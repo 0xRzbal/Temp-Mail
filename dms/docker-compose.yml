@@ -1,0 +1,34 @@
+services:
+  dms:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: joemail-dms
+    hostname: mail.rzbal.biz.id
+    env_file: .env
+    ports:
+      - "25:25"
+      - "465:465"
+      - "587:587"
+      - "143:143"
+      - "993:993"
+      - "110:110"
+      - "995:995"
+      - "4190:4190"
+    volumes:
+      - ./mail-data:/var/mail
+      - ./mail-state:/var/mail-state
+      - ./mail-logs:/var/log/mail
+      - ./config:/tmp/docker-mailserver/
+      - ./certs/letsencrypt:/etc/letsencrypt:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+    stop_grace_period: 1m
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+    networks:
+      - joemail_joemail-net
+
+networks:
+  joemail_joemail-net:
+    external: true

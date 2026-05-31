@@ -1,0 +1,17 @@
+logrotate state -- version 2
+"/var/log/syslog" 2026-5-31-6:54:5
+"/var/log/dpkg.log" 2026-5-29-6:0:0
+"/var/log/auth.log" 2026-5-31-6:54:5
+"/var/log/apt/term.log" 2026-5-29-6:0:0
+"/var/log/apt/history.log" 2026-5-29-6:0:0
+"/var/log/rspamd/rspamd.log" 2026-5-29-6:0:0
+"/var/log/mail/mail.log" 2026-5-31-6:54:5
+"/var/log/alternatives.log" 2026-5-29-6:0:0
+"/var/log/kern.log" 2026-5-29-6:0:0
+"/var/log/wtmp" 2026-5-29-6:0:0
+"/var/log/razor-agent.log" 2026-5-29-6:0:0
+"/var/log/btmp" 2026-5-29-6:0:0
+"/var/log/dbconfig-common/dbc.log" 2026-5-29-6:0:0
+"/var/log/user.log" 2026-5-29-6:0:0
+"/var/log/cron.log" 2026-5-31-6:54:5
+"/var/log/redis/redis-server*.log" 2026-5-29-6:0:0

@@ -1,0 +1,78 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: joemail-nginx
+    restart: unless-stopped
+    ports:
+      - "8880:80"
+      - "8443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/admin-index.html:/usr/share/nginx/html/admin/index.html:ro
+    depends_on:
+      - api
+      - frontend
+    networks:
+      - joemail_joemail-net
+
+  api:
+    image: joemail-api:latest
+    container_name: joemail-api
+    restart: unless-stopped
+    user: "0:0"
+    environment:
+      - PORT=3000
+      - JOEMAIL_HOST=host.docker.internal
+      - JOEMAIL_PORT=8080
+      - JOEMAIL_ADMIN_USER=admin@rzbal.biz.id
+      - JOEMAIL_ADMIN_PASS=UxS2YJNrMjq4sH4i
+      - DOMAIN=mail.rzbal.biz.id
+      - JWT_SECRET=joemail_jwt_secret_2026
+      - DEFAULT_EXPIRY=86400000
+      - TWO_FA_ENABLED=false
+    volumes:
+      - joemail_api-data:/app/data
+      - joemail_api-logs:/app/logs
+      - ./api-index.js:/app/index.js:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./dms/config:/dms/config
+      - ./dms/mail-logs:/dms/mail-logs:ro
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /opt/joemail:/opt/joemail
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://127.0.0.1:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - joemail_joemail-net
+
+  frontend:
+    image: joemail-frontend:latest
+    container_name: joemail-frontend
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    volumes:
+      - ./frontend/public:/usr/share/nginx/html:ro
+    networks:
+      - joemail_joemail-net
+
+volumes:
+  joemail_api-data:
+    external: true
+  joemail_api-logs:
+  joemail_joemail-data:
+    external: true
+  joemail_certbot-data:
+    external: true
+  joemail_certbot-www:
+    external: true
+
+networks:
+  joemail_joemail-net:
+    external: true

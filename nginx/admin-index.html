@@ -1,0 +1,1343 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JoeMail Admin</title><style>
+:root{
+    --admin-gap: 20px;
+    --admin-sidebar: 84px;
+    --mut: #8ca3c7;--bg:#050814;--panel:rgba(9,14,30,.82);--panel2:rgba(13,20,42,.92);--text:#eaf2ff;--muted:#8ca3c7;--line:rgba(84,122,184,.28);--cyan:#22d3ee;--blue:#3b82f6;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--radius:18px}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,rgba(34,211,238,.16),transparent 34%),radial-gradient(circle at 80% 10%,rgba(59,130,246,.14),transparent 30%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}button,input,select,textarea{font:inherit}.app-layout{min-height:100vh;padding-left:84px}.sidebar{position:fixed;inset:0 auto 0 0;width:84px;background:rgba(5,8,20,.84);backdrop-filter:blur(18px);border-right:1px solid var(--line);z-index:40;display:flex;flex-direction:column;transition:.22s}.sidebar.expanded,.app-layout.sidebar-expanded .sidebar{width:280px}.brand{display:flex;align-items:center;gap:12px;padding:18px 14px;border-bottom:1px solid var(--line);min-height:78px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:grid;place-items:center;font-weight:900;color:#00111e;box-shadow:0 0 30px rgba(34,211,238,.25)}.brand h1{margin:0;font-size:17px}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}.brand>div:not(.logo),.navlabel,.sidebar button span:not(.ico),.sidefoot button span:not(.ico){opacity:0;width:0;overflow:hidden;white-space:nowrap}.sidebar.expanded .brand>div:not(.logo),.sidebar.expanded .navlabel,.sidebar.expanded button span:not(.ico),.app-layout.sidebar-expanded .brand>div:not(.logo),.app-layout.sidebar-expanded .navlabel,.app-layout.sidebar-expanded button span:not(.ico){opacity:1;width:auto}.nav{padding:12px 10px;overflow:auto;flex:1}.navgroup{margin-bottom:12px}.navlabel{color:#6f86aa;text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.08em;margin:8px 10px}.sidebar button,.bottomnav button,.more-menu button{border:0;background:transparent;color:var(--muted);cursor:pointer}.nav button,.sidefoot button{width:100%;display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:14px;margin:3px 0;text-align:left;position:relative}.nav button:hover,.sidefoot button:hover,.nav button.active{background:linear-gradient(135deg,rgba(34,211,238,.16),rgba(59,130,246,.12));color:var(--text)}.nav button.active:before{content:'';position:absolute;left:-10px;width:3px;height:24px;border-radius:4px;background:var(--cyan)}.ico{width:26px;min-width:26px;text-align:center}.sidefoot{padding:12px 10px;border-top:1px solid var(--line)}.mainwrap{min-height:100vh}.appbar{height:78px;position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(5,8,20,.64);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.toggle-btn,.ghost,.primary,.danger{border:1px solid var(--line);border-radius:13px;padding:10px 14px;color:var(--text);background:rgba(255,255,255,.04);cursor:pointer;transition:all .15s}.primary{border-color:rgba(34,211,238,.55);background:linear-gradient(135deg,rgba(34,211,238,.22),rgba(59,130,246,.18))}.crumb b{display:block}.crumb span,.mut{color:var(--muted)}.top-actions{display:flex;align-items:center;gap:10px}.status-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 18px var(--green)}.max-pill,.badge{border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:#b9d2ff;background:rgba(255,255,255,.04);font-size:12px}.main{padding:22px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{grid-column:span 12;background:linear-gradient(180deg,rgba(15,23,42,.88),rgba(7,11,24,.84));border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 18px 60px rgba(0,0,0,.22)}.glass-card{background:linear-gradient(180deg,rgba(15,23,42,.76),rgba(7,11,24,.72));backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:var(--radius)}.s2{grid-column:span 2}.s3{grid-column:span 3}.s4{grid-column:span 4}.s6{grid-column:span 6}.s8{grid-column:span 8}.s12{grid-column:span 12}.head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.head h3{margin:0;font-size:17px}.num{font-size:30px;font-weight:900;letter-spacing:-.04em;margin:8px 0}.ok{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}table{width:100%;border-collapse:collapse}th,td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left}th{color:#9fb5d8;font-size:12px;text-transform:uppercase;letter-spacing:.06em}.bar{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:inherit}.bottomnav,.more-menu{display:none !important}.sidebar-overlay{display:none}@media(max-width:1024px){
+.app-layout{padding-left:0;transition:none}
+.sidebar{transform:translateX(-100%);width:280px;transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.sidebar.expanded{transform:translateX(0)}
+.sidebar.expanded~.sidebar-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:35;backdrop-filter:blur(4px)}
+.appbar{height:64px;padding:0 12px;gap:8px}
+.appbar .toggle-btn{width:40px;height:40px;padding:0;display:grid;place-items:center;font-size:20px}
+.appbar .crumb b{font-size:14px}
+.appbar .crumb span{font-size:11px}
+.top-actions .ghost,.top-actions .max-pill{display:none}
+.top-actions{gap:6px}
+.top-actions .primary{padding:8px 12px;font-size:13px}
+.main{padding:16px 16px 28px;overflow-x:hidden}
+.card{padding:18px;border-radius:16px}
+.head{flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.head h3{font-size:16px}
+.num{font-size:24px}
+table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table thead,table tbody{min-width:500px}
+th,td{padding:8px 10px;font-size:13px}
+.grid{gap:14px}
+.s2,.s3,.s4,.s6,.s8{grid-column:span 12}
+.s12{grid-column:span 12}
+button,.primary,.ghost,.danger{min-height:32px;font-size:12px;padding:6px 10px;border-radius:10px}
+.head{flex-wrap:nowrap;overflow-x:auto;gap:6px}
+.head button{flex-shrink:0;white-space:nowrap}
+.quickgrid{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto}
+.quickgrid button{flex-shrink:0;white-space:nowrap}
+.form{display:flex;flex-wrap:nowrap;gap:6px;align-items:center}
+.form button{flex-shrink:0;white-space:nowrap}
+.card .head{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto}
+.card .head button{flex-shrink:0;white-space:nowrap}
+input,select,textarea{font-size:16px;min-height:44px;padding:10px 12px}
+
+.badge{font-size:11px;padding:4px 8px}
+.nav button{padding:10px 12px;font-size:13px}
+.bottomnav{display:none !important}
+.bottomnav button,.bottomnav button.active{display:none !important}
+.more-menu.show{display:none !important}
+.more-menu button{display:flex;align-items:center;gap:8px;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);color:var(--text)}
+}
+/* Desktop enhancements */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.22)}
+.card:hover{border-color:rgba(34,211,238,.35);box-shadow:0 18px 60px rgba(0,0,0,.22),0 0 30px rgba(34,211,238,.06)}
+button:active{transform:scale(.97)}
+.nav button{transition:background .15s,color .15s}
+.status-dot{animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.5}}
+.sidebar{scrollbar-width:none;-ms-overflow-style:none}
+.sidebar::-webkit-scrollbar{display:none}
+.form input,.form select,.form textarea{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:10px 12px;transition:border-color .15s}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 2px rgba(34,211,238,.15)}
+.danger{border-color:rgba(239,68,68,.5);background:linear-gradient(135deg,rgba(239,68,68,.18),rgba(220,38,38,.12))}
+.danger:hover{border-color:var(--red);background:linear-gradient(135deg,rgba(239,68,68,.28),rgba(220,38,38,.18))}
+table tr:hover td{background:rgba(255,255,255,.03)}
+
+/* Login page */
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 20% 0%,rgba(34,211,238,.16),transparent 34%),radial-gradient(circle at 80% 10%,rgba(59,130,246,.14),transparent 30%),var(--bg)}
+.login-card{width:100%;max-width:400px;padding:40px 36px;text-align:center;animation:loginFadeIn .4s ease}
+@keyframes loginFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.loginbrand{display:flex;flex-direction:column;align-items:center;gap:16px;margin-bottom:32px}
+.loginbrand .logo{width:64px;height:64px;border-radius:20px;font-size:28px}
+.loginbrand h1{margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em}
+.loginbrand p{margin:0;color:var(--muted);font-size:14px}
+.login-card input{width:100%;padding:14px 16px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;color:var(--text);font-size:15px;margin-bottom:14px;transition:border-color .2s,box-shadow .2s}
+.login-card input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.12)}
+.login-card input::placeholder{color:var(--muted)}
+.login-card .primary{width:100%;padding:14px;font-size:16px;font-weight:700;border-radius:14px;margin-top:6px;cursor:pointer;transition:transform .15s,box-shadow .2s}
+.login-card .primary:hover{box-shadow:0 0 28px rgba(34,211,238,.22)}
+.login-card .primary:active{transform:scale(.97)}
+.login-card .bad{margin-top:16px;font-size:14px;min-height:20px}
+
+/* === Missing component CSS === */
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:1024px){
+.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+}
+.card-hover{transition:border-color .2s,box-shadow .2s}
+.card-hover:hover{border-color:rgba(34,211,238,.35);box-shadow:0 0 28px rgba(34,211,238,.08)}
+.mini-stat-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:24px 18px;gap:8px}
+.mini-stat-card .icon{font-size:28px;line-height:1}
+.mini-stat-card .icon i{font-style:normal}
+.mini-stat-card .value{font-size:32px;font-weight:900;letter-spacing:-.04em;color:var(--text)}
+.mini-stat-card .label{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.status-indicator{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.status-indicator.ok{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.status-indicator.warn{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
+.status-indicator.bad{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.metric-card{display:flex;align-items:center;gap:14px;padding:14px 16px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:14px}
+.metric-card .icon-wrap{width:40px;height:40px;border-radius:12px;background:rgba(34,211,238,.1);display:grid;place-items:center;font-size:18px;color:var(--cyan)}
+.metric-card .val{font-size:18px;font-weight:800}
+.metric-card .lbl{font-size:12px;color:var(--muted)}
+.data-table-simple{width:100%;border-collapse:collapse}
+.data-table-simple th,.data-table-simple td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
+.data-table-simple th{color:#9fb5d8;font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.data-table-simple tr:hover td{background:rgba(255,255,255,.03)}
+.table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.log-viewer{background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;padding:16px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;color:var(--muted);max-height:400px;overflow:auto;white-space:pre-wrap;word-break:break-all;line-height:1.6}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;padding:10px 0}
+.bar-chart .bar{flex:1;background:linear-gradient(180deg,var(--cyan),var(--blue));border-radius:6px 6px 0 0;min-height:8px;position:relative;display:flex;flex-direction:column;justify-content:flex-start;align-items:center}
+bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px}
+.bar-chart .bar-val{font-size:11px;font-weight:700;color:var(--text)}
+.bar-chart .bar{flex:1;width:100%}
+.bar-chart .bar-label{font-size:10px;color:var(--muted);white-space:nowrap}
+.sparkline-chart{display:flex;align-items:flex-end;gap:2px;height:32px;margin-top:8px}
+.sparkline-chart .bar{flex:1;border-radius:2px;min-height:2px;background:var(--cyan);opacity:.7}
+.sparkline-chart.red .bar{background:var(--red)}
+.sparkline-chart.blue .bar{background:var(--blue)}
+.sparkline-chart.green .bar{background:var(--green)}
+.radial-progress{--p:0;--c:var(--cyan);width:80px;height:80px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p)*3.6deg),rgba(255,255,255,.08) 0);display:grid;place-items:center;position:relative;font-size:18px;font-weight:900}
+.radial-progress .bg{position:absolute;inset:6px;border-radius:50%;background:var(--panel)}
+.radial-progress span{position:relative;z-index:1}
+.radial-progress .label{display:none}
+
+@keyframes prog-slide{0%{left:-30%}100%{left:100%}}
+
+.form.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f-span-1{grid-column:span 1}
+.f-span-2{grid-column:span 2}
+.quickgrid{display:flex;gap:8px;flex-wrap:wrap}
+.logtools{display:flex;gap:8px;align-items:center}
+@media(max-width:1024px){
+.form.grid-2{grid-template-columns:1fr}
+.f-span-1,.f-span-2{grid-column:span 1}
+.quickgrid{flex-direction:column}
+.quickgrid button{width:100%}
+.bar-chart{flex-wrap:wrap}
+.mini-stat-card .value{font-size:24px}
+.mini-stat-card{padding:16px 12px}
+.metric-card{padding:10px 12px;gap:10px}
+.metric-card .icon-wrap{width:34px;height:34px;font-size:15px}
+.metric-card .val{font-size:15px}
+}
+
+.mini-stat{display:flex;flex-direction:column;align-items:center;text-align:center;padding:24px 18px;gap:8px}
+.mini-stat .icon{font-size:28px;line-height:1;color:var(--cyan)}
+.mini-stat .val{font-size:32px;font-weight:900;letter-spacing:-.04em;color:var(--text)}
+.mini-stat .label{font-size:13px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:16px}
+.row .card h3{margin:0 0 14px;font-size:17px}
+.row .card input[type="text"]{width:100%;padding:10px 12px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:10px;color:var(--text);font-size:14px;margin-bottom:10px}
+.row .card input[type="text"]:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 2px rgba(34,211,238,.12)}
+.row .card button{margin-right:8px}
+.row .card{grid-column:span 1}
+@media(max-width:1024px){.row .card{grid-column:span 1}}
+
+/* Form field wrappers */
+.f2{flex:0 0 16.666%;max-width:16.666%;box-sizing:border-box}
+.f4{flex:0 0 33.333%;max-width:33.333%;box-sizing:border-box;display:flex;flex-direction:column;gap:6px}
+.f8{flex:0 0 66.666%;max-width:66.666%;box-sizing:border-box;display:flex;flex-direction:column;gap:6px}
+.f4 label,.f8 label{font-size:13px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.03em;display:block}
+.form{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.form .f2,.form .f4,.form .f8{margin-bottom:0}
+
+/* === Missing class definitions === */
+.refresh-bar{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin-bottom:16px;padding:8px 0}
+.dns-card{background:linear-gradient(180deg,rgba(15,23,42,.88),rgba(7,11,24,.84));border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.dns-fields{display:flex;flex-direction:column;gap:10px}
+.dns-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.dns-type{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;font-size:12px;font-weight:700;background:rgba(34,211,238,.15);color:var(--cyan);border:1px solid rgba(34,211,238,.3)}
+.dns-value{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--text);word-break:break-all;padding:8px 12px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px}
+.docker-status{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-size:13px}
+.progress-bar{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+.progress-bar .fill{display:block;height:100%;border-radius:inherit;transition:width .4s}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th,.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}
+.tbl th{color:#9fb5d8;font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.logpre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.6;padding:14px;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;color:var(--text);max-height:400px;overflow-y:auto}
+.sysline{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px}
+.cmd{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
+.cmdbox{width:520px;max-width:92vw;background:rgba(13,20,42,.96);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.cmdbox input{width:100%;padding:16px 18px;border:0;background:transparent;color:var(--text);font-size:15px;outline:none;border-bottom:1px solid var(--line)}
+.cmdres{max-height:320px;overflow-y:auto}
+.cmditem{display:flex;align-items:center;gap:12px;padding:12px 18px;cursor:pointer;font-size:14px;color:var(--text);transition:background .12s}
+.cmditem:hover,.cmditem.active{background:rgba(34,211,238,.12)}
+.cmdkey{margin-left:auto;font-size:11px;color:var(--muted);padding:2px 8px;border:1px solid var(--line);border-radius:6px}
+.account-pick,.domain-pick,.ipick{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;cursor:pointer;font-size:13px;color:var(--text);transition:all .15s;background:rgba(255,255,255,.03)}
+.account-pick:hover,.domain-pick:hover,.ipick:hover{border-color:var(--cyan);background:rgba(34,211,238,.08)}
+.account-pick.active,.domain-pick.active,.ipick.active{border-color:var(--cyan);background:rgba(34,211,238,.15);color:var(--cyan)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;padding:6px 10px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;word-break:break-all}
+.kbd{font-size:11px;padding:2px 7px;border:1px solid var(--line);border-radius:6px;background:rgba(255,255,255,.06);color:var(--muted)}
+/* === End missing class definitions === */
+</style></head><body><div id="root"></div><script>
+function routeTab(){let p=location.pathname.replace(/^\/admin\/?/,'').replace(/\/$/,'');return ({'':'dash','dashboard':'dash'}[p]||p||'dash')}const S={token:localStorage.jmToken||'',tab:routeTab(),cmd:false,cmdIndex:0};const ICONS={dash:'📊',analytics:'📈',domains:'🌐',accounts:'👤',dns:'🔧',inbox:'📥',logs:'📋',queue:'📨',mon:'📡',diagnostics:'🔍',reputation:'🛡️',sec:'🔒',spam:'🚫',backup:'💾',system:'⚙️',ops:'🖥️'};
+const GROUPS=[['Overview',[['dash','Dashboard','📊'],['analytics','Analytics','📈']]],['Mail Operations',[['domains','Domains','🌐'],['accounts','DMS Accounts','👤'],['dns','DNS Tools','🔧'],['inbox','Inbox','📥'],['logs','Mail Logs','📋'],['queue','Queue','📨']]],['Infrastructure',[['mon','Monitoring','📡'],['diagnostics','Diagnostics','🔍'],['reputation','Reputation','🛡️'],['sec','Security','🔒'],['spam','Spam','🚫']]],['Administration',[['backup','Backup','💾'],['system','System','⚙️'],['ops','Ops Center','🖥️']]]];const T=GROUPS.flatMap(g=>g[1].map(x=>[x[0],x[1],x[2]]));
+const esc=x=>String(x??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));const dt=x=>x?new Date(x).toLocaleString():'-';const mb=x=>(x/1048576).toFixed(0)+' MB';const gb=x=>(x/1073741824).toFixed(1)+' GB';const pct=x=>Number(x||0).toFixed(1)+'%';function toast(m){let e=document.getElementById('toast');if(!e)return;e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',2200)}function openCmd(){S.cmd=true;document.body.insertAdjacentHTML('beforeend',cmdHtml());setTimeout(()=>cmdq.focus(),20)}function closeCmd(){S.cmd=false;document.querySelector('.cmd')?.remove()}function cmdHtml(){let items=T.map(x=>`<div class="cmditem" onclick="closeCmd();go('${x[0]}')"><span><b>${x[1]}</b><div class="mut">Open ${x[1]} module</div></span><span class="cmdkey">${x[2]}</span></div>`).join('');return `<div class="cmd show" onclick="if(event.target.className.includes('cmd '))closeCmd()"><div class="cmdbox"><input id="cmdq" placeholder="Search pages / actions..." oninput="filterCmd(this.value)" onkeydown="if(event.key==='Escape')closeCmd()"><div id="cmdres" class="cmdres">${items}</div><div class="mut" style="padding:0 16px 14px">Shortcut: <span class="kbd">Ctrl</span> + <span class="kbd">K</span></div></div></div>`}function filterCmd(q){q=q.toLowerCase();cmdres.innerHTML=T.filter(x=>x.join(' ').toLowerCase().includes(q)).map(x=>`<div class="cmditem" onclick="closeCmd();go('${x[0]}')"><span><b>${x[1]}</b><div class="mut">Open ${x[1]} module</div></span><span class="cmdkey">${x[2]}</span></div>`).join('')||'<div class="cmditem">No match</div>'}document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCmd()}if(e.key==='Escape')closeCmd()})
+async function api(p,o={}){let r=await fetch('/admin/api'+p,{...o,headers:{'Content-Type':'application/json',...(S.token?{Authorization:'Bearer '+S.token}:{}),...(o.headers||{})}});let t=await r.text(),j={};try{j=t?JSON.parse(t):{}}catch{j={raw:t}}if(!r.ok){if(r.status==401||r.status==403)logout(0);throw Error(j.error||r.status)}return j}
+function login(){root.innerHTML=`<div class="login"><div class="card login-card"><div class="loginbrand"><div class="logo">J</div><div><h1>JoeMail Tools</h1><p>Mail operations console</p></div></div><input id="u" value="admin" placeholder="Username" autocomplete="username"><input id="p" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"><button class="primary" onclick="doLogin()">Sign In</button><p id="err" class="bad"></p></div></div>`}async function doLogin(){try{let r=await api('/login',{method:'POST',body:JSON.stringify({username:u.value,password:p.value})});localStorage.jmToken=S.token=r.token;render()}catch(e){err.textContent=e.message}}function logout(t=1){localStorage.removeItem('jmToken');S.token='';if(t)toast('logout');login()}
+let sidebarExpanded=window.innerWidth>1024&&localStorage.sidebarExpanded==='true';
+function toggleSidebar(){sidebarExpanded=!sidebarExpanded;localStorage.sidebarExpanded=String(sidebarExpanded);let side=document.getElementById('side');let app=document.querySelector('.app-layout');if(side){side.classList.toggle('expanded',sidebarExpanded)}if(app){app.classList.toggle('sidebar-expanded',sidebarExpanded)}}
+function shell(){
+  let cur=T.find(x=>x[0]===S.tab)||T[0];
+  let navHTML=GROUPS.map(g=>'<div class="navgroup"><div class="navlabel">'+g[0]+'</div>'+g[1].map(x=>'<button title="'+x[1]+'" class="'+(S.tab==x[0]?'active':'')+'" onclick="go(\''+x[0]+'\')"><span class="ico">'+x[2]+'</span><span>'+x[1]+'</span></button>').join('')+'</div>').join('');
+  root.innerHTML='<div class="app-layout'+(sidebarExpanded?' sidebar-expanded':'')+'"><aside id="side" class="sidebar'+(sidebarExpanded?' expanded':'')+'"><div class="brand"><div class="logo">JM</div><div><h1>JoeMail</h1><p>Ops Console</p></div></div><nav class="nav">'+navHTML+'</nav><div class="sidefoot"><button onclick="openCmd()"><span class="ico">⌘K</span><span>Command</span></button><button onclick="logout()"><span class="ico">⏻</span><span>Logout</span></button></div></aside><div class="mainwrap"><header class="appbar"><div style="display:flex;align-items:center;gap:8px"><button class="toggle-btn" onclick="toggleSidebar()">☰</button><div class="crumb"><b>'+cur[1]+'</b><span>/ admin / '+S.tab+'</span></div></div><div class="top-actions"><span class="status-dot"></span><span class="max-pill">Live</span><button class="primary" onclick="render()">Refresh</button></div></header><main class="main"><div id="view"></div></main></div><div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div></div>';
+}
+function tabPath(tab){return '/admin/'+(tab==='dash'?'dashboard':tab)+'/'}function go(tab){S.tab=tab;history.pushState(null,'',tabPath(tab));if(window.innerWidth<=1024&&sidebarExpanded){toggleSidebar()}render()}window.addEventListener('popstate',()=>{S.tab=routeTab();render()});async function render(){if(!S.token)return login();S.tab=routeTab()||S.tab||'dash';shell();try{await ({dash,domains,accounts,dns,inbox,logs,queue,mon,diagnostics,reputation,sec,spam,analytics,backup,system,ops}[S.tab]||dash)()}catch(e){view.innerHTML='<div class="card bad">'+esc(e.message)+'</div>'}}
+function stat(t,v,s,c=''){return `<div class="card s3"><div class="mut" style="font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.04em">${t}</div><div class="num ${c}">${v}</div><div class="mut">${s||''}</div></div>`}
+
+async function dash(){
+let d=await api('/extended/dashboard');
+let server = d.server || {};
+let totals = d.totals || {};
+let queueData = d.queue || {};
+let trend = d.trend || {};
+let uptime = Math.round((server.uptime || 0) / 60);
+let cpu = +server.cpu || 0;
+let ram = +server.ramPct || 0;
+let disk = +server.diskPct || 0;
+let sparkMail = trend.mailPerDay || [0,0,0,0,0,0,0];
+let sparkSpam = trend.spamPerDay || [0,0,0,0,0,0,0];
+view.innerHTML=`
+        <div class="grid grid-4" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon"><i class="fas fa-envelope"></i></div>
+                <div class="value">${totals.emailToday || 0}</div>
+                <div class="label">Mail Today</div>
+                ${sparklineChart(sparkMail, 'blue')}
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon"><i class="fas fa-ban"></i></div>
+                <div class="value">${totals.spamBlocked || 0}</div>
+                <div class="label">Spam Blocked</div>
+                ${sparklineChart(sparkSpam, 'red')}
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon"><i class="fas fa-globe"></i></div>
+                <div class="value">${totals.domains || 0}</div>
+                <div class="label">Active Domains</div>
+                <span class="mut">${totals.activeDomains} active / ${totals.inactiveDomains} inactive</span>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon"><i class="fas fa-inbox"></i></div>
+                <div class="value">${totals.inboxes || 0}</div>
+                <div class="label">Total Inboxes</div>
+                <span class="mut">Including temporary</span>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card s12">
+                <div class="head">
+                    <div>
+                        <h3>System Resource Usage</h3>
+                        <div class="mut">Current load of critical system components.</div>
+                    </div>
+                </div>
+                <div class="grid-3" style="margin-top:20px">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(cpu.toFixed(0), 'CPU', cpu > 80 ? 'red' : cpu > 60 ? 'amber' : 'green')}
+                        <div class="label">CPU Usage</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(ram.toFixed(0), 'RAM', ram > 80 ? 'red' : ram > 60 ? 'amber' : 'green')}
+                        <div class="label">RAM Usage</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(disk.toFixed(0), 'Disk', disk > 80 ? 'red' : disk > 60 ? 'amber' : 'green')}
+                        <div class="label">Disk Usage</div>
+                    </div>
+                </div>
+                <div style="margin-top:20px">
+                    <div class="metric-card">
+                        <div class="icon-wrap"><i class="fas fa-heartbeat"></i></div>
+                        <div>
+                            <div class="val"><span class="status-indicator ${server.health === 'ok' ? 'ok' : 'bad'}">${server.health}</span></div>
+                            <div class="lbl">System Health</div>
+                        </div>
+                    </div>
+                    <div class="metric-card" style="margin-top:10px">
+                        <div class="icon-wrap"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <div class="val">${uptime} mins</div>
+                            <div class="lbl">Server Uptime</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card s12">
+                <div class="head">
+                    <div>
+                        <h3>Mail Queue Status</h3>
+                        <div class="mut">Overview of pending and deferred emails.</div>
+                    </div>
+                    <button class="primary" onclick="go('queue')">Manage Queue</button>
+                </div>
+                <div style="margin-top:20px">
+                    <div class="metric-card">
+                        <div class="icon-wrap"><i class="fas fa-hourglass-half"></i></div>
+                        <div>
+                            <div class="val"><span class="status-indicator ${queueData.status === 'ok' ? 'ok' : 'warn'}">${queueData.status}</span></div>
+                            <div class="lbl">Queue Status</div>
+                        </div>
+                    </div>
+                    <div class="metric-card" style="margin-top:10px">
+                        <div class="icon-wrap"><i class="fas fa-list-ol"></i></div>
+                        <div>
+                            <div class="val">${queueData.pending || 0}</div>
+                            <div class="lbl">Pending Emails</div>
+                        </div>
+                    </div>
+                    <div class="metric-card" style="margin-top:10px">
+                        <div class="icon-wrap"><i class="fas fa-calendar-alt"></i></div>
+                        <div>
+                            <div class="val">${totals.email7d || 0}</div>
+                            <div class="lbl">Mail Last 7 Days</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="log-viewer" style="margin-top:20px">
+                    ${esc(queueData.raw || 'Queue is empty or no raw data available.')}
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:var(--admin-gap)">
+            <div class="card s12">
+                <div class="head">
+                    <h3>Top Domains by Activity</h3>
+                    <button class="ghost" onclick="go('domains')">View All</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table-simple">
+                        <thead>
+                            <tr><th>Domain</th><th>Status</th><th>Health</th><th>Daily Mail</th></tr>
+                        </thead>
+                        <tbody>
+                            ${(d.top?.domains || []).slice(0, 5).map(dom => `
+                                <tr>
+                                    <td>@${esc(dom.domain)}</td>
+                                    <td><span class="badge ${dom.active ? 'ok' : 'bad'}">${dom.active ? 'Active' : 'Inactive'}</span></td>
+                                    <td><span class="status-indicator ${dom.health === 'ok' ? 'ok' : 'bad'}">${esc(dom.health)}</span></td>
+                                    <td>${dom.emailToday || 0}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card s12">
+                <div class="head">
+                    <h3>Top Inboxes by Volume</h3>
+                    <button class="ghost" onclick="go('inbox')">View All</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table-simple">
+                        <thead>
+                            <tr><th>Inbox</th><th>Messages</th><th>Last Activity</th></tr>
+                        </thead>
+                        <tbody>
+                            ${(d.top?.inboxes || []).slice(0, 5).map(inb => `
+                                <tr>
+                                    <td>${esc(inb.email)}</td>
+                                    <td>${inb.messageCount || 0}</td>
+                                    <td>${dt(inb.lastActivity)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function tbl(h,rows){let table='<table><thead><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map((c,i)=>'<td data-label="'+esc(h[i]||'')+'">'+((String(c).includes('<button')||String(c).includes('<span')||String(c).includes('<input')||String(c).includes('<select'))?c:esc(c))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';return '<div class="table-wrap">'+table+'</div>'}
+async function domains(){
+    let d=await api('/extended/domains');
+    let domains = d.domains || [];
+    let stats = {
+        total: domains.length,
+        active: domains.filter(dom => dom.active).length,
+        inactive: domains.filter(dom => !dom.active).length,
+        healthy: domains.filter(dom => dom.health === 'ok').length,
+        warning: domains.filter(dom => dom.health === 'warn').length,
+        critical: domains.filter(dom => dom.health === 'bad').length,
+    };
+
+    view.innerHTML=`
+        <div class="grid grid-4" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--primary)"><i class="fas fa-globe"></i></div>
+                <div class="value">${stats.total}</div>
+                <div class="label">Total Domains</div>
+                <span class="mut">All records</span>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--green)"><i class="fas fa-check-circle"></i></div>
+                <div class="value">${stats.active}</div>
+                <div class="label">Active Domains</div>
+                <span class="mut">Currently enabled</span>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--amber)"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="value">${stats.warning}</div>
+                <div class="label">Warning Health</div>
+                <span class="mut">Needs attention</span>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--red)"><i class="fas fa-times-circle"></i></div>
+                <div class="value">${stats.critical}</div>
+                <div class="label">Critical Health</div>
+                <span class="mut">Immediate action</span>
+            </div>
+        </div>
+
+        <div class="card s12">
+            <div class="head">
+                <h3>Domain Management</h3>
+                <span class="badge">Add/Edit/Manage Domain Records</span>
+            </div>
+            <div class="form grid-2" style="margin-top:20px; gap:15px">
+                <input class="f-span-2" id="dom" placeholder="domain.com" required>
+                <input class="f-span-2" id="target" value="admin@rzbal.biz.id" placeholder="Target email for catch-all (optional)">
+                <input class="f-span-1" id="tags" placeholder="Tags (comma separated)">
+                <input class="f-span-1" id="expiry" placeholder="Expiry (yyyy-mm-dd)">
+                <input class="f-span-2" id="notes" placeholder="Internal notes about this domain">
+                <div class="f-span-2 quickgrid">
+                    <button class="primary" onclick="addDom()">Add Domain</button>
+                    <button class="ghost" onclick="prefillSelected()">Edit Selected</button>
+                    
+                </div>
+                <textarea class="f-span-2" id="bulk" rows="5" placeholder="Bulk import (one domain per line, e.g., domain.com,target@email.com,tag1,tag2,notes,2025-12-31)"></textarea>
+                <div class="f-span-2 quickgrid">
+                    <button class="primary" onclick="bulkDom()">Bulk Action</button>
+                    <button class="ghost" onclick="bulkStatus(true)">Enable Selected</button>
+                    <button class="ghost" onclick="bulkStatus(false)">Disable Selected</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card s12" style="margin-top:var(--admin-gap)">
+            <div class="head">
+                <h3>All Managed Domains</h3>
+                <span class="badge">${domains.length} Records</span>
+            </div>
+            <div class="table-responsive" style="margin-top:20px">
+                <table class="data-table-simple">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="toggleAllDomains(this.checked)"></th>
+                            <th>Domain</th>
+                            <th>Target</th>
+                            <th>Status</th>
+                            <th>Health</th>
+                            <th>Tags</th>
+                            <th>Expiry</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${domains.map(x => `
+                            <tr>
+                                <td><input type="checkbox" class="domain-pick" value="${esc(x.domain)}"></td>
+                                <td>@${esc(x.domain)}</td>
+                                <td>${esc(x.target)}</td>
+                                <td><span class="status-indicator ${x.active ? 'ok' : 'bad'}">${x.active ? 'Active' : 'Inactive'}</span></td>
+                                <td><span class="status-indicator ${x.health === 'ok' ? 'ok' : x.health === 'warn' ? 'warn' : 'bad'}">${esc(x.health)}</span></td>
+                                <td>${(x.tags || []).map(t => `<span class="badge" style="margin-right:5px">${esc(t)}</span>`).join('')}</td>
+                                <td>${esc(x.expiry || '-')}</td>
+                                <td><span title="${esc(x.notes || '')}">${esc(x.notes || '-').substring(0, 30)}${x.notes && x.notes.length > 30 ? '...' : ''}</span></td>
+                                <td>
+                                    <button class="ghost" onclick="editDomainForm('${esc(x.domain)}', '${esc((x.tags || []).join(','))}', '${esc(x.notes || '')}', '${esc(x.expiry || '')}', '${esc(x.target || '')}')">Edit</button>
+                                    <button class="ghost ${x.active ? 'danger' : 'primary'}" onclick="setDom('${esc(x.domain)}', ${!x.active})">${x.active ? 'Disable' : 'Enable'}</button>
+                                    <button class="ghost" onclick="localStorage.dn='${esc(x.domain)}';go('dns')">DNS</button>
+                                    <button class="ghost danger" onclick="delDom('${esc(x.domain)}')">Remove</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+async function addDom(){
+    let domainVal = dom.value.trim();
+    if (!domainVal) { toast('Domain cannot be empty'); return; }
+    let targetVal = target.value.trim();
+    if (!targetVal) { toast('Target email cannot be empty'); return; }
+
+    try {
+        await api('/dms/domains',{method:'POST',body:JSON.stringify({domain:domainVal,target:targetVal})});
+        await api('/extended/domains/'+encodeURIComponent(domainVal),{method:'PATCH',body:JSON.stringify({tags:tags.value.trim().split(',').map(t=>t.trim()).filter(Boolean),notes:notes.value.trim(),expiry:expiry.value.trim(),active:true})});
+        toast('Domain added');
+        domains();
+    } catch (e) {
+        toast('Error adding domain: ' + e.message);
+    }
+}
+
+async function delDom(x){
+    if(!confirm('Are you sure you want to remove domain '+x+'?')) return;
+    try {
+        await api('/dms/domains/'+encodeURIComponent(x),{method:'DELETE'});
+        toast('Domain removed');
+        domains();
+    } catch (e) {
+        toast('Error removing domain: ' + e.message);
+    }
+}
+
+async function setDom(x,a){
+    try {
+        await api('/extended/domains/'+encodeURIComponent(x),{method:'PATCH',body:JSON.stringify({active:a})});
+        toast('Domain status updated');
+        domains();
+    } catch (e) {
+        toast('Error updating domain status: ' + e.message);
+    }
+}
+
+function editDomainForm(d, t, n, e, targetEmail){
+    dom.value=d;
+    tags.value=t;
+    notes.value=n;
+    expiry.value=e;
+    target.value=targetEmail;
+    toast('Domain data loaded for editing');
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleAllDomains(checked) {
+    document.querySelectorAll('.domain-pick').forEach(checkbox => {
+        checkbox.checked = checked;
+    });
+}
+
+function pickedDomains(){
+    return [...document.querySelectorAll('.domain-pick:checked')].map(x=>x.value);
+}
+
+function prefillSelected(){
+    const selected = pickedDomains();
+    if (selected.length === 0) {
+        toast('No domains selected');
+        return;
+    }
+    if (selected.length === 1) {
+        // Fetch full domain details for prefill
+        api('/extended/domains').then(data => {
+            const domainDetail = data.domains.find(d => d.domain === selected[0]);
+            if (domainDetail) {
+                editDomainForm(domainDetail.domain, (domainDetail.tags || []).join(','), domainDetail.notes || '', domainDetail.expiry || '', domainDetail.target || '');
+            } else {
+                toast('Could not find full details for selected domain');
+            }
+        }).catch(e => toast('Error fetching domain details: ' + e.message));
+    } else {
+        bulk.value = selected.join('\n');
+        toast('Selected domains copied to bulk textarea');
+    }
+}
+
+async function bulkDom(){
+    const bulkData = bulk.value.trim();
+    if (!bulkData) { toast('Bulk input is empty'); return; }
+
+    const lines = bulkData.split('\n').map(line => line.trim()).filter(Boolean);
+    const domainsToProcess = [];
+
+    for (const line of lines) {
+        const parts = line.split(',').map(p => p.trim());
+        if (parts.length < 1) continue;
+
+        const domainName = parts[0];
+        let domainTarget = target.value.trim(); // Default target from form
+        let domainTags = tags.value.trim().split(',').map(t=>t.trim()).filter(Boolean); // Default tags from form
+        let domainNotes = notes.value.trim(); // Default notes from form
+        let domainExpiry = expiry.value.trim(); // Default expiry from form
+
+        if (parts.length > 1) domainTarget = parts[1];
+        if (parts.length > 2) domainTags = parts[2].split(';').map(t=>t.trim()).filter(Boolean); // Allow semicolon for tags in bulk line
+        if (parts.length > 3) domainNotes = parts[3];
+        if (parts.length > 4) domainExpiry = parts[4];
+
+        domainsToProcess.push({
+            domain: domainName,
+            target: domainTarget,
+            tags: domainTags,
+            notes: domainNotes,
+            expiry: domainExpiry,
+            active: true // Always add as active for bulk import
+        });
+    }
+
+    if (domainsToProcess.length === 0) {
+        toast('No valid domains found in bulk input');
+        return;
+    }
+
+    try {
+        await api('/extended/domains/bulk',{method:'POST',body:JSON.stringify({domains: domainsToProcess})});
+        toast('Bulk operation completed for ' + domainsToProcess.length + ' domains');
+        domains();
+    } catch (e) {
+        toast('Error in bulk operation: ' + e.message);
+    }
+}
+
+async function bulkStatus(a){
+    let ds=pickedDomains();
+    if(ds.length === 0) { toast('No domains selected for bulk status update'); return; }
+    try {
+        await api('/extended/domains/bulk-status',{method:'POST',body:JSON.stringify({domains:ds,active:a})});
+        toast('Bulk status updated for ' + ds.length + ' domains');
+        domains();
+    } catch (e) {
+        toast('Error updating bulk status: ' + e.message);
+    }
+}
+
+async function accounts(){
+    let r=await api('/dms/accounts');
+    let allAccounts = r.accounts || [];
+    let stats = {
+        total: allAccounts.length,
+        active: allAccounts.filter(acc => !acc.suspended).length,
+        suspended: allAccounts.filter(acc => acc.suspended).length
+    };
+
+    view.innerHTML=`
+        <div class="grid grid-3" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--primary)"><i class="fas fa-users"></i></div>
+                <div class="value">${stats.total}</div>
+                <div class="label">Total Accounts</div>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--green)"><i class="fas fa-user-check"></i></div>
+                <div class="value">${stats.active}</div>
+                <div class="label">Active Accounts</div>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--amber)"><i class="fas fa-user-lock"></i></div>
+                <div class="value">${stats.suspended}</div>
+                <div class="label">Suspended Accounts</div>
+            </div>
+        </div>
+
+        <div class="card s12">
+            <div class="head">
+                <h3>DMS Accounts</h3>
+                <span class="badge">Manage Mailbox Accounts</span>
+            </div>
+            <div class="form grid-2" style="margin-top:20px; gap:15px">
+                <input class="f-span-1" id="ae" placeholder="email@domain.com" required type="email">
+                <input class="f-span-1" id="ap" placeholder="password" required type="password">
+                <div class="f-span-2 quickgrid">
+                    <button class="primary" onclick="addAccount()">Add Account</button>
+                    
+                </div>
+                <div class="f-span-2" style="margin-top:10px">
+                    <button class="ghost" onclick="toggleAllAccounts(true)">Select All</button>
+                    <button class="ghost" onclick="toggleAllAccounts(false)">Clear Selection</button>
+                    <button class="ghost" onclick="bulkAccountAction('unsuspend')">Unsuspend Selected</button>
+                    <button class="ghost" onclick="bulkAccountAction('suspend')">Suspend Selected</button>
+                    <button class="ghost danger" onclick="bulkAccountAction('delete')">Delete Selected</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card s12" style="margin-top:var(--admin-gap)">
+            <div class="head">
+                <h3>All Mail Accounts</h3>
+                <span class="badge">${allAccounts.length} Records</span>
+            </div>
+            <div class="table-responsive" style="margin-top:20px">
+                <table class="data-table-simple">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="toggleAllAccounts(this.checked)"></th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${allAccounts.map(a => {
+                            let email = a.email || a.user || String(a);
+                            return `
+                                <tr>
+                                    <td><input type="checkbox" class="account-pick" value="${esc(email)}"></td>
+                                    <td>${esc(email)}</td>
+                                    <td><span class="status-indicator ${a.suspended ? 'warn' : 'ok'}">${a.suspended ? 'Suspended' : 'Active'}</span></td>
+                                    <td>
+                                        <button class="ghost" onclick="localStorage.iq='${esc(email)}';go('inbox')">Inbox</button>
+                                        <button class="ghost ${a.suspended ? 'primary' : 'warn'}" onclick="updateAccountStatus('${esc(email)}', ${!a.suspended})">${a.suspended ? 'Unsuspend' : 'Suspend'}</button>
+                                        <button class="ghost danger" onclick="delAccount('${esc(email)}')">Delete</button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
+
+async function addAccount(){
+    let emailVal = ae.value.trim();
+    let passwordVal = ap.value.trim();
+    if (!emailVal || !passwordVal) { toast('Email and password cannot be empty'); return; }
+
+    try {
+        await api('/dms/accounts',{method:'POST',body:JSON.stringify({email:emailVal,password:passwordVal})});
+        toast('Account added');
+        ae.value = '';
+        ap.value = '';
+        accounts();
+    } catch (e) {
+        toast('Error adding account: ' + e.message);
+    }
+}
+
+async function delAccount(e){
+    if(!confirm('Are you sure you want to delete account '+e+'?')) return;
+    try {
+        await api('/dms/accounts/'+encodeURIComponent(e),{method:'DELETE'});
+        toast('Account deleted');
+        accounts();
+    } catch (e) {
+        toast('Error deleting account: ' + e.message);
+    }
+}
+
+async function updateAccountStatus(email, status){
+    try {
+        await api('/dms/accounts/'+encodeURIComponent(email),{method:'PATCH',body:JSON.stringify({suspended: !status})});
+        toast('Account status updated');
+        accounts();
+    } catch (e) {
+        toast('Error updating account status: ' + e.message);
+    }
+}
+
+function toggleAllAccounts(checked) {
+    document.querySelectorAll('.account-pick').forEach(checkbox => {
+        checkbox.checked = checked;
+    });
+}
+
+function pickedAccounts(){
+    return [...document.querySelectorAll('.account-pick:checked')].map(x=>x.value);
+}
+
+async function bulkAccountAction(action) {
+    let emails = pickedAccounts();
+    if (!emails.length) { toast('No accounts selected'); return; }
+
+    let confirmMsg = `Are you sure you want to ${action} ${emails.length} accounts?`;
+    if (action === 'delete') {
+        confirmMsg = `WARNING: Are you sure you want to DELETE ${emails.length} accounts permanently? This cannot be undone!`;
+    }
+    if (!confirm(confirmMsg)) return;
+
+    try {
+        // DMS API for accounts only supports DELETE for single, and POST for add.
+        // For suspend/unsuspend, we have to iterate or check if the API supports bulk PATCH.
+        // Assuming /extended/accounts/bulk-action for simplicity for now.
+        // If not, each account needs individual PATCH call.
+        if (action === 'suspend' || action === 'unsuspend') {
+            await Promise.all(emails.map(email =>
+                api('/dms/accounts/' + encodeURIComponent(email), {method:'PATCH', body:JSON.stringify({suspended: action === 'suspend'})})
+            ));
+        } else if (action === 'delete') {
+            await Promise.all(emails.map(email =>
+                api('/dms/accounts/' + encodeURIComponent(email), {method:'DELETE'})
+            ));
+        } else {
+            toast('Unknown bulk action: ' + action);
+            return;
+        }
+        toast(action + ' ' + emails.length + ' accounts');
+        accounts();
+    } catch (e) {
+        toast('Error performing bulk action: ' + e.message);
+    }
+}
+async function diagnostics(){
+    let d=await api('/diagnostics');
+    let checks = Object.entries(d).filter(([k])=> typeof d[k] !== 'object' && k !== 'status');
+
+    view.innerHTML=`
+        <div class="grid grid-3" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--primary)"><i class="fas fa-heartbeat"></i></div>
+                <div class="value"><span class="status-indicator ${d.status === 'ok' ? 'ok' : d.status === 'warn' ? 'warn' : 'bad'}">${esc(d.status || 'unknown')}</span></div>
+                <div class="label">Overall Status</div>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--blue)"><i class="fas fa-plug"></i></div>
+                <div class="value"><span class="status-indicator ${d.api === 'ok' ? 'ok' : 'bad'}">${esc(d.api || 'unknown')}</span></div>
+                <div class="label">API Service</div>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--green)"><i class="fas fa-server"></i></div>
+                <div class="value"><span class="status-indicator ${d.dms === 'ok' ? 'ok' : d.dms === 'warn' ? 'warn' : 'bad'}">${esc(d.dms || 'unknown')}</span></div>
+                <div class="label">Mail Server (DMS)</div>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card s12">
+                <div class="head">
+                    <h3>Health Check Details</h3>
+                    <button class="primary" onclick="diagnostics()">Run Again</button>
+                </div>
+                <div class="table-responsive" style="margin-top:20px">
+                    <table class="data-table-simple">
+                        <thead>
+                            <tr><th>Check</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            ${checks.map(([k,v]) => `
+                                <tr>
+                                    <td>${esc(k)}</td>
+                                    <td><span class="status-indicator ${v === 'ok' ? 'ok' : v === 'warn' ? 'warn' : 'bad'}">${esc(String(v))}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card s12">
+                <div class="head">
+                    <h3>Raw Diagnostics Output</h3>
+                </div>
+                <pre class="log-viewer" style="margin-top:20px">${esc(JSON.stringify(d,null,2))}</pre>
+            </div>
+        </div>
+    `;
+}
+
+async function reputation(){
+    let dom=localStorage.repDomain||localStorage.dn||'rzbal.biz.id';
+    view.innerHTML=`<div class="grid">
+        <div class="card s12"><div class="head"><div><h3>Domain/IP Reputation</h3><div class="mut">RBL blacklist lookup + mail IP discovery.</div></div><span class="badge">Spamhaus / Spamcop / Barracuda</span></div>
+        <div class="form"><input class="f8" id="repdn" value="${esc(dom)}" placeholder="domain.com"><button class="primary" style="flex:0 0 16.666%;max-width:16.666%" onclick="runRep()">Check Reputation</button><button class="ghost" style="flex:0 0 16.666%;max-width:16.666%" onclick="localStorage.dn=repdn.value;go('dns')">DNS Tools</button></div></div>
+        <div id="repout" class="s12"></div>
+    </div>`;
+    runRep();
+}
+async function runRep(){
+    localStorage.repDomain=repdn.value;
+    let r=await api('/extended/reputation/'+encodeURIComponent(repdn.value));
+    let checks=r.checks||[];
+    let cleanCount=checks.filter(x=>x.status==='clean').length;
+    let listedCount=checks.filter(x=>x.status==='listed').length;
+    repout.innerHTML=`<div class="grid">
+        ${stat('IP Address',r.ip||'-','mail server IP')}${stat('Clean RBLs',cleanCount,'of '+checks.length)}${stat('Listed RBLs',listedCount,listedCount?'PROBLEM':'all clear',listedCount?'bad':'ok')}
+        <div class="card s12"><div class="head"><h3>${esc(r.domain)} Reputation</h3><span class="badge">IP ${esc(r.ip||'-')}</span></div>
+        ${tbl(['RBL','Status','Value'],checks.map(x=>[`<span class="badge ${x.status==='clean'?'ok':'bad'}">${esc(x.rbl)}</span>`,`<span class="badge ${x.status==='clean'?'ok':'bad'}">${esc(x.status)}</span>`,esc(x.value)]))}
+        </div>
+    </div>`;
+}
+
+async function inbox(){
+    let q=localStorage.iq||'';
+    let r=await api('/extended/inboxes?q='+encodeURIComponent(q));
+    let stats=r.stats||{};
+    view.innerHTML=`<div class="grid">
+        ${stat('Total Inboxes',stats.total,'all')}${stat('Active',stats.active,'running',stats.active?'ok':'')}${stat('Suspended',stats.suspended,'blocked',stats.suspended?'warn':'')}${stat('Messages',stats.messages,'total messages')}
+        <div class="card s12"><div class="head"><div><h3>Inbox Management</h3><div class="mut">Search, manage, and control temporary inboxes.</div></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input style="max-width:360px" id="iq" value="${esc(q)}" placeholder="Search inbox / IP" onkeydown="if(event.key==='Enter'){localStorage.iq=iq.value;inbox()}"><button class="ghost" onclick="pickAll(true)">Select All</button><button class="ghost" onclick="pickAll(false)">Clear</button><button class="ghost" onclick="bulkInbox('suspend')">Suspend</button><button class="ghost" onclick="bulkInbox('unsuspend')">Unsuspend</button><button class="ghost" onclick="bulkInbox('expire')">Expire</button><button class="ghost danger" onclick="bulkInbox('delete')">Delete</button></div></div>
+        ${tbl(['Pick','Inbox','Status','Msg','IP','Activity','Action'],(r.inboxes||[]).map(x=>[`<input type="checkbox" class="ipick" value="${x.email}">`,`<span class="badge">${esc(x.email)}</span>`,x.suspended?'<span class="badge bad">suspended</span>':'<span class="badge ok">active</span>',x.messageCount,x.ip||'-',dt(x.lastActivity),`<button class="ghost" onclick="updInbox('${x.email}',{suspended:${!x.suspended}})">${x.suspended?'Unsuspend':'Suspend'}</button> <button class="ghost" onclick="updInbox('${x.email}',{forceExpire:true})">Expire</button> <button class="ghost danger" onclick="delInbox('${x.email}')">Delete</button>`]))}
+        </div>
+    </div>`;
+}
+function pickAll(v){document.querySelectorAll('.ipick').forEach(x=>x.checked=v)}
+function pickedInbox(){return [...document.querySelectorAll('.ipick:checked')].map(x=>x.value)}
+async function bulkInbox(action){let emails=pickedInbox();if(!emails.length)return toast('no inbox selected');await api('/extended/inboxes/bulk',{method:'POST',body:JSON.stringify({action,emails})});toast(action+' '+emails.length);inbox()}
+async function updInbox(e,b){await api('/extended/inboxes/'+encodeURIComponent(e),{method:'PATCH',body:JSON.stringify(b)});inbox()}
+async function delInbox(e){await api('/users/'+encodeURIComponent(e),{method:'DELETE'});inbox()}
+
+async function logs(){
+    let type=localStorage.lt||'all';
+    let r=await api('/extended/mail-logs?type='+type+'&limit=1500');
+    window.lastLogExport=r.export||'';
+    let logs=r.logs||[];
+    let typeCounts={};
+    logs.forEach(l=>{typeCounts[l.type]=(typeCounts[l.type]||0)+1});
+    view.innerHTML=`<div class="grid">
+        ${Object.entries(typeCounts).map(([t,c])=>stat(t,c,'entries')).join('')}
+        <div class="card s12"><div class="head"><div><h3>Mail Logs</h3><div class="mut">${logs.length} entries • filtered by ${type}</div></div>
+        <div class="logtools"><select id="lt" onchange="localStorage.lt=this.value;logs()"><option>all</option><option>incoming</option><option>delivery</option><option>bounce</option><option>reject</option><option>smtp</option></select><button class="ghost" onclick="download('mail-logs.txt',window.lastLogExport||'')">Export</button></div></div>
+        <pre class="logpre">${esc(logs.map(x=>'['+x.type+'] '+x.line).join('\\n'))}</pre></div>
+    </div>`;
+    lt.value=type;
+}
+function download(n,t){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t]));a.download=n;a.click()}
+
+async function queue(){
+    let q=await api('/extended/queue');
+    let hasPending=q.pending>0;
+    view.innerHTML=`<div class="grid">
+        ${stat('Queue Status',q.status,'pending '+q.pending,hasPending?'warn':'ok')}
+        <div class="card s12"><div class="head"><div><h3>Live Mail Queue</h3><div class="mut">Postfix mail queue management.</div></div>
+        <div><button class="primary" onclick="api('/extended/queue/flush',{method:'POST'}).then(queue)">Flush Queue</button> <button class="ghost danger" onclick="api('/extended/queue/delete-deferred',{method:'POST'}).then(queue)">Delete Deferred</button></div></div>
+        <pre style="max-height:500px;overflow:auto">${esc(q.raw||'empty queue')}</pre></div>
+    </div>`;
+}
+
+async function mon(){
+    let m=await api('/extended/monitoring');
+    let cpu=+m.cpu.currentLoad||0,ram=m.memory.used/m.memory.total*100,disk=+m.disk[0]?.use||0;
+    let barH=v=>Math.max(8,Math.min(100,v))+'%';
+    let barC=v=>v>80?'bad':v>60?'warn':'ok';
+    let dockerStatus=s=>{let l=(s||'').toLowerCase();let cls=l.includes('running')?'running':l.includes('created')?'created':l.includes('exited')?'exited':'other';return`<span class="docker-status"><span class="dot ${cls}"></span>${esc(s)}</span>`};
+    view.innerHTML=`<div class="grid">
+        ${stat('CPU',pct(cpu),m.cpu.cpus?.length+' cores',barC(cpu))}${stat('RAM',pct(ram),mb(m.memory.used)+' / '+mb(m.memory.total),barC(ram))}${stat('Disk',pct(disk),gb(m.disk[0]?.used||0)+' used',barC(disk))}${stat('Uptime',Math.round(m.uptime/60)+'m','process')}${stat('Mail Queue',m.queue.status,'pending '+m.queue.pending,m.queue.pending?'warn':'ok')}${stat('Rate/min',m.ratePerMinute,'mail rate')}${stat('Connections',m.connections.length,'interfaces')}
+        <div class="card s6"><h3>System Resources</h3>
+            <div style="margin:14px 0"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span class="mut">CPU Load</span><b>${pct(cpu)}</b></div><div class="progress-bar"><div class="fill ${barC(cpu)}" style="width:${barH(cpu)}"></div></div></div>
+            <div style="margin:14px 0"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span class="mut">Memory</span><b>${pct(ram)}</b></div><div class="progress-bar"><div class="fill ${barC(ram)}" style="width:${barH(ram)}"></div></div></div>
+            <div style="margin:14px 0"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span class="mut">Disk</span><b>${pct(disk)}</b></div><div class="progress-bar"><div class="fill ${barC(disk)}" style="width:${barH(disk)}"></div></div></div>
+        </div>
+        <div class="card s6"><h3>Docker Containers</h3>${tbl(['Name','Status','Image'],(m.docker||[]).map(x=>[x.name,dockerStatus(x.status),x.image]))}</div>
+        <div class="card s6"><h3>TCP States</h3><pre>${esc(m.connectionStates||'none')}</pre></div>
+        <div class="card s6"><h3>Network</h3><pre>${esc(JSON.stringify(m.connections,null,2)||'none')}</pre></div>
+    </div>`;
+}
+
+async function dns(){let d=localStorage.dn||'rzbal.biz.id';view.innerHTML=`<div class="grid"><div class="card s12"><div class="head"><div><h3>DNS Tools</h3><div class="mut">Generate, copy, and verify MX/SPF/DKIM/DMARC records.</div></div><span class="badge">domain dns</span></div><div class="form"><input class="f8" id="dn" value="${esc(d)}" placeholder="domain.com"><button class="primary" onclick="genDns()">Generate</button><button class="ghost" onclick="checkDns()">Verify DNS</button></div></div><div id="out" class="s12"></div></div>`;genDns()}function dnsCard(x, filterType = 'ALL'){
+    if (filterType !== 'ALL' && x.type !== filterType) return '';
+    return `
+        <div class="dns-card ${x.type.toLowerCase()}">
+            <div class="dns-top">
+                <div class="dns-type">${esc(x.type)}</div>
+                <button class="ghost" onclick="navigator.clipboard.writeText('${esc(x.type)} ${esc(x.name)} ${esc(x.value)} ${esc(x.ttl)}');toast('Copied record')">Copy Record</button>
+            </div>
+            <div class="dns-fields">
+                <label>Name<input readonly value="${esc(x.name)}"></label>
+                <label>TTL<input readonly value="${esc(x.ttl)}"></label>
+                <label class="dns-value">Value<pre>${esc(x.value)}</pre></label>
+            </div>
+        </div>
+    `;
+}
+
+function toggleDNSRecordType(type) {
+    document.querySelectorAll('.dns-list .dns-card').forEach(card => {
+        if (type === 'ALL') {
+            card.style.display = 'block';
+        } else if (card.classList.contains(type.toLowerCase())) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// Analytics function
+async function analytics(){
+    let d = await api('/extended/dashboard'); // Re-use dashboard data for consistency
+    let trend = d.trend || {};
+
+    let mailSentData = trend.mailPerDay || [0,0,0,0,0,0,0];
+    let spamBlockedData = trend.spamPerDay || [0,0,0,0,0,0,0];
+    let domainHealthData = trend.domainHealth || { good: 0, warn: 0, bad: 0 };
+
+    let labels = Array.from({length: 7}, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - (6 - i));
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+
+    // Generate bar chart for mail volume
+    const mailVolumeBars = mailSentData.map((val, i) => {
+        const maxVal = Math.max(...mailSentData, 1);
+        const height = (val / maxVal) * 100;
+        return `<div class="bar-col"><div class="bar-val">${val}</div><div class="bar" style="height:${Math.max(8, height)}%"></div><div class="bar-label">${labels[i]}</div></div>`;
+    }).join('');
+
+    // Generate bar chart for spam blocked
+    const spamBlockedBars = spamBlockedData.map((val, i) => {
+        const maxVal = Math.max(...spamBlockedData, 1);
+        const height = (val / maxVal) * 100;
+        return `<div class="bar-col"><div class="bar-val">${val}</div><div class="bar bad" style="height:${Math.max(8, height)}%;background:linear-gradient(180deg,var(--red),#f87171)"></div><div class="bar-label">${labels[i]}</div></div>`;
+    }).join('');
+
+    view.innerHTML = `
+        <div class="grid grid-3" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--blue)"><i class="fas fa-chart-line"></i></div>
+                <div class="value">${d.totals?.emailToday || 0}</div>
+                <div class="label">Mail Today</div>
+                ${sparklineChart(mailSentData, 'blue')}
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--red)"><i class="fas fa-shield-virus"></i></div>
+                <div class="value">${d.totals?.spamBlocked || 0}</div>
+                <div class="label">Spam Blocked</div>
+                ${sparklineChart(spamBlockedData, 'red')}
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--green)"><i class="fas fa-server"></i></div>
+                <div class="value">${(d.server?.health === 'ok' ? 'OK' : 'Warning')}</div>
+                <div class="label">Server Health</div>
+                <span class="status-indicator ${d.server?.health === 'ok' ? 'ok' : 'warn'}">API Status</span>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card s12">
+                <div class="head">
+                    <h3>Email Volume (Last 7 Days)</h3>
+                    <span class="badge">Total: ${d.totals?.email7d || 0}</span>
+                </div>
+                <div class="bar-chart" style="height:200px; margin-top:20px; overflow:visible;">
+                    ${mailVolumeBars}
+                </div>
+            </div>
+            <div class="card s12">
+                <div class="head">
+                    <h3>Spam Blocked (Last 7 Days)</h3>
+                    <span class="badge bad">Total: ${d.totals?.spamBlocked || 0}</span>
+                </div>
+                <div class="bar-chart" style="height:200px; margin-top:20px; overflow:visible;">
+                    ${spamBlockedBars}
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:var(--admin-gap)">
+            <div class="card s12">
+                <div class="head">
+                    <h3>Domain Health Distribution</h3>
+                    <span class="badge">Total: ${d.totals?.domains || 0}</span>
+                </div>
+                <div class="grid grid-3" style="margin-top:20px">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(((domainHealthData.good / d.totals.domains) * 100).toFixed(0), 'Good', 'green')}
+                        <div class="label">Good</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(((domainHealthData.warn / d.totals.domains) * 100).toFixed(0), 'Warning', 'amber')}
+                        <div class="label">Warning</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(((domainHealthData.bad / d.totals.domains) * 100).toFixed(0), 'Bad', 'red')}
+                        <div class="label">Bad</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    `;
+}
+
+// Security function
+async function sec(){
+    let x = await api('/extended/security');
+    let cfg = x.config || {};
+    let sessRows = (x.sessions||[]).map(s=>`<tr><td>${esc(s.username||'-')}</td><td>${esc(s.ip||'-')}</td><td>${s.lastActivity?dt(s.lastActivity):s.createdAt?dt(s.createdAt):'-'}</td><td><button class="ghost danger" onclick="killSession('${esc(s.token)}')">Kill</button></td></tr>`).join('');
+    let loginRows = (x.loginHistory||[]).slice(0,50).map(l=>`<tr><td>${esc(l.username||'admin')}</td><td>${esc(l.ip||'-')}</td><td>${dt(l.timestamp)}</td><td>success</td></tr>`).join('');
+    let failedRows = (x.failedLogins||[]).slice(0,20).map(l=>`<tr><td>${esc(l.username||'-')}</td><td>${esc(l.ip||'-')}</td><td>${dt(l.timestamp)}</td><td class="badge bad">failed</td></tr>`).join('');
+    let auditRows = (x.audit||[]).slice(0,100).map(a=>`<div class="sysline"><span>${dt(a.timestamp)} — <b>${esc(a.type)}</b> ${esc(JSON.stringify(a.data||{}).substring(0,120))}</span></div>`).join('');
+    view.innerHTML=`<div class="grid">
+        <div class="card s4"><div class="head"><h3>Active Sessions</h3><span class="badge">${(x.sessions||[]).length} active</span></div>
+            <div class="tbl"><table><thead><tr><th>User</th><th>IP</th><th>Last Activity</th><th>Action</th></tr></thead><tbody>${sessRows||'<tr><td colspan="4">No active sessions</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s4"><div class="head"><h3>Login History</h3><span class="badge">${(x.loginHistory||[]).length} logins</span></div>
+            <div class="tbl"><table><thead><tr><th>User</th><th>IP</th><th>Time</th><th>Status</th></tr></thead><tbody>${loginRows||'<tr><td colspan="4">No login history</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s4"><div class="head"><h3>Failed Logins</h3><span class="badge bad">${(x.abuse?.failed)||0} attempts</span></div>
+            <div class="tbl"><table><thead><tr><th>User</th><th>IP</th><th>Time</th><th>Status</th></tr></thead><tbody>${failedRows||'<tr><td colspan="4">No failed logins</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s6"><div class="head"><h3>IP Whitelist</h3><span class="badge">${(cfg.ipWhitelist||[]).length} IPs</span></div>
+            <textarea id="ipWhitelist" rows="5" placeholder="One IP per line">${(cfg.ipWhitelist||[]).join('\\n')}</textarea>
+            <button class="primary" onclick="saveSec()" style="margin-top:10px">Save Whitelist</button>
+        </div>
+        <div class="card s6"><div class="head"><h3>IP Blacklist</h3><span class="badge bad">${(cfg.ipBlacklist||[]).length} IPs</span></div>
+            <textarea id="ipBlacklist" rows="5" placeholder="One IP per line">${(cfg.ipBlacklist||[]).join('\\n')}</textarea>
+            <button class="ghost danger" onclick="saveSec()" style="margin-top:10px">Save Blacklist</button>
+        </div>
+        <div class="card s12"><div class="head"><h3>Admin Audit Log</h3><span class="badge">${(x.audit||[]).length} events</span></div>
+            <div class="logpre">${auditRows||'No audit events'}</div>
+        </div>
+    </div>`;
+}
+async function saveSec(){
+    let whitelist=document.getElementById('ipWhitelist').value.split('\\n').filter(Boolean);
+    let blacklist=document.getElementById('ipBlacklist').value.split('\\n').filter(Boolean);
+    let res=await api('/extended/security',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ipWhitelist:whitelist,ipBlacklist:blacklist})});
+    if(res.success){toast('Security settings saved');sec()}else{toast('Error: '+(res.message||'unknown'),'error')}
+}
+async function killSession(token){
+    if(!confirm('Kill session '+token+'?'))return;
+    await api('/extended/security/kill-session/'+encodeURIComponent(token),{method:'POST'});
+    toast('Session killed');sec();
+}
+
+// Spam function
+async function spam(){
+    let x = await api('/extended/spam');
+    view.innerHTML = `
+        <div class="row">
+            <div class="card mini-stat">
+                <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="val">${x.spam_blocked_today || 0}</div>
+                <div class="label">Spam Blocked Today</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card">
+                <h3>Spam Blacklist</h3>
+                <input type="text" id="blacklistEntry" placeholder="Add email or domain">
+                <button class="ghost" onclick="addSpamEntry('blacklist')">Add</button>
+                <div class="tbl">
+                    <table>
+                        <thead><tr><th>Entry</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${(x.blacklist||[]).length?(x.blacklist||[]).map(e=>`<tr><td>${esc(e)}</td><td><button class="ghost danger" onclick="removeSpamEntry('blacklist','${esc(e)}')">Remove</button></td></tr>`).join(''):'<tr><td colspan="2" class="mut" style="text-align:center;padding:20px">No blacklisted entries</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Spam Whitelist</h3>
+                <input type="text" id="whitelistEntry" placeholder="Add email or domain">
+                <button class="ghost" onclick="addSpamEntry('whitelist')">Add</button>
+                <div class="tbl">
+                    <table>
+                        <thead><tr><th>Entry</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${(x.whitelist||[]).length?(x.whitelist||[]).map(e=>`<tr><td>${esc(e)}</td><td><button class="ghost danger" onclick="removeSpamEntry('whitelist','${esc(e)}')">Remove</button></td></tr>`).join(''):'<tr><td colspan="2" class="mut" style="text-align:center;padding:20px">No whitelisted entries</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card">
+                <h3>Spam Quarantine</h3>
+                <div class="tbl">
+                    <table>
+                        <thead><tr><th>From</th><th>To</th><th>Subject</th><th>Date</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${(x.quarantine||[]).length?(x.quarantine||[]).map(q=>`<tr><td>${esc(q.from)}</td><td>${esc(q.to)}</td><td>${esc(q.subject)}</td><td>${esc(q.date)}</td><td><button class="ghost" onclick="releaseQuarantine('${esc(q.id)}')">Release</button></td></tr>`).join(''):'<tr><td colspan="5" class="mut" style="text-align:center;padding:20px">No quarantined emails</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+async function addSpamEntry(type) {
+    let entryInput = document.getElementById(`${type}Entry`);
+    let entry = entryInput.value.trim();
+    if (!entry) return;
+    let res = await api(`/extended/spam/${type}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ entry: entry })
+    });
+    if(res.status === 'success') { toast(type+" entry added"); entryInput.value = ''; spam(); }
+    else { toast("Error: "+res.message); }
+}
+async function removeSpamEntry(type, entry) {
+    if(confirm(`Are you sure you want to remove '${entry}' from ${type}?`)) {
+        let res = await api(`/extended/spam/${type}/${encodeURIComponent(entry)}`, {method: 'DELETE'});
+        if(res.status === 'success') { toast(type+" entry removed"); spam(); }
+        else { toast("Error: "+res.message); }
+    }
+}
+async function releaseQuarantine(id) {
+    if(confirm('Are you sure you want to release this email from quarantine?')) {
+        let res = await api(`/extended/spam/quarantine/${id}/release`, {method: 'POST'});
+        if(res.status === 'success') { toast('Email released'); spam(); }
+        else { toast('Error: '+res.message); }
+    }
+}
+
+// Backup function
+async function backup(){
+    let x = await api('/backups');
+    let bkRows=(x.backups||[]).map(b=>`<tr><td>${esc(b.filename)}</td><td>${esc(b.size)}</td><td>${esc(b.date)}</td><td><button class="ghost" onclick="restoreBackup('${esc(b.filename)}')">Restore</button></td></tr>`).join('');
+    view.innerHTML=`<div class="grid">
+        <div class="card s6"><div class="head"><h3>Create New Backup</h3></div>
+            <button class="primary" onclick="createBackup()">Create Backup Now</button>
+            <div id="backupStatus" class="mut" style="margin-top:10px"></div>
+        </div>
+        <div class="card s6"><div class="head"><h3>Available Backups</h3><span class="badge">${(x.backups||[]).length} files</span></div>
+            <div class="tbl"><table><thead><tr><th>Filename</th><th>Size</th><th>Date</th><th>Action</th></tr></thead><tbody>${bkRows||'<tr><td colspan="4" class="mut" style="text-align:center;padding:20px">No backups yet</td></tr>'}</tbody></table></div>
+        </div>
+    </div>`;
+}
+async function createBackup() {
+    document.getElementById('backupStatus').innerHTML = 'Creating backup... This may take a moment.';
+    let res = await api('/backups/create', {method: 'POST'});
+    if(res.status === 'success') {
+        toast('Backup created');
+        document.getElementById('backupStatus').innerHTML = 'Backup created.';
+        backup();
+    } else {
+        toast('Error: '+res.message);
+        document.getElementById('backupStatus').innerHTML = 'Backup failed: ' + res.message;
+    }
+}
+async function restoreBackup(filename) {
+    if(confirm(`Are you sure you want to restore from backup "${filename}"? This will overwrite current data!`)) {
+        let res = await api(`/backups/restore/${filename}`, {method: 'POST'});
+        if(res.status === 'success') { toast('Restore initiated'); }
+        else { toast('Error: '+res.message); }
+    }
+}
+
+// System function
+async function system(){
+    let x = await api('/extended/system');
+    let ports = (x.smtpPorts||'25,465,587').split(',').map(s=>s.trim());
+    view.innerHTML=`<div class="grid">
+        <div class="card s12"><div class="head"><h3>System Settings</h3><button class="primary" onclick="saveSys()">Save Settings</button></div>
+            <div class="form">
+                <div class="f4"><label for="maintenanceMode">Maintenance Mode</label><select id="maintenanceMode"><option value="false" ${!x.maintenance?'selected':''}>Off</option><option value="true" ${x.maintenance?'selected':''}>On</option></select></div>
+                <div class="f4"><label for="smtpPort">SMTP Port</label><input type="number" id="smtpPort" value="${ports[0]||25}"></div>
+                <div class="f4"><label for="submissionPort">Submission Port</label><input type="number" id="submissionPort" value="${ports[1]||587}"></div>
+                <div class="f4"><label for="imapsPort">IMAPS Port</label><input type="number" id="imapsPort" value="${ports[2]||993}"></div>
+                <div class="f4"><label for="retentionDays">Mail Retention (Days)</label><input type="number" id="retentionDays" value="${x.retentionDays||7}"></div>
+                <div class="f4"><label for="tempMailExpiry">Temp Mail Expiry (Hours)</label><input type="number" id="tempMailExpiry" value="${x.tempMailExpiryHours||24}"></div>
+                <div class="f8"><label for="adminEmail">Admin Notification Email</label><input type="email" id="adminEmail" value="${esc(x.notifications||'')}" placeholder="admin@example.com"></div>
+            </div>
+        </div>
+    </div>`;
+}
+async function saveSys(){
+    let settings={
+        maintenance:document.getElementById('maintenanceMode').value==='true',
+        smtpPorts:[document.getElementById('smtpPort').value,document.getElementById('submissionPort').value,document.getElementById('imapsPort').value].join(','),
+        retentionDays:parseInt(document.getElementById('retentionDays').value)||7,
+        tempMailExpiryHours:parseInt(document.getElementById('tempMailExpiry').value)||24,
+        notifications:document.getElementById('adminEmail').value.trim()
+    };
+    let res=await api('/extended/system',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(settings)});
+    if(res.success){toast('System settings saved');system()}else{toast('Error: '+(res.message||'unknown'),'error')}
+}
+
+// Ops function
+async function ops(){
+    let x = await api('/extended/ops');
+    let c=x.containers||{};
+    let containerRows=[['DMS',c.dms],['API',c.api],['Nginx',c.nginx]].map(([name,val])=>{
+        let parts=(val||'').split('|');
+        let state=parts[0]||'unknown', status=parts[1]||'', image=parts[2]||'';
+        let cls=state==='running'?'ok':state==='exited'?'bad':'warn';
+        return `<tr><td>${name}</td><td><span class="badge ${cls}">${state}</span></td><td>${esc(status)}</td><td>${esc(image)}</td></tr>`;
+    }).join('');
+    let portRows=(x.ports||[]).map(p=>`<tr><td>${esc(p)}</td></tr>`).join('');
+    let composeRows=(x.compose||[]).map(line=>{
+        let [name,status,ports]=line.split('|');
+        return `<tr><td>${esc(name)}</td><td>${esc(status)}</td><td>${esc(ports||'-')}</td></tr>`;
+    }).join('');
+    let backupRows=(x.backups||[]).map(b=>`<tr><td>${esc(b.file)}</td><td>${(b.size/1024).toFixed(1)} KB</td><td>${dt(b.createdAt)}</td></tr>`).join('');
+    view.innerHTML=`<div class="grid">
+        <div class="card s12"><div class="head"><h3>One-Click Operations</h3></div>
+            <div class="form">
+                <button class="primary" onclick="runOp('dms-reload')">DMS Reload</button>
+                <button class="primary" onclick="runOp('dms-restart')">DMS Restart</button>
+                <button class="primary" onclick="runOp('api-restart')">API Restart</button>
+                <button class="ghost" onclick="runOp('nginx-reload')">Nginx Reload</button>
+                <button class="ghost danger" onclick="runOp('ops-cleanup')">Cleanup</button>
+                <button class="ghost danger" onclick="runOp('docker-prune')">Docker Prune</button>
+            </div>
+        </div>
+        <div class="card s6"><div class="head"><h3>Container Status</h3></div>
+            <div class="tbl"><table><thead><tr><th>Container</th><th>State</th><th>Status</th><th>Image</th></tr></thead><tbody>${containerRows||'<tr><td colspan="4">No containers</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s6"><div class="head"><h3>Docker Compose</h3></div>
+            <div class="tbl"><table><thead><tr><th>Service</th><th>Status</th><th>Ports</th></tr></thead><tbody>${composeRows||'<tr><td colspan="3">N/A</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s4"><div class="head"><h3>Exposed Ports</h3></div>
+            <div class="tbl"><table><thead><tr><th>Port</th></tr></thead><tbody>${portRows||'<tr><td>N/A</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s4"><div class="head"><h3>TLS Certificate</h3></div>
+            <pre class="logpre">${esc(x.cert||'N/A')}</pre>
+        </div>
+        <div class="card s4"><div class="head"><h3>Recent Backups</h3></div>
+            <div class="tbl"><table><thead><tr><th>File</th><th>Size</th><th>Date</th></tr></thead><tbody>${backupRows||'<tr><td colspan="3">No backups</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s12"><div class="head"><h3>Action Output</h3></div>
+            <pre id="actionOutput" class="logpre">No recent action output.</pre>
+        </div>
+    </div>`;
+}
+async function runOp(operation){
+    if(!confirm('Run '+operation+'?'))return;
+    let out=document.getElementById('actionOutput');
+    if(out) out.innerText='Running '+operation+'...';
+    try{
+        let res=await api('/extended/ops/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:operation})});
+        if(out) out.innerText=res.out||'Operation completed.';
+        toast(operation+' completed');
+    }catch(e){
+        if(out) out.innerText='Error: '+e.message;
+        toast('Error: '+e.message,'error');
+    }
+}
+
+// Auto-refresh system code
+function sparklineChart(data, colorClass = 'primary') {
+    const maxVal = Math.max(...data, 1);
+    const bars = data.map(val => {
+        const height = (val / maxVal) * 100;
+        return `<div class="bar" style="height:${height}%" title="${val}"></div>`;
+    }).join('');
+    return `<div class="sparkline-chart ${colorClass}">${bars}</div>`;
+}
+
+function radialProgress(value, label, color = 'primary') {
+    return `<div class="radial-progress" style="--p:${value};--c:var(--${color})"><div class="bg"></div><span>${value}%</span><div class="label">${label}</div></div>`;
+}
+
+    const refreshBar = document.getElementById('refreshBar');
+    if (refreshBar) {
+        if (refreshBar.classList.contains('active')) {
+            refreshBar.classList.remove('active');
+            stopAutoRefresh();
+            alert('Auto-refresh disabled.');
+        } else {
+            refreshBar.classList.add('active');
+            alert('Auto-refresh enabled.');
+        }
+    }
+
+render();
+
+function genDns(){let d=dn.value.trim();if(!d)return toast('enter domain');localStorage.dn=d;out.innerHTML='<div class="grid">'+stat('Domain',d,'checking...')+'</div>';api('/extended/dns/'+encodeURIComponent(d)).then(r=>{let records=r.records||[];out.innerHTML='<div class="grid">'+stat('Domain',d,records.length+' records')+stat('MX',records.filter(x=>x.type==='MX').length,'records')+stat('TXT',records.filter(x=>x.type==='TXT').length,'SPF/DKIM/DMARC')+'</div>'+records.map(x=>dnsCard(x)).join('')}).catch(e=>{out.innerHTML='<div class="card bad">'+esc(e.message)+'</div>'})}
+
+function checkDns(){genDns()}
+</script></body></html>

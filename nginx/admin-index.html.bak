@@ -1,0 +1,1715 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JoeMail Admin</title><style>:root{--background:#1a1a1a;--foreground:#f5f5f5;--card:#242424;--popover:#212121;--primary:#ff6b4a;--accent:#ff4fa0;--secondary:#2e2e2e;--muted:#333;--muted-foreground:#b3b3b3;--border:#474747;--input:#3d3d3d;--destructive:#e45454;--success:#29b36f;--warning:#f6ad28;--radius:14px}*{box-sizing:border-box;min-width:0}html{color-scheme:dark;background:var(--background);scroll-behavior:smooth}body{margin:0;min-height:100vh;background:linear-gradient(180deg,#1a1a1a 0%,#1f1f1f 52%,#242424 100%);color:var(--foreground);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial;font-size:14px;-webkit-font-smoothing:antialiased}body:before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);background-size:54px 54px;background-position:-1px -1px;pointer-events:none;z-index:0}.main:before{content:'';position:fixed;left:240px;right:0;top:64px;bottom:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:54px 54px;pointer-events:none;z-index:-1}::selection{background:rgba(255,107,74,.26)}button,input,textarea,select{font:inherit;color-scheme:dark}button{border:1px solid var(--border);border-radius:10px;padding:8px 12px;background:#1f1f1f;color:var(--foreground);cursor:pointer;font-weight:600;transition:background .18s,border-color .18s,transform .18s}button:hover{background:var(--secondary);border-color:rgba(255,107,74,.35)}.primary{background:linear-gradient(135deg,var(--primary),var(--accent));border-color:transparent;color:#111}.danger{background:rgba(228,84,84,.10);border-color:rgba(228,84,84,.35);color:#ffb8b8}.ghost{background:#1f1f1f;border-color:rgba(71,71,71,.78)}input,textarea,select{width:100%;background:#1f1f1f;border:1px solid rgba(71,71,71,.86);border-radius:10px;color:var(--foreground);padding:10px 12px;outline:0}input:focus,textarea:focus,select:focus{border-color:rgba(255,107,74,.56);box-shadow:0 0 0 3px rgba(255,107,74,.10)}textarea{min-height:116px}.mut{color:var(--muted-foreground)}.bad{color:#ff8b8b}.ok{color:#6ee7a8}.warn{color:#facc6b}.login{min-height:100vh;display:grid;place-items:center;padding:24px;position:relative;z-index:1}.card{background:#242424;border:1px solid rgba(71,71,71,.82);border-radius:18px;padding:18px;box-shadow:0 10px 26px rgba(0,0,0,.22),0 0 20px rgba(255,107,74,.035);position:relative;overflow:auto}.card:before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(255,107,74,.34),rgba(255,79,160,.26),transparent 72%);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}.card:hover{border-color:rgba(255,107,74,.28);background:#282828;box-shadow:0 12px 30px rgba(0,0,0,.24),0 0 24px rgba(255,79,160,.045)}.app{position:relative;z-index:1;min-height:100vh}.sidebar{position:fixed;left:0;top:0;z-index:40;width:240px;height:100vh;background:#1a1a1a;border-right:1px solid rgba(71,71,71,.6);display:flex;flex-direction:column}.brand{height:64px;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid rgba(71,71,71,.6);background:#1a1a1a;flex-shrink:0}.logo{width:32px;height:32px;border-radius:10px;background:#2e2e2e;border:1px solid var(--border);display:grid;place-items:center;font-weight:800;color:var(--foreground);flex-shrink:0}.brand h1{margin:0;font-size:14px;font-weight:650}.brand p{margin:2px 0 0;font-size:12px;color:var(--muted-foreground)}.nav{flex:1;padding:12px 8px;overflow-y:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav button{width:100%;display:flex;align-items:center;gap:12px;padding:9px 12px;margin:2px 0;border:0;border-radius:8px;background:transparent;color:var(--muted-foreground);text-align:left;font-weight:550}.nav button:hover{background:#2e2e2e;color:var(--foreground)}.nav button.active{background:#2e2e2e;color:var(--foreground);box-shadow:inset 3px 0 0 var(--primary)}.ico{width:16px;height:16px;display:inline-grid;place-items:center;font-size:11px;color:inherit;flex-shrink:0}.sidefoot{border-top:1px solid var(--border);padding:8px}.sidefoot button{width:100%;display:flex;align-items:center;justify-content:flex-start;gap:12px;border:0;background:transparent;color:var(--muted-foreground);border-radius:8px}.sidefoot button:hover{background:#2e2e2e;color:var(--foreground)}.mainwrap{margin-left:240px;min-height:100vh}.appbar{height:64px;position:fixed;top:0;left:240px;right:0;z-index:30;background:rgba(26,26,26,.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(71,71,71,.6);display:flex;align-items:center;justify-content:space-between;padding:0 24px}.left{display:flex;align-items:center;gap:12px}.crumb{font-size:13px;color:var(--muted-foreground)}.main{padding:88px 24px 28px;overflow-x:hidden}.title{margin:0 0 18px;font-size:32px;line-height:1.1;font-weight:800;background:linear-gradient(135deg,#ff6b4a,#ff4fa0);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 10px rgba(255,107,74,.18)}.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}.s12{grid-column:span 12}.s9{grid-column:span 9}.s8{grid-column:span 8}.s6{grid-column:span 6}.s4{grid-column:span 4}.s3{grid-column:span 3}.form{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:10px}.f1{grid-column:span 1}.f2{grid-column:span 2}.f3{grid-column:span 3}.f8{grid-column:span 8}.f9{grid-column:span 9}.f10{grid-column:span 10}.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}.head h3,.card h3{margin:0 0 5px;font-size:16px}.num{font-size:31px;font-weight:800;margin:8px 0}.badge,.max-pill{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;background:#1f1f1f;border:1px solid rgba(71,71,71,.78);color:var(--muted-foreground);font-size:12px;margin:2px}table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid rgba(71,71,71,.6);text-align:left;vertical-align:top}th{color:var(--muted-foreground);font-size:12px;font-weight:650}pre{margin:0;white-space:pre-wrap;word-break:break-word;max-height:520px;overflow:auto;background:#1f1f1f;border:1px solid var(--border);border-radius:12px;padding:13px;font-family:'JetBrains Mono','Fira Code','SF Mono',monospace;font-size:12px}.bottomnav{display:none}.cmd{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:flex-start;justify-content:center;padding-top:90px;z-index:99}.cmd.show{display:flex}.cmdbox{width:min(680px,92vw);background:#242424;border:1px solid var(--border);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.45);overflow:hidden}.cmdbox input{border:0;border-bottom:1px solid var(--border);border-radius:0;background:#202020;padding:17px 18px;font-size:16px}.cmdres{max-height:430px;overflow:auto;padding:10px}.cmditem{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:12px;cursor:pointer}.cmditem:hover{background:#303030}.cmdkey,.kbd{font-size:11px;color:#cfcfcf;border:1px solid var(--border);padding:3px 7px;border-radius:7px;background:#202020}.quick{min-width:250px}.mobile-menu{display:none}.healthbar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.healthpill{background:#1f1f1f;border:1px solid rgba(71,71,71,.78);border-radius:14px;padding:11px 13px}.healthpill b{display:block;font-size:18px;margin-top:4px}#toast{position:fixed;right:18px;bottom:18px;background:#242424;border:1px solid var(--border);border-radius:12px;padding:12px 14px;z-index:120;display:none}.login-card{width:min(430px,92vw);padding:28px}.loginbrand{display:flex;align-items:center;gap:12px;margin-bottom:22px}.loginbrand h1{margin:0;font-size:22px;font-weight:800;background:linear-gradient(135deg,#ff6b4a,#ff4fa0);-webkit-background-clip:text;background-clip:text;color:transparent}.loginbrand p{margin:2px 0 0;font-size:12px;color:var(--muted-foreground)}.nav button.active .ico{color:#ff6b4a;text-shadow:0 0 10px rgba(255,107,74,.28)}.nav button:hover .ico{color:#f5f5f5}.sidebar .logo{box-shadow:0 0 0 1px rgba(255,107,74,.08),0 0 18px rgba(255,107,74,.06)}.appbar .max-pill{box-shadow:0 0 0 1px rgba(41,179,111,.09)}.card h3{letter-spacing:.01em}.card .mut{font-size:13px}.title:after{content:'';display:block;width:72px;height:3px;border-radius:99px;margin-top:10px;background:linear-gradient(90deg,#ff6b4a,#ff4fa0)}@keyframes status-pulse{0%,100%{opacity:1}50%{opacity:.4}}@media(max-width:1023px){.sidebar{display:flex;left:0;width:240px;transform:translateX(-104%);transition:transform .22s ease;box-shadow:18px 0 50px rgba(0,0,0,.45)}.sidebar.show{transform:translateX(0)}.mainwrap{margin-left:0}.appbar{display:flex;left:0;padding:0 14px}.appbar .mobile-menu{display:inline-flex}.main{padding:88px 14px 28px}.main:before{left:0}.title{font-size:28px}.bottomnav{display:none!important}.quick{display:none}.grid,.form{grid-template-columns:1fr}.s12,.s9,.s8,.s6,.s4,.s3,.f1,.f2,.f3,.f8,.f9,.f10{grid-column:1}.healthbar{grid-template-columns:repeat(2,1fr)}}
+/* JoeMail Admin Professional Theme Override 2026 */
+:root{--background:#08111f;--foreground:#e5eefc;--card:rgba(17,24,39,.88);--popover:#0f172a;--primary:#2563eb;--accent:#38bdf8;--secondary:#172033;--muted:#1e293b;--muted-foreground:#94a3b8;--border:rgba(148,163,184,.22);--input:#111827;--destructive:#ef4444;--success:#22c55e;--warning:#f59e0b;--radius:18px}body{background:radial-gradient(circle at 18% 0%,rgba(37,99,235,.22),transparent 34%),radial-gradient(circle at 84% 10%,rgba(56,189,248,.16),transparent 30%),linear-gradient(180deg,#08111f 0%,#0b1220 55%,#0f172a 100%)!important;color:var(--foreground)!important}.card,.login-card{background:linear-gradient(180deg,rgba(17,24,39,.88),rgba(15,23,42,.94))!important;border:1px solid var(--border)!important;border-radius:22px!important;box-shadow:0 24px 80px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.04)!important}.sidebar,.appbar,.bottomnav{background:rgba(2,6,23,.72)!important;border-color:var(--border)!important;backdrop-filter:blur(18px)!important}.brand .logo,.loginbrand .logo{background:linear-gradient(135deg,#2563eb,#38bdf8)!important;color:#fff!important;box-shadow:0 12px 34px rgba(37,99,235,.3)}button.primary,.primary{background:linear-gradient(135deg,#2563eb,#38bdf8)!important;color:#fff!important;border:0!important}button:hover{border-color:rgba(56,189,248,.45)!important}.nav button.active,.bottomnav button.active{background:rgba(37,99,235,.18)!important;border-color:rgba(56,189,248,.36)!important;color:#f8fafc!important}.title{letter-spacing:-.04em!important}.badge,.max-pill,.healthpill{background:rgba(15,23,42,.72)!important;border:1px solid var(--border)!important;border-radius:999px!important}input,textarea,select{background:rgba(15,23,42,.88)!important;border:1px solid rgba(148,163,184,.24)!important;border-radius:14px!important;color:#f8fafc!important}table{border-color:var(--border)!important}th{color:#94a3b8!important}tr:hover td{background:rgba(37,99,235,.08)!important}.num{letter-spacing:-.055em!important}
+
+/* JoeMail Admin Responsive UX Maximal 2026 */
+:root{--admin-sidebar:260px;--admin-gap:18px;--orange:#ff6b4a;--blue:#2563eb;--cyan:#38bdf8;--bg0:#080d16;--bg1:#0d1422;--panel:rgba(15,23,42,.82);--panel2:rgba(17,24,39,.94);--line:rgba(148,163,184,.20);--soft:rgba(148,163,184,.10)}
+html,body,#root{width:100%;min-height:100%;overflow-x:hidden}body{background:radial-gradient(circle at 18% 0%,rgba(255,107,74,.13),transparent 28%),radial-gradient(circle at 82% 12%,rgba(56,189,248,.14),transparent 28%),linear-gradient(180deg,var(--bg0),var(--bg1))!important}.app{min-height:100vh;display:grid!important;grid-template-columns:var(--admin-sidebar) minmax(0,1fr)!important}.sidebar{position:sticky!important;top:0;height:100vh!important;overflow-y:auto!important;padding:18px 14px!important;border-right:1px solid var(--line)!important}.brand{gap:12px!important;margin-bottom:18px!important}.brand h1{font-size:20px!important;letter-spacing:-.04em!important}.brand p{font-size:12px!important;color:#94a3b8!important}.nav{display:flex!important;flex-direction:column!important;gap:7px!important}.nav button,.sidefoot button{width:100%!important;justify-content:flex-start!important;gap:10px!important;border-radius:14px!important;padding:11px 12px!important}.nav button.active{background:linear-gradient(135deg,rgba(255,107,74,.18),rgba(37,99,235,.16))!important;border-color:rgba(255,107,74,.34)!important}.ico{flex:0 0 auto;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:34px!important;height:28px!important;border-radius:10px!important;background:rgba(255,255,255,.06)!important;color:#ffb199!important;font-size:11px!important;font-weight:800!important}.mainwrap{min-width:0!important;width:100%!important}.appbar{position:sticky!important;top:0;z-index:20;height:auto!important;min-height:64px!important;padding:12px 18px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;border-bottom:1px solid var(--line)!important}.appbar>div:last-child{display:flex!important;gap:10px!important;align-items:center!important;flex-wrap:wrap!important;justify-content:flex-end!important}.main{width:100%!important;max-width:1540px!important;margin:0 auto!important;padding:24px!important;min-width:0!important;overflow:visible!important}.title{font-size:clamp(28px,4vw,48px)!important;line-height:1!important;margin:0 0 22px!important;background:linear-gradient(135deg,#fff,#c7d2fe 50%,#ffb199)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}.grid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:var(--admin-gap)!important;align-items:start!important}.card{min-width:0!important;width:100%!important;padding:18px!important;overflow:hidden!important;border-radius:22px!important}.s12{grid-column:span 12!important}.s9{grid-column:span 9!important}.s8{grid-column:span 8!important}.s6{grid-column:span 6!important}.s4,.s3{grid-column:span 3!important}.head{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:14px!important;flex-wrap:wrap!important;margin-bottom:14px!important}.head h3,.card h3{margin:0 0 10px!important;font-size:17px!important;letter-spacing:-.02em!important}.mut{color:#94a3b8!important}.badge,.max-pill,.healthpill{display:inline-flex!important;align-items:center!important;gap:7px!important;margin:3px 5px 3px 0!important;padding:7px 10px!important;white-space:normal!important}.healthbar{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;margin-bottom:18px!important}.healthpill{justify-content:space-between!important;border-radius:16px!important;background:rgba(15,23,42,.70)!important}.form{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:12px!important;align-items:end!important}.form>*{min-width:0!important}.form .f1{grid-column:span 1!important}.form .f2{grid-column:span 2!important}.form .f3{grid-column:span 3!important}.form .f8{grid-column:span 8!important}.form .f9{grid-column:span 9!important}.form .f10{grid-column:span 10!important}label{display:flex!important;flex-direction:column!important;gap:7px!important;color:#cbd5e1!important;font-weight:700!important;font-size:12px!important;text-transform:uppercase!important;letter-spacing:.04em!important}input,textarea,select,button{max-width:100%!important}input,textarea,select{width:100%!important;min-height:42px!important;padding:10px 12px!important;border-radius:14px!important}textarea{min-height:110px!important;resize:vertical!important}button{min-height:40px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;white-space:normal!important;line-height:1.15!important}button.primary,.primary{background:linear-gradient(135deg,var(--orange),#ff4fa0)!important;color:#fff!important;box-shadow:0 14px 38px rgba(255,107,74,.20)!important}.ghost{background:rgba(15,23,42,.70)!important}.danger{background:rgba(239,68,68,.13)!important;color:#fecaca!important;border-color:rgba(239,68,68,.35)!important}.card table,table{display:block!important;width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;border-collapse:separate!important;border-spacing:0!important;-webkit-overflow-scrolling:touch!important;white-space:nowrap!important}.card table tbody,table tbody{display:table!important;width:100%!important;min-width:760px!important}.card:has(table)::after{content:'← geser tabel →';display:block;margin-top:8px;color:#64748b;font-size:11px;text-align:right}th,td{padding:12px 14px!important;border-bottom:1px solid rgba(148,163,184,.12)!important;vertical-align:top!important;max-width:520px!important}td{color:#dbeafe!important}td:nth-child(3),td:nth-child(4),td:nth-child(5){white-space:normal!important;word-break:break-word!important}pre{width:100%!important;max-width:100%!important;overflow:auto!important;white-space:pre-wrap!important;word-break:break-word!important;line-height:1.55!important;background:rgba(2,6,23,.45)!important;border:1px solid rgba(148,163,184,.14)!important;border-radius:16px!important;padding:14px!important}.num{font-size:clamp(24px,3.4vw,40px)!important}.login{min-height:100vh!important;display:grid!important;place-items:center!important;padding:20px!important}.login-card{width:min(440px,100%)!important}.bottomnav{display:none!important}.mobile-menu{display:none!important}
+@media(max-width:1180px){:root{--admin-sidebar:224px}.main{padding:20px!important}.s3,.s4{grid-column:span 6!important}.s8,.s9{grid-column:span 12!important}.healthbar{grid-template-columns:repeat(2,minmax(0,1fr))!important}.form .f1,.form .f2,.form .f3{grid-column:span 4!important}.form .f8,.form .f9,.form .f10{grid-column:span 12!important}}
+@media(max-width:820px){.app{display:block!important;padding-bottom:76px!important}.sidebar{position:fixed!important;left:0;top:0;bottom:0;width:min(86vw,320px)!important;height:100vh!important;z-index:60!important;transform:translateX(-105%)!important;transition:transform .22s ease!important;box-shadow:30px 0 80px rgba(0,0,0,.42)!important}.sidebar.show{transform:translateX(0)!important}.mobile-menu{display:inline-flex!important}.appbar{position:sticky!important;padding:10px 12px!important}.quick{display:none!important}.main{padding:18px 12px!important}.grid{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:12px!important}.s12,.s9,.s8,.s6,.s4,.s3{grid-column:span 6!important}.healthbar{grid-template-columns:repeat(2,minmax(0,1fr))!important}.form{grid-template-columns:repeat(6,minmax(0,1fr))!important}.form .f1,.form .f2,.form .f3,.form .f8,.form .f9,.form .f10,.form>*{grid-column:span 6!important}.card{padding:15px!important;border-radius:18px!important}.head{display:block!important}.head>*+*{margin-top:10px!important}.bottomnav{position:fixed!important;left:10px!important;right:10px!important;bottom:10px!important;z-index:50!important;display:grid!important;grid-template-columns:repeat(5,1fr)!important;gap:6px!important;padding:8px!important;border:1px solid var(--line)!important;border-radius:20px!important;background:rgba(2,6,23,.82)!important;backdrop-filter:blur(18px)!important}.bottomnav button{padding:8px 5px!important;min-height:48px!important;font-size:11px!important;flex-direction:column!important}.bottomnav .ico{width:28px!important;height:22px!important;font-size:10px!important}table tbody{min-width:680px!important}th,td{padding:10px!important}.toast{left:12px!important;right:12px!important;bottom:84px!important;width:auto!important}}
+@media(max-width:520px){.main{padding:14px 10px!important}.title{font-size:30px!important}.healthbar{grid-template-columns:1fr!important}.appbar>div:last-child{gap:6px!important}.appbar button,.max-pill{font-size:12px!important;padding:8px 9px!important}.card{padding:13px!important}.num{font-size:26px!important}table tbody{min-width:620px!important}.brand h1{font-size:18px!important}}
+
+.dns-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}.dns-card{display:grid!important;grid-template-columns:64px minmax(0,1fr) auto!important;gap:12px!important;align-items:start!important;padding:14px!important;border:1px solid rgba(148,163,184,.18)!important;border-radius:18px!important;background:rgba(2,6,23,.28)!important}.dns-type{display:flex!important;align-items:center!important;justify-content:center!important;height:42px!important;border-radius:14px!important;background:linear-gradient(135deg,#ff6b4a,#2563eb)!important;font-weight:900!important}.dns-fields{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}.dns-fields input,.dns-fields textarea{font-family:ui-monospace,SFMono-Regular,Menlo,monospace!important;font-size:12px!important;text-transform:none!important;letter-spacing:0!important}.dns-fields textarea{min-height:72px!important}.dns-health{display:grid!important;gap:10px!important}.health-row{display:grid!important;grid-template-columns:120px 100px minmax(0,1fr)!important;gap:12px!important;align-items:center!important;padding:12px!important;border:1px solid rgba(148,163,184,.15)!important;border-radius:14px!important;background:rgba(15,23,42,.42)!important}.health-row code{white-space:normal!important;word-break:break-word!important;color:#cbd5e1!important}.badge.ok{color:#86efac!important}.badge.bad{color:#fecaca!important}@media(max-width:900px){.dns-list{grid-template-columns:1fr!important}.dns-card{grid-template-columns:1fr!important}.dns-type{width:64px!important}.health-row{grid-template-columns:1fr!important}}
+
+/* DNS readability hotfix */
+.dns-list{grid-template-columns:1fr!important}.dns-card{grid-template-columns:1fr!important;overflow:visible!important}.dns-top{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;flex-wrap:wrap!important}.dns-fields{grid-template-columns:180px 120px minmax(0,1fr)!important;align-items:start!important}.dns-value{grid-column:auto!important}.dns-value pre{margin:0!important;min-height:54px!important;white-space:pre-wrap!important;overflow:visible!important}.dns-card label{text-transform:none!important;letter-spacing:0!important}.dns-raw{margin-top:14px!important}.dns-raw summary{cursor:pointer;color:#cbd5e1;font-weight:800;padding:10px 0}.main .form{overflow:visible!important}.main .form button{width:100%!important}@media(max-width:1200px){.dns-fields{grid-template-columns:1fr!important}.dns-value{grid-column:1!important}.dns-top{align-items:flex-start!important}.dns-top button{width:100%!important}}
+
+/* DNS no-cut final */
+.dns-fields{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}.dns-value{grid-column:1 / -1!important}.dns-value pre{display:block!important;width:100%!important;max-width:none!important;white-space:pre-wrap!important;overflow:visible!important;word-break:break-all!important;font-size:12px!important;line-height:1.55!important;padding:12px!important}.dns-card{max-width:100%!important;overflow:visible!important}.dns-card input{overflow:visible!important;text-overflow:clip!important}@media(max-width:700px){.dns-fields{grid-template-columns:1fr!important}}
+
+/* JoeMail Maximal Admin Update 2026 */
+body{background:radial-gradient(circle at 8% 0%,rgba(255,107,74,.16),transparent 25%),radial-gradient(circle at 78% 2%,rgba(37,99,235,.18),transparent 28%),radial-gradient(circle at 55% 80%,rgba(56,189,248,.08),transparent 34%),#07101d!important}.app{grid-template-columns:280px minmax(0,1fr)!important}.sidebar{background:linear-gradient(180deg,rgba(3,7,18,.94),rgba(15,23,42,.88))!important;border-right:1px solid rgba(148,163,184,.18)!important;box-shadow:12px 0 60px rgba(0,0,0,.22)!important}.brand{padding:10px 8px 18px!important;border-bottom:1px solid rgba(148,163,184,.12)!important}.brand .logo{width:48px!important;height:48px!important;border-radius:17px!important;font-size:14px!important;font-weight:950!important}.navgroup{display:grid!important;gap:7px!important;margin:14px 0!important}.navlabel{padding:0 12px 2px!important;color:#64748b!important;font-size:10px!important;letter-spacing:.14em!important;text-transform:uppercase!important;font-weight:900!important}.nav button{position:relative!important}.nav button.active:before{content:'';position:absolute;left:-7px;top:12px;bottom:12px;width:3px;border-radius:99px;background:linear-gradient(#ff6b4a,#38bdf8)}.appbar{background:rgba(3,7,18,.72)!important;backdrop-filter:blur(18px)!important}.crumb{display:flex!important;flex-direction:column!important;gap:2px!important}.crumb b{font-size:13px!important}.crumb span{font-size:12px!important;color:#64748b!important}.top-actions,.hero-actions{display:flex!important;align-items:center!important;gap:9px!important;flex-wrap:wrap!important}.status-dot{width:10px;height:10px;border-radius:99px;background:#22c55e;box-shadow:0 0 0 6px rgba(34,197,94,.12),0 0 24px rgba(34,197,94,.6);display:inline-block}.hero{display:flex!important;align-items:flex-end!important;justify-content:space-between!important;gap:18px!important;margin-bottom:18px!important;padding:22px!important;border:1px solid rgba(148,163,184,.16)!important;border-radius:28px!important;background:linear-gradient(135deg,rgba(15,23,42,.72),rgba(37,99,235,.10)),radial-gradient(circle at 80% 10%,rgba(255,107,74,.18),transparent 28%)!important;box-shadow:0 30px 100px rgba(0,0,0,.22)!important}.eyebrow{font-size:11px!important;color:#38bdf8!important;text-transform:uppercase!important;letter-spacing:.18em!important;font-weight:950!important}.hero .title{margin:4px 0!important;font-size:clamp(34px,4vw,60px)!important}.grid{align-items:start!important}.card{position:relative!important;overflow:hidden!important}.card:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent 32%)!important}.card>*{position:relative!important;z-index:1}.card:hover{transform:translateY(-1px)!important;border-color:rgba(56,189,248,.34)!important}.num{background:linear-gradient(135deg,#f8fafc,#93c5fd)!important;-webkit-background-clip:text!important;color:transparent!important}.bad{color:#fb7185!important}.warn{color:#fbbf24!important}.ok{color:#86efac!important}table{width:100%!important;border-collapse:separate!important;border-spacing:0!important;overflow:hidden!important;border-radius:16px!important}th{background:rgba(15,23,42,.95)!important;text-transform:uppercase!important;font-size:11px!important;letter-spacing:.08em!important}td,th{border-bottom:1px solid rgba(148,163,184,.12)!important}pre,textarea{max-width:100%!important;white-space:pre-wrap!important;word-break:break-word!important}.form{align-items:end!important}.form button{min-height:45px!important}.badge{display:inline-flex!important;align-items:center!important;gap:6px!important;margin:3px!important}.sidefoot{margin-top:18px!important;padding-top:12px!important;border-top:1px solid rgba(148,163,184,.12)!important}
+
+.layout-fix-marker{display:none}.grid>.card:not(.s3):not(.s4):not(.s6):not(.s8):not(.s9):not(.s12){grid-column:1/-1!important}.table-wrap{width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;border:1px solid rgba(148,163,184,.12)!important;border-radius:16px!important}.table-wrap table{margin:0!important;border:0!important;min-width:max-content!important}table:after{content:none!important;display:none!important}.table-wrap:after{content:none!important;display:none!important}.card{overflow:visible!important}.card:after{border-radius:inherit!important}.head{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:12px!important;flex-wrap:wrap!important}.head>div{min-width:0!important}.head input,.head select{max-width:100%!important}.num{font-size:clamp(24px,3vw,42px)!important;line-height:1.05!important;overflow-wrap:anywhere!important;word-break:break-word!important}td,th{white-space:normal!important;word-break:break-word!important;vertical-align:top!important}td:last-child{min-width:170px!important}.form{width:100%!important}.form>*{min-width:0!important}pre{overflow:auto!important;max-height:62vh!important}.quickgrid{display:flex!important;gap:9px!important;flex-wrap:wrap!important;justify-content:flex-end!important}.quickgrid button{min-height:42px!important}.sysline{position:relative;display:grid;grid-template-columns:1fr auto;gap:10px;margin:14px 0;padding-bottom:15px;border-bottom:1px solid rgba(148,163,184,.10)}.sysline i{position:absolute;left:0;right:0;bottom:0;height:7px;border-radius:99px;background:rgba(148,163,184,.16);overflow:hidden}.sysline i:after{content:'';display:block;width:var(--w);height:100%;border-radius:99px;background:linear-gradient(90deg,#38bdf8,#2563eb,#ff6b4a)}.opslist{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}.opslist button{width:100%!important}.card.s4 .opslist{margin-top:10px!important}@media(max-width:720px){.quickgrid,.hero-actions,.top-actions{justify-content:flex-start!important}.quickgrid button{width:100%!important}.opslist{grid-template-columns:1fr!important}.hero{align-items:flex-start!important;flex-direction:column!important}}
+
+/* Mobile sidebar stays left */
+@media(max-width:820px){
+  :root{--admin-sidebar:86px!important}
+  .app{display:grid!important;grid-template-columns:var(--admin-sidebar) minmax(0,1fr)!important;padding-bottom:0!important}
+  .sidebar{position:sticky!important;left:auto!important;top:0!important;bottom:auto!important;width:var(--admin-sidebar)!important;height:100vh!important;z-index:30!important;transform:none!important;box-shadow:none!important;padding:10px 7px!important;border-right:1px solid var(--line)!important;overflow-y:auto!important}
+  .sidebar.show{transform:none!important}
+  .brand{justify-content:center!important;margin-bottom:10px!important}.brand h1,.brand p,.nav button span:not(.ico),.sidefoot button span:not(.ico){display:none!important}
+  .brand .logo{width:42px!important;height:42px!important}.nav{gap:7px!important}.nav button,.sidefoot button{justify-content:center!important;padding:9px 6px!important;border-radius:14px!important}.ico{width:42px!important;height:34px!important;font-size:10px!important}
+  .mobile-menu,.bottomnav{display:none!important}.appbar{padding:10px!important}.main{padding:14px 10px!important}.main:before{left:var(--admin-sidebar)!important}.title{font-size:28px!important}.toast{left:calc(var(--admin-sidebar) + 10px)!important;right:10px!important;bottom:14px!important}
+}
+@media(max-width:420px){:root{--admin-sidebar:72px!important}.ico{width:36px!important;height:32px!important}.sidebar{padding:8px 5px!important}.main{padding:12px 8px!important}.appbar button,.max-pill{font-size:11px!important;padding:7px 8px!important}}
+@media(max-width:760px){
+  .hero{padding:16px!important;border-radius:22px!important}.hero .title{font-size:30px!important}.healthbar{grid-template-columns:1fr 1fr!important}.grid{gap:12px!important}.card{padding:14px!important;border-radius:18px!important}.head{gap:10px!important}.head h3{width:100%!important}.form{grid-template-columns:1fr!important}.form button,.form input,.form select{width:100%!important}.table-wrap{border:0!important;overflow:visible!important;background:transparent!important}.table-wrap table{min-width:0!important;width:100%!important;border-spacing:0!important}.table-wrap thead{display:none!important}.table-wrap tbody,.table-wrap tr,.table-wrap td{display:block!important;width:100%!important}.table-wrap tr{margin:0 0 12px!important;padding:12px!important;border:1px solid rgba(148,163,184,.16)!important;border-radius:16px!important;background:rgba(15,23,42,.46)!important;box-shadow:0 10px 28px rgba(0,0,0,.12)!important}.table-wrap td{display:grid!important;grid-template-columns:92px minmax(0,1fr)!important;gap:10px!important;border-bottom:1px solid rgba(148,163,184,.08)!important;padding:9px 0!important}.table-wrap td:last-child{border-bottom:0!important;min-width:0!important}.table-wrap td:before{content:attr(data-label);color:#64748b;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:900}.table-wrap td button,.table-wrap td select,.table-wrap td input{width:100%!important;margin:3px 0!important}.top-actions button:nth-child(n+3){display:none!important}.brand h1,.brand p,.navlabel,.nav button span:last-child,.sidefoot button span:last-child{display:none!important}.brand{justify-content:center!important}.sidebar{align-items:center!important}.nav button,.sidefoot button{justify-content:center!important;padding:10px 6px!important}.hero-actions{width:100%!important}.hero-actions button{flex:1!important}.logpre{max-height:56vh!important;font-size:11px!important}.num{font-size:26px!important}
+}
+
+/* Final anti-berantakan override */
+.main pre,.card pre{white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-all!important;max-width:100%!important;width:100%!important;overflow:auto!important}.logtools{display:flex!important;gap:8px!important;flex-wrap:wrap!important}.logpre{font-size:12px!important;line-height:1.55!important;background:rgba(2,6,23,.55)!important;border:1px solid rgba(148,163,184,.12)!important;border-radius:16px!important;padding:14px!important}.main table{max-width:100%!important}.table-wrap{contain:inline-size!important}.card,.head,.form,.main,.mainwrap{max-width:100%!important}.head select,.head button{flex:0 1 auto!important}
+
+/* Desktop clean fix - sidebar/header precision */
+@media(min-width:821px){
+  :root{--admin-sidebar:260px!important}
+  .app{grid-template-columns:var(--admin-sidebar) minmax(0,1fr)!important}
+  .sidebar{width:var(--admin-sidebar)!important;padding:18px 14px!important}
+  .main:before{left:var(--admin-sidebar)!important}
+  .appbar{min-height:64px!important;height:64px!important;padding:0 22px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:18px!important;overflow:hidden!important}
+  .top-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;flex-wrap:nowrap!important;white-space:nowrap!important}
+  .top-actions .quick{display:none!important}
+  .top-actions button,.top-actions .max-pill{height:38px!important;display:inline-flex!important;align-items:center!important}
+  .crumb{min-width:180px!important;flex:1 1 auto!important;overflow:hidden!important}.crumb b,.crumb span{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .main{max-width:1440px!important;padding:22px!important}.hero{padding:20px 22px!important;margin-bottom:18px!important}
+  .nav button,.sidefoot button{min-height:42px!important}.brand{margin-bottom:12px!important}.navgroup{margin:10px 0!important}
+}
+
+/* Sidebar fixed desktop - tidak ikut page scroll */
+@media(min-width:821px){
+  .app{display:block!important;min-height:100vh!important}
+  .sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:var(--admin-sidebar)!important;height:100vh!important;z-index:40!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+  .mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important;min-height:100vh!important}
+  .appbar{left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important}
+  .main:before{left:var(--admin-sidebar)!important}
+}
+
+/* FINAL sidebar lock: sidebar tidak bergerak saat page scroll */
+.sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;height:100dvh!important;max-height:100dvh!important;z-index:80!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+@media(min-width:821px){
+  :root{--admin-sidebar:260px!important}
+  .app{display:block!important;min-height:100vh!important}
+  .sidebar{width:var(--admin-sidebar)!important;transform:none!important}
+  .mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important;min-height:100vh!important}
+  .appbar{width:100%!important;left:auto!important}
+  .main:before{left:var(--admin-sidebar)!important}
+}
+@media(max-width:820px){
+  .sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;height:100dvh!important;transform:none!important}
+}
+
+/* Sidebar locked: tidak ikut scroll page */
+.sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;height:100vh!important;z-index:40!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+.mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important;min-height:100vh!important}
+.main:before{left:var(--admin-sidebar)!important}
+@media(max-width:820px){
+  .app{display:block!important;padding-bottom:0!important}
+  .sidebar{width:var(--admin-sidebar)!important;transform:none!important;box-shadow:none!important}
+  .sidebar.show{transform:none!important}
+  .mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important}
+  .appbar{left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important}
+}
+
+/* Sidebar top height = header height */
+@media(min-width:821px){
+  .sidebar .brand{height:64px!important;min-height:64px!important;margin:-18px -14px 12px!important;padding:0 14px!important;display:flex!important;align-items:center!important;border-bottom:1px solid rgba(148,163,184,.12)!important}
+}
+@media(max-width:820px){
+  :root{--admin-sidebar:86px!important}
+  .sidebar{padding:10px 7px!important}
+  .sidebar .brand{height:58px!important;min-height:58px!important;margin:-10px -7px 10px!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;border-bottom:1px solid rgba(148,163,184,.12)!important}
+  .brand .logo{width:42px!important;height:42px!important}
+  .appbar{height:58px!important;min-height:58px!important;padding:10px 12px!important}
+  .nav button,.sidefoot button{min-height:44px!important;padding:9px 6px!important;border-radius:14px!important}
+  .ico{width:42px!important;height:34px!important;font-size:10px!important}
+  .main{padding:14px 10px!important}
+}
+@media(max-width:420px){
+  :root{--admin-sidebar:72px!important}
+  .sidebar{padding:8px 5px!important}
+  .sidebar .brand{height:54px!important;min-height:54px!important;margin:-8px -5px 8px!important}
+  .brand .logo{width:38px!important;height:38px!important}
+  .appbar{height:54px!important;min-height:54px!important}
+  .ico{width:36px!important;height:32px!important}
+}
+
+/* Mobile header final: tidak kepotong, sidebar top sama */
+@media(max-width:820px){
+  :root{--admin-sidebar:78px!important}
+  .sidebar{width:var(--admin-sidebar)!important;padding:8px 6px!important}
+  .sidebar .brand{height:64px!important;min-height:64px!important;margin:-8px -6px 8px!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important}
+  .brand .logo{width:40px!important;height:40px!important;border-radius:14px!important}
+  .mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important}
+  .appbar{height:auto!important;min-height:64px!important;padding:8px 10px!important;overflow:visible!important;align-items:center!important;gap:8px!important;left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important}
+  .crumb{min-width:0!important;flex:1 1 90px!important;overflow:hidden!important}.crumb b{font-size:12px!important;line-height:1.2!important}.crumb span{font-size:10px!important;line-height:1.2!important}
+  .top-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:5px!important;flex:0 0 auto!important;flex-wrap:wrap!important;max-width:178px!important}
+  .top-actions button,.top-actions .max-pill{height:28px!important;min-height:28px!important;padding:5px 7px!important;font-size:10px!important;line-height:1!important;border-radius:9px!important}
+  .nav button,.sidefoot button{min-height:38px!important;padding:6px 4px!important}.ico{width:34px!important;height:28px!important;font-size:9px!important}.main{padding:12px 8px!important}
+}
+@media(max-width:420px){
+  :root{--admin-sidebar:68px!important}
+  .sidebar{padding:7px 4px!important}.sidebar .brand{height:64px!important;min-height:64px!important;margin:-7px -4px 7px!important}.brand .logo{width:36px!important;height:36px!important}.appbar{min-height:64px!important;padding:7px 8px!important}.top-actions{max-width:142px!important}.top-actions button,.top-actions .max-pill{height:26px!important;min-height:26px!important;padding:4px 6px!important;font-size:9px!important}.ico{width:30px!important;height:26px!important}
+.sparkline .sp{width:4px;border-radius:2px;background:#38bdf8;transition:height .3s}
+
+/* JoeMail Enhanced UI Maximal 2026 */
+.grid-2,.grid-3,.grid-4{display:grid;gap:var(--admin-gap)}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1180px){.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:820px){.grid-2,.grid-3,.grid-4{grid-template-columns:minmax(0,1fr)}}
+
+.card-hover:hover{transform:translateY(-3px);box-shadow:0 18px 50px rgba(0,0,0,.28)!important}
+.mini-stat-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:18px!important;min-height:unset!important;transition:all .2s ease}
+.mini-stat-card .icon{width:48px;height:48px;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-size:22px;color:var(--primary)}
+.mini-stat-card .value{font-size:32px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.mini-stat-card .label{font-size:12px;color:var(--muted2);text-transform:uppercase;font-weight:700;letter-spacing:.08em}
+
+.progress-line{width:100%;height:6px;border-radius:99px;background:var(--soft);margin-top:8px;overflow:hidden}
+.progress-line .fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .4s ease-out}
+.progress-line.warn .fill{background:linear-gradient(90deg,var(--amber),#fde047)}
+.progress-line.bad .fill{background:linear-gradient(90deg,var(--red),#fca5a5)}
+
+.radial-progress{position:relative;width:80px;height:80px;border-radius:50%;display:grid;place-items:center;font-size:16px;font-weight:700;color:var(--text)}
+.radial-progress .bg{position:absolute;width:100%;height:100%;border-radius:50%;background:conic-gradient(var(--primary) var(--p), var(--soft) 0deg);-webkit-mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));--b:8px;transition:background .3s ease-out}
+.radial-progress span{position:relative;z-index:1}
+
+.table-responsive{overflow-x:auto;width:100%}
+.table-responsive table{width:100%;min-width:700px} /* Ensure min-width for proper display on larger mobiles */
+@media(max-width:820px){
+  .table-responsive table{min-width:100%;display:block}
+  .table-responsive thead{display:none}
+  .table-responsive tbody{display:block;width:100%}
+  .table-responsive tr{display:block;margin-bottom:10px;border:1px solid var(--line);border-radius:16px;padding:10px;background:var(--panel)}
+  .table-responsive td{display:grid;grid-template-columns:90px 1fr;gap:5px;padding:8px 0;border-bottom:1px solid var(--soft);align-items:center}
+  .table-responsive td:last-child{border-bottom:none}
+  .table-responsive td:before{content:attr(data-label);font-weight:700;color:var(--muted2);font-size:11px;text-transform:uppercase}
+  .table-responsive td button, .table-responsive td select, .table-responsive td input{width:auto!important;margin:0;height:32px;padding:0 10px;font-size:12px;border-radius:8px}
+  .table-responsive td button.danger{color:var(--red)}
+}
+
+.metric-card{display:flex;align-items:center;gap:12px}
+.metric-card .icon-wrap{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--soft);color:var(--primary);font-size:18px}
+.metric-card .val{font-size:24px;font-weight:800;line-height:1}
+.metric-card .lbl{font-size:11px;color:var(--muted2);text-transform:uppercase}
+
+.sparkline-chart{display:flex;height:40px;align-items:flex-end;gap:2px;padding:5px 0}
+.sparkline-chart .bar{width:4px;background:var(--primary);border-radius:2px;transition:height .3s ease}
+.sparkline-chart.green .bar{background:var(--green)}
+.sparkline-chart.red .bar{background:var(--red)}
+
+.data-table-simple{width:100%;border-collapse:collapse}
+.data-table-simple th,.data-table-simple td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.data-table-simple th{background:var(--muted);color:var(--muted2);text-transform:uppercase;font-size:11px;font-weight:700}
+.data-table-simple tr:last-child td{border-bottom:none}
+
+.log-viewer{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;font-family:monospace;font-size:12px;max-height:400px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+.log-line.error{color:var(--red)}
+.log-line.warn{color:var(--amber)}
+.log-line.info{color:var(--blue)}
+
+.status-indicator{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px}
+.status-indicator .dot{width:8px;height:8px;border-radius:50%}
+.status-indicator.ok .dot{background:var(--green);box-shadow:0 0 8px var(--green)}
+.status-indicator.warn .dot{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.status-indicator.bad .dot{background:var(--red);box-shadow:0 0 8px var(--red)}
+
+.gauge-chart{width:100px;height:60px;position:relative;overflow:hidden}
+.gauge-chart .fill{width:100%;height:100%;border-radius:100px 100px 0 0;background:conic-gradient(var(--green) calc(var(--p)*1%), var(--soft) 0);transform-origin:bottom center;transform:rotate(calc(var(--p)*1.8deg - 90deg));transition:transform .5s ease-out}
+.gauge-chart .label{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:12px;font-weight:700}
+
+/* Admin contrast maximal polish */
+:root{--bg0:#050b14!important;--bg1:#0b1220!important;--panel:rgba(18,28,45,.96)!important;--panel2:rgba(22,34,55,.98)!important;--line:rgba(203,213,225,.30)!important;--muted-foreground:#cbd5e1!important;--muted:#23314a!important;--foreground:#f8fbff!important;--primary:#3b82f6!important;--accent:#67e8f9!important;--warning:#fbbf24!important;--success:#4ade80!important;--destructive:#fb7185!important}
+body{color:#f8fbff!important;background:radial-gradient(circle at 18% 0%,rgba(59,130,246,.20),transparent 31%),radial-gradient(circle at 82% 10%,rgba(103,232,249,.14),transparent 27%),linear-gradient(180deg,#050b14,#0b1220)!important}
+.card,.login-card,.hero,.table-wrap,.appbar,.sidebar,.bottomnav{border-color:rgba(203,213,225,.28)!important;box-shadow:0 20px 60px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.06)!important}
+.card,.login-card{background:linear-gradient(180deg,rgba(22,34,55,.96),rgba(12,20,35,.98))!important}.hero{background:linear-gradient(135deg,rgba(22,34,55,.94),rgba(12,22,38,.98))!important}
+.sidebar,.appbar,.bottomnav{background:rgba(5,11,20,.92)!important;backdrop-filter:blur(20px)!important}
+.title,h1,h2,h3,b,strong,th,label{color:#ffffff!important}.mut,.crumb span,.brand p,.navlabel,.card p,small{color:#cbd5e1!important}.badge,.max-pill,.healthpill{color:#f8fbff!important;background:rgba(30,41,59,.92)!important;border-color:rgba(203,213,225,.32)!important}
+button,.ghost,.nav button,.sidefoot button{color:#f8fbff!important;background:rgba(30,41,59,.90)!important;border-color:rgba(203,213,225,.30)!important}button:hover,.nav button:hover{background:rgba(51,65,85,.96)!important;border-color:rgba(103,232,249,.55)!important}.primary,button.primary{background:linear-gradient(135deg,#2563eb,#06b6d4)!important;color:#fff!important;border-color:transparent!important}
+.nav button.active,.bottomnav button.active{background:linear-gradient(135deg,rgba(37,99,235,.42),rgba(6,182,212,.25))!important;border-color:rgba(103,232,249,.60)!important;color:#fff!important}.ico{background:rgba(59,130,246,.22)!important;color:#dffbff!important;border:1px solid rgba(103,232,249,.24)!important}
+input,textarea,select{background:#0b1324!important;border-color:rgba(203,213,225,.36)!important;color:#ffffff!important}input::placeholder,textarea::placeholder{color:#94a3b8!important}td{color:#eef6ff!important;border-color:rgba(203,213,225,.14)!important}th{background:rgba(15,23,42,.96)!important;color:#dbeafe!important;border-color:rgba(203,213,225,.22)!important}tr:hover td{background:rgba(59,130,246,.14)!important}.logpre,pre,code{color:#e2e8f0!important;background:rgba(2,6,23,.78)!important;border-color:rgba(203,213,225,.22)!important}.bad{color:#fecaca!important}.ok{color:#bbf7d0!important}.warn{color:#fde68a!important}
+
+/* FINAL mobile admin layout lock - no sidebar glitch, no header cut */
+@media(max-width:820px){
+  :root{--admin-sidebar:62px!important}
+  html,body{overflow-x:hidden!important;width:100%!important}
+  .app{display:block!important;min-height:100vh!important;padding:0!important}
+  .sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:var(--admin-sidebar)!important;height:100dvh!important;z-index:60!important;transform:none!important;padding:7px 4px!important;overflow-y:auto!important;overflow-x:hidden!important;box-shadow:none!important}
+  .sidebar.show{transform:none!important}
+  .mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100vw - var(--admin-sidebar))!important;max-width:calc(100vw - var(--admin-sidebar))!important;min-height:100vh!important;overflow-x:hidden!important}
+  .appbar{position:sticky!important;top:0!important;left:auto!important;right:auto!important;width:100%!important;max-width:100%!important;min-height:64px!important;height:auto!important;padding:8px 8px!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:6px!important;overflow:visible!important;z-index:50!important}
+  .crumb{min-width:0!important;overflow:hidden!important}.crumb b{display:block!important;font-size:12px!important;line-height:1.2!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}.crumb span{display:block!important;font-size:10px!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .top-actions{min-width:0!important;max-width:100%!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:4px!important;flex-wrap:wrap!important;overflow:visible!important}.top-actions .max-pill{display:none!important}.top-actions button{height:28px!important;min-height:28px!important;padding:4px 6px!important;font-size:10px!important;line-height:1!important;border-radius:9px!important;white-space:nowrap!important}.top-actions button:nth-child(n+3){display:none!important}
+  .sidebar .brand{height:64px!important;min-height:64px!important;margin:-7px -4px 6px!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;border-bottom:1px solid rgba(203,213,225,.16)!important}.brand .logo{width:34px!important;height:34px!important;border-radius:12px!important;font-size:10px!important}.brand h1,.brand p,.navlabel,.nav button span:not(.ico),.sidefoot button span:not(.ico){display:none!important}
+  .nav,.navgroup{gap:5px!important;margin:7px 0!important}.nav button,.sidefoot button{width:100%!important;min-height:34px!important;height:34px!important;padding:3px!important;justify-content:center!important;border-radius:11px!important}.ico{width:30px!important;height:26px!important;font-size:9px!important;border-radius:9px!important}
+  .main{padding:10px 8px!important;max-width:100%!important}.main:before{left:var(--admin-sidebar)!important}.hero{padding:12px!important;border-radius:18px!important}.hero .title,.title{font-size:24px!important;line-height:1.06!important}.hero-actions{width:100%!important;display:flex!important;gap:6px!important;flex-wrap:wrap!important}.hero-actions button{height:31px!important;min-height:31px!important;padding:5px 8px!important;font-size:11px!important;flex:1 1 auto!important}.card{padding:12px!important;border-radius:16px!important}.head{gap:8px!important}.bottomnav,.mobile-menu{display:none!important}
+}
+@media(max-width:420px){
+  :root{--admin-sidebar:56px!important}.mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100vw - var(--admin-sidebar))!important;max-width:calc(100vw - var(--admin-sidebar))!important}.appbar{padding:7px 6px!important;gap:4px!important}.top-actions button{font-size:9px!important;padding:4px 5px!important}.sidebar{padding:6px 3px!important}.sidebar .brand{margin:-6px -3px 6px!important}.brand .logo{width:30px!important;height:30px!important}.nav button,.sidefoot button{height:31px!important;min-height:31px!important}.ico{width:27px!important;height:24px!important;font-size:8px!important}.main{padding:9px 6px!important}
+}
+
+/* Inbox/mobile table action buttons compact */
+@media(max-width:820px){
+  .table-wrap td:last-child{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:5px!important;flex-wrap:wrap!important;min-width:0!important}
+  .table-wrap td:last-child:before{flex:0 0 74px!important}
+  .table-wrap td button,.table-wrap td select{width:auto!important;min-width:0!important;max-width:100%!important;height:28px!important;min-height:28px!important;padding:4px 7px!important;margin:2px!important;border-radius:8px!important;font-size:10px!important;line-height:1!important}
+  .table-wrap td input{height:28px!important;min-height:28px!important;padding:4px 7px!important;font-size:11px!important}
+  .table-wrap td .danger,.table-wrap td .primary,.table-wrap td .ghost{flex:0 0 auto!important}
+  .table-wrap tr{padding:9px!important;margin-bottom:8px!important}
+  .table-wrap td{grid-template-columns:74px minmax(0,1fr)!important;gap:7px!important;padding:6px 0!important;font-size:12px!important}
+  .table-wrap td:before{font-size:9px!important;letter-spacing:.06em!important}
+}
+@media(max-width:420px){
+  .table-wrap td:last-child:before{flex-basis:62px!important}
+  .table-wrap td{grid-template-columns:62px minmax(0,1fr)!important}
+  .table-wrap td button,.table-wrap td select{height:26px!important;min-height:26px!important;padding:3px 6px!important;font-size:9px!important}
+}
+
+/* Sidebar icon size restore */
+@media(min-width:821px){
+  .sidebar .ico{width:34px!important;height:28px!important;font-size:11px!important;border-radius:10px!important}
+}
+@media(max-width:820px){
+  .sidebar .ico{width:42px!important;height:34px!important;font-size:10px!important;border-radius:12px!important}
+  .sidebar .brand .logo{width:42px!important;height:42px!important;border-radius:14px!important;font-size:13px!important}
+  .sidebar .nav button,.sidebar .sidefoot button{padding:8px 4px!important}
+}
+@media(max-width:420px){
+  .sidebar .ico{width:38px!important;height:32px!important;font-size:10px!important}
+  .sidebar .brand .logo{width:38px!important;height:38px!important}
+}
+
+/* JoeMail Admin Full Visual Rebuild Lock */
+:root{--admin-sidebar:272px!important;--bg0:#050a12!important;--bg1:#09111f!important;--panel:#101b2d!important;--panel2:#152238!important;--panel3:#1b2a44!important;--line:rgba(203,213,225,.22)!important;--line2:rgba(203,213,225,.34)!important;--text:#f8fbff!important;--muted2:#b8c7dc!important;--blue:#3b82f6!important;--cyan:#22d3ee!important;--green:#22c55e!important;--amber:#f59e0b!important;--red:#ef4444!important}
+html,body{background:#050a12!important;color:var(--text)!important;overflow-x:hidden!important}body:before,.main:before{opacity:.28!important;background-size:72px 72px!important}.app{display:block!important;min-height:100vh!important}.sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:var(--admin-sidebar)!important;height:100dvh!important;z-index:80!important;padding:0 14px 14px!important;background:linear-gradient(180deg,rgba(5,10,18,.98),rgba(10,18,32,.98))!important;border-right:1px solid var(--line2)!important;box-shadow:18px 0 70px rgba(0,0,0,.30)!important;overflow-y:auto!important;overflow-x:hidden!important}.mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100% - var(--admin-sidebar))!important;min-height:100vh!important}.appbar{position:sticky!important;top:0!important;z-index:70!important;height:72px!important;min-height:72px!important;left:auto!important;width:100%!important;padding:0 24px!important;display:grid!important;grid-template-columns:minmax(220px,1fr) auto!important;align-items:center!important;gap:18px!important;background:rgba(5,10,18,.90)!important;border-bottom:1px solid var(--line2)!important;backdrop-filter:blur(20px)!important;box-shadow:0 12px 40px rgba(0,0,0,.18)!important}.sidebar .brand{height:72px!important;min-height:72px!important;margin:0 -14px 14px!important;padding:0 14px!important;display:flex!important;align-items:center!important;gap:12px!important;border-bottom:1px solid var(--line)!important}.brand .logo{width:46px!important;height:46px!important;border-radius:16px!important;background:linear-gradient(135deg,#2563eb,#22d3ee)!important;box-shadow:0 12px 36px rgba(34,211,238,.22)!important}.brand h1{font-size:18px!important;line-height:1.1!important}.brand p{font-size:12px!important;color:var(--muted2)!important}.navgroup{margin:12px 0!important;display:grid!important;gap:7px!important}.navlabel{padding:0 10px 3px!important;color:#8ea3bd!important;font-size:10px!important;letter-spacing:.16em!important}.nav button,.sidefoot button{height:44px!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:11px!important;padding:0 11px!important;border-radius:14px!important;background:transparent!important;border:1px solid transparent!important;color:#dcecff!important;box-shadow:none!important}.nav button:hover,.sidefoot button:hover{background:rgba(30,41,59,.70)!important;border-color:var(--line)!important}.nav button.active{background:linear-gradient(135deg,rgba(37,99,235,.34),rgba(34,211,238,.18))!important;border-color:rgba(34,211,238,.46)!important;color:#fff!important}.nav button.active:before{left:-14px!important;top:10px!important;bottom:10px!important;background:#22d3ee!important}.ico{width:34px!important;height:30px!important;border-radius:11px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;background:rgba(59,130,246,.18)!important;border:1px solid rgba(34,211,238,.20)!important;color:#e6fbff!important;font-size:11px!important;font-weight:900!important}.main{max-width:1480px!important;margin:0 auto!important;padding:24px!important}.hero{padding:24px!important;margin-bottom:18px!important;border-radius:24px!important;background:linear-gradient(135deg,rgba(21,34,56,.98),rgba(12,22,38,.98))!important;border:1px solid var(--line2)!important;box-shadow:0 26px 90px rgba(0,0,0,.26)!important}.title{font-size:clamp(30px,3.2vw,48px)!important;line-height:1!important;color:#fff!important;letter-spacing:-.055em!important}.hero p,.mut,.crumb span{color:var(--muted2)!important}.healthbar{display:grid!important;grid-template-columns:repeat(4,minmax(135px,1fr))!important;gap:10px!important;margin-top:16px!important}.healthpill{height:48px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important;padding:0 14px!important;border-radius:16px!important;background:rgba(8,16,30,.78)!important;border:1px solid var(--line)!important}.healthpill .mut{font-size:11px!important;text-transform:uppercase!important;letter-spacing:.08em!important}.healthpill b{font-size:14px!important;color:#fff!important}.grid{gap:16px!important}.card{padding:18px!important;border-radius:20px!important;background:linear-gradient(180deg,rgba(21,34,56,.96),rgba(12,22,38,.98))!important;border:1px solid var(--line)!important;box-shadow:0 18px 60px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.045)!important}.head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin-bottom:14px!important}.head h3{font-size:16px!important;color:#fff!important;letter-spacing:-.015em!important}.table-wrap{position:relative!important;overflow:auto!important;border:1px solid var(--line)!important;border-radius:16px!important;background:rgba(5,10,18,.40)!important;box-shadow:none!important}.table-wrap:before,.table-wrap:after,table:before,table:after{content:none!important;display:none!important}.table-wrap table{width:100%!important;min-width:0!important;border-collapse:separate!important;border-spacing:0!important;table-layout:auto!important}th{position:sticky!important;top:0!important;z-index:1!important;background:#0b1424!important;color:#dbeafe!important;font-size:11px!important;letter-spacing:.08em!important;text-transform:uppercase!important;font-weight:900!important;border-bottom:1px solid var(--line2)!important;padding:12px!important;white-space:nowrap!important}td{padding:12px!important;color:#eef6ff!important;border-bottom:1px solid rgba(203,213,225,.10)!important;vertical-align:middle!important;line-height:1.35!important}td:last-child{min-width:0!important}tr:last-child td{border-bottom:0!important}tr:hover td{background:rgba(59,130,246,.10)!important}.badge,.max-pill,.healthpill{box-shadow:none!important}.badge{display:inline-flex!important;align-items:center!important;max-width:100%!important;min-height:28px!important;padding:5px 9px!important;border-radius:999px!important;white-space:normal!important;word-break:break-word!important}.badge.ok{background:rgba(34,197,94,.14)!important;border-color:rgba(34,197,94,.34)!important;color:#bbf7d0!important}.badge.bad{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.34)!important;color:#fecaca!important}.badge.warn{background:rgba(245,158,11,.14)!important;border-color:rgba(245,158,11,.34)!important;color:#fde68a!important}button,input,select,textarea{border-radius:12px!important}button{min-height:38px!important;padding:8px 12px!important;background:#16243a!important;border-color:var(--line2)!important;color:#f8fbff!important}button:hover{background:#1e3352!important;border-color:rgba(34,211,238,.52)!important}.primary{background:linear-gradient(135deg,#2563eb,#0891b2)!important;border:0!important;color:#fff!important}.danger{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.36)!important;color:#fecaca!important}input,textarea,select{min-height:38px!important;background:#071121!important;border:1px solid var(--line2)!important;color:#fff!important}.logpre,pre,code{background:#071121!important;color:#e2e8f0!important;border:1px solid var(--line)!important}.top-actions,.hero-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;flex-wrap:wrap!important}.top-actions .quick{display:none!important}
+@media(max-width:1180px){:root{--admin-sidebar:238px!important}.main{padding:20px!important}.healthbar{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:820px){:root{--admin-sidebar:74px!important}.sidebar{width:var(--admin-sidebar)!important;padding:0 8px 10px!important}.mainwrap{margin-left:var(--admin-sidebar)!important;width:calc(100vw - var(--admin-sidebar))!important}.sidebar .brand{height:66px!important;min-height:66px!important;margin:0 -8px 10px!important;padding:0!important;justify-content:center!important}.brand h1,.brand p,.navlabel,.nav button span:not(.ico),.sidefoot button span:not(.ico){display:none!important}.brand .logo{width:46px!important;height:46px!important}.nav button,.sidefoot button{height:46px!important;padding:0!important;justify-content:center!important}.ico{width:46px!important;height:36px!important;font-size:11px!important}.appbar{min-height:66px!important;height:auto!important;padding:9px 10px!important;grid-template-columns:1fr!important;gap:8px!important}.crumb{display:none!important}.top-actions{justify-content:flex-start!important;gap:6px!important}.top-actions button,.top-actions .max-pill{min-height:30px!important;height:30px!important;padding:5px 8px!important;font-size:11px!important}.main{padding:12px!important}.hero{padding:16px!important;border-radius:20px!important}.title{font-size:28px!important}.healthbar{grid-template-columns:1fr 1fr!important;gap:8px!important}.healthpill{height:42px!important;padding:0 10px!important}.grid{grid-template-columns:1fr!important;gap:12px!important}.s12,.s9,.s8,.s6,.s4,.s3{grid-column:1/-1!important}.card{padding:14px!important;border-radius:18px!important}.head{align-items:flex-start!important;flex-direction:column!important}.table-wrap{border:0!important;background:transparent!important;overflow:visible!important}.table-wrap table,.table-wrap thead,.table-wrap tbody,.table-wrap tr,.table-wrap td{display:block!important;width:100%!important}.table-wrap thead{display:none!important}.table-wrap tr{padding:10px!important;margin-bottom:10px!important;border:1px solid var(--line)!important;border-radius:16px!important;background:rgba(15,25,42,.92)!important}.table-wrap td{display:grid!important;grid-template-columns:82px minmax(0,1fr)!important;gap:8px!important;padding:7px 0!important;border-bottom:1px solid rgba(203,213,225,.10)!important;font-size:12px!important}.table-wrap td:last-child{border-bottom:0!important;display:flex!important;gap:5px!important;flex-wrap:wrap!important}.table-wrap td:before{content:attr(data-label);color:#9fb3ce;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.07em}.table-wrap td button,.table-wrap td select{min-height:28px!important;height:28px!important;padding:4px 7px!important;font-size:10px!important;border-radius:8px!important;width:auto!important}}
+@media(max-width:420px){:root{--admin-sidebar:66px!important}.sidebar{padding:0 6px 8px!important}.sidebar .brand{margin:0 -6px 8px!important}.brand .logo{width:40px!important;height:40px!important}.ico{width:40px!important;height:34px!important}.main{padding:10px 8px!important}.healthbar{grid-template-columns:1fr!important}.table-wrap td{grid-template-columns:68px minmax(0,1fr)!important}}
+
+
+/* === JoeMail Enhanced UI 2026 === */
+.progress-bar{position:relative;height:10px;background:rgba(148,163,184,.15);border-radius:99px;overflow:hidden;margin-top:8px}
+.progress-bar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;transition:width .6s ease}
+.progress-bar .fill.ok{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.progress-bar .fill.warn{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.progress-bar .fill.bad{background:linear-gradient(90deg,#ef4444,#f87171)}
+.docker-status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.docker-status .dot{width:8px;height:8px;border-radius:50%}
+.docker-status .dot.running{background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.4)}
+.docker-status .dot.created{background:#f59e0b}
+.docker-status .dot.exited{background:#ef4444}
+.docker-status .dot.other{background:#94a3b8}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:120px;padding:8px 0}
+.bar-chart .bar{flex:1;min-width:20px;border-radius:6px 6px 0 0;background:linear-gradient(180deg,#38bdf8,#2563eb);position:relative;transition:height .5s ease}
+.bar-chart .bar:hover{opacity:.85}
+.bar-chart .bar .bar-label{position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:#94a3b8;white-space:nowrap}
+.bar-chart .bar .bar-val{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;color:#e2e8f0;font-weight:700}
+.mini-stat{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(15,23,42,.5);border:1px solid rgba(148,163,184,.12);border-radius:14px}
+.mini-stat .icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:16px}
+.mini-stat .icon.blue{background:rgba(37,99,235,.2);color:#60a5fa}
+.mini-stat .icon.green{background:rgba(34,197,94,.2);color:#4ade80}
+.mini-stat .icon.orange{background:rgba(245,158,11,.2);color:#fbbf24}
+.mini-stat .icon.red{background:rgba(239,68,68,.2);color:#f87171}
+.refresh-bar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(15,23,42,.5);border:1px solid rgba(148,163,184,.12);border-radius:12px;margin-bottom:16px;font-size:12px;color:#94a3b8}
+.refresh-bar .countdown{color:#38bdf8;font-weight:700}
+.refresh-bar button{padding:4px 10px;min-height:28px;font-size:11px;border-radius:8px}
+.trend-up{color:#4ade80}.trend-down{color:#f87171}.trend-flat{color:#94a3b8}
+.sparkline{display:inline-flex;align-items:flex-end;gap:2px;height:24px;vertical-align:middle}
+.sparkline .sp{width:4px;border-radius:2px;background:#38bdf8;transition:height .3s}
+
+/* JoeMail Enhanced UI Maximal 2026 */
+.grid-2,.grid-3,.grid-4{display:grid;gap:var(--admin-gap)}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1180px){.grid-3,.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:820px){.grid-2,.grid-3,.grid-4{grid-template-columns:minmax(0,1fr)}}
+
+.card-hover:hover{transform:translateY(-3px);box-shadow:0 18px 50px rgba(0,0,0,.28)!important}
+.mini-stat-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:18px!important;min-height:unset!important;transition:all .2s ease}
+.mini-stat-card .icon{width:48px;height:48px;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-size:22px;color:var(--primary)}
+.mini-stat-card .value{font-size:32px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.mini-stat-card .label{font-size:12px;color:var(--muted2);text-transform:uppercase;font-weight:700;letter-spacing:.08em}
+
+.progress-line{width:100%;height:6px;border-radius:99px;background:var(--soft);margin-top:8px;overflow:hidden}
+.progress-line .fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .4s ease-out}
+.progress-line.warn .fill{background:linear-gradient(90deg,var(--amber),#fde047)}
+.progress-line.bad .fill{background:linear-gradient(90deg,var(--red),#fca5a5)}
+
+.radial-progress{position:relative;width:80px;height:80px;border-radius:50%;display:grid;place-items:center;font-size:16px;font-weight:700;color:var(--text)}
+.radial-progress .bg{position:absolute;width:100%;height:100%;border-radius:50%;background:conic-gradient(var(--primary) var(--p), var(--soft) 0deg);-webkit-mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));--b:8px;transition:background .3s ease-out}
+.radial-progress span{position:relative;z-index:1}
+
+.table-responsive{overflow-x:auto;width:100%}
+.table-responsive table{width:100%;min-width:700px} /* Ensure min-width for proper display on larger mobiles */
+@media(max-width:820px){
+  .table-responsive table{min-width:100%;display:block}
+  .table-responsive thead{display:none}
+  .table-responsive tbody{display:block;width:100%}
+  .table-responsive tr{display:block;margin-bottom:10px;border:1px solid var(--line);border-radius:16px;padding:10px;background:var(--panel)}
+  .table-responsive td{display:grid;grid-template-columns:90px 1fr;gap:5px;padding:8px 0;border-bottom:1px solid var(--soft);align-items:center}
+  .table-responsive td:last-child{border-bottom:none}
+  .table-responsive td:before{content:attr(data-label);font-weight:700;color:var(--muted2);font-size:11px;text-transform:uppercase}
+  .table-responsive td button, .table-responsive td select, .table-responsive td input{width:auto!important;margin:0;height:32px;padding:0 10px;font-size:12px;border-radius:8px}
+  .table-responsive td button.danger{color:var(--red)}
+}
+
+.metric-card{display:flex;align-items:center;gap:12px}
+.metric-card .icon-wrap{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--soft);color:var(--primary);font-size:18px}
+.metric-card .val{font-size:24px;font-weight:800;line-height:1}
+.metric-card .lbl{font-size:11px;color:var(--muted2);text-transform:uppercase}
+
+.sparkline-chart{display:flex;height:40px;align-items:flex-end;gap:2px;padding:5px 0}
+.sparkline-chart .bar{width:4px;background:var(--primary);border-radius:2px;transition:height .3s ease}
+.sparkline-chart.green .bar{background:var(--green)}
+.sparkline-chart.red .bar{background:var(--red)}
+
+.data-table-simple{width:100%;border-collapse:collapse}
+.data-table-simple th,.data-table-simple td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.data-table-simple th{background:var(--muted);color:var(--muted2);text-transform:uppercase;font-size:11px;font-weight:700}
+.data-table-simple tr:last-child td{border-bottom:none}
+
+.log-viewer{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;font-family:monospace;font-size:12px;max-height:400px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+.log-line.error{color:var(--red)}
+.log-line.warn{color:var(--amber)}
+.log-line.info{color:var(--blue)}
+
+.status-indicator{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px}
+.status-indicator .dot{width:8px;height:8px;border-radius:50%}
+.status-indicator.ok .dot{background:var(--green);box-shadow:0 0 8px var(--green)}
+.status-indicator.warn .dot{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.status-indicator.bad .dot{background:var(--red);box-shadow:0 0 8px var(--red)}
+
+.gauge-chart{width:100px;height:60px;position:relative;overflow:hidden}
+.gauge-chart .fill{width:100%;height:100%;border-radius:100px 100px 0 0;background:conic-gradient(var(--green) calc(var(--p)*1%), var(--soft) 0);transform-origin:bottom center;transform:rotate(calc(var(--p)*1.8deg - 90deg));transition:transform .5s ease-out}
+.gauge-chart .label{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:12px;font-weight:700}
+
+/* Admin contrast maximal polish */
+.card:after,.card:before{content:none!important;display:none!important}
+.card.s4:after,.card.s6:after,.card.s8:after,.card.s9:after,.card.s12:after{content:none!important;display:none!important}
+
+/* Ops/status readability polish */
+.sysline{grid-template-columns:minmax(0,1fr)!important;gap:8px!important;padding:12px!important;margin:10px 0!important;border:1px solid rgba(203,213,225,.16)!important;border-radius:14px!important;background:rgba(7,17,33,.55)!important}
+.sysline>span,.sysline>b,.sysline code{display:block!important;max-width:100%!important;overflow-wrap:anywhere!important;word-break:break-word!important;white-space:normal!important;line-height:1.35!important}
+.sysline .mut{font-size:11px!important}.sysline i{position:relative!important;display:block!important;margin-top:6px!important}
+td code,td pre{white-space:pre-wrap!important;overflow-wrap:anywhere!important;word-break:break-word!important;max-width:100%!important;font-size:11px!important;line-height:1.35!important}
+.table-wrap td:nth-child(4),.table-wrap td:nth-child(5){max-width:360px!important;overflow-wrap:anywhere!important;word-break:break-word!important}
+.card .opslist{grid-template-columns:repeat(auto-fit,minmax(135px,1fr))!important}
+/* Auto-hide sidebar system */
+:root{--sidebar-collapsed:70px;--sidebar-expanded:260px;--sidebar-state:var(--sidebar-collapsed)}
+.app{display:block!important;min-height:100vh!important}
+.sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:var(--sidebar-state)!important;height:100dvh!important;z-index:80!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;transition:width .25s cubic-bezier(.4,0,.2,1)!important;padding:0!important}
+.sidebar .brand{height:58px!important;min-height:58px!important;margin:0!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;border-bottom:1px solid rgba(148,163,184,.12)!important;gap:0!important;overflow:hidden!important}
+.sidebar .brand .logo{width:40px!important;height:40px!important;border-radius:13px!important;flex:0 0 auto!important;font-size:13px!important}
+.sidebar .brand div:last-child{display:none!important;white-space:nowrap!important}
+.sidebar.expanded .brand div:last-child{display:block!important;margin-left:10px!important}
+.sidebar.expanded .brand{justify-content:flex-start!important;padding:0 14px!important}
+.sidebar .nav{padding:8px 7px!important;display:flex!important;flex-direction:column!important;gap:3px!important}
+.sidebar .navgroup{margin:0!important}
+.sidebar .navlabel{display:none!important;padding:0 0 2px!important;color:#64748b!important;font-size:9px!important;letter-spacing:.14em!important;text-transform:uppercase!important;font-weight:900!important;overflow:hidden!important;white-space:nowrap!important}
+.sidebar.expanded .navlabel{display:block!important;padding:8px 8px 3px!important}
+.sidebar .nav button,.sidebar .sidefoot button{width:100%!important;justify-content:center!important;padding:0!important;border-radius:13px!important;min-height:42px!important;gap:0!important;position:relative!important;overflow:hidden!important}
+.sidebar.expanded .nav button,.sidebar.expanded .sidefoot button{justify-content:flex-start!important;padding:0 12px!important;gap:10px!important}
+.sidebar .nav button span:not(.ico),.sidebar .sidefoot button span:not(.ico){display:none!important;white-space:nowrap!important}
+.sidebar.expanded .nav button span:not(.ico),.sidebar.expanded .sidefoot button span:not(.ico){display:inline!important}
+.sidebar .ico{flex:0 0 auto!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;width:36px!important;height:30px!important;border-radius:9px!important;font-size:12px!important;font-weight:800!important}
+.sidebar.expanded .ico{width:32px!important;height:28px!important}
+.sidebar .sidefoot{position:absolute!important;bottom:0!important;left:0!important;right:0!important;padding:8px 7px!important;border-top:1px solid rgba(148,163,184,.12)!important;display:flex!important;flex-direction:column!important;gap:3px!important}
+.sidebar .nav button.active:before{content:''!important;position:absolute!important;left:-7px!important;top:10px!important;bottom:10px!important;width:3px!important;border-radius:99px!important;background:linear-gradient(#ff6b4a,#38bdf8)!important}
+.mainwrap{margin-left:var(--sidebar-state)!important;width:calc(100% - var(--sidebar-state))!important;min-height:100vh!important;transition:margin-left .25s cubic-bezier(.4,0,.2,1),width .25s cubic-bezier(.4,0,.2,1)!important}
+.appbar{position:sticky!important;top:0;z-index:20;height:58px!important;min-height:58px!important;padding:0 16px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;border-bottom:1px solid rgba(148,163,184,.12)!important;background:rgba(5,11,20,.88)!important;backdrop-filter:blur(16px)!important}
+.appbar .crumb{flex:1 1 auto!important;min-width:0!important}
+.appbar .top-actions{display:flex!important;align-items:center!important;gap:8px!important;flex:0 0 auto!important}
+.toggle-btn{width:36px!important;height:36px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;border-radius:10px!important;background:rgba(30,41,59,.6)!important;border:1px solid rgba(148,163,184,.22)!important;color:#cbd5e1!important;cursor:pointer!important;font-size:16px!important;padding:0!important;flex:0 0 auto!important;margin-right:8px!important;transition:background .18s!important}
+.toggle-btn:hover{background:rgba(51,65,85,.9)!important;border-color:rgba(103,232,249,.4)!important}
+.sidebar.expanded{width:var(--sidebar-expanded)!important}
+.app.sidebar-expanded .mainwrap{margin-left:var(--sidebar-expanded)!important;width:calc(100% - var(--sidebar-expanded))!important}
+.main{width:100%!important;max-width:1440px!important;margin:0 auto!important;padding:18px!important}
+.main:before{content:''!important;position:fixed!important;left:var(--sidebar-state)!important;right:0!important;top:58px!important;bottom:0!important;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px)!important;background-size:54px 54px!important;pointer-events:none!important;z-index:-1!important;transition:left .25s cubic-bezier(.4,0,.2,1)!important}
+.sidebar-overlay{display:none!important;position:fixed!important;inset:0!important;background:rgba(0,0,0,.45)!important;z-index:79!important}
+
+/* Tooltip for collapsed sidebar */
+.sidebar .nav button .tooltip,.sidebar .sidefoot button .tooltip{display:none!important;position:absolute!important;left:calc(100% + 10px)!top:50%!important;transform:translateY(-50%)!important;background:rgba(15,23,42,.96)!important;border:1px solid rgba(148,163,184,.28)!important;color:#f8fbff!important;padding:5px 10px!important;border-radius:8px!important;font-size:12px!important;font-weight:600!important;white-space:nowrap!important;z-index:100!important;pointer-events:none!important;box-shadow:0 4px 16px rgba(0,0,0,.3)!important}
+.sidebar:not(.expanded) .nav button:hover .tooltip,.sidebar:not(.expanded) .sidefoot button:hover .tooltip{display:block!important}
+
+/* Mobile responsive */
+@media(max-width:820px){
+  :root{--sidebar-collapsed:58px!important;--sidebar-expanded:260px!important}
+  .sidebar{width:var(--sidebar-collapsed)!important}
+  .sidebar.expanded{width:var(--sidebar-expanded)!important;box-shadow:20px 0 60px rgba(0,0,0,.5)!important}
+  .mainwrap{margin-left:var(--sidebar-collapsed)!important;width:calc(100% - var(--sidebar-collapsed))!important}
+  .app.sidebar-expanded .mainwrap{margin-left:0!important;width:100%!important}
+  .sidebar-overlay.active{display:block!important}
+  .appbar{padding:0 10px!important}
+  .main{padding:12px 8px!important}
+  .top-actions button:not(.toggle-btn){display:none!important}
+  .top-actions .max-pill{display:none!important}
+}
+@media(max-width:520px){
+  :root{--sidebar-collapsed:52px!important}
+  .sidebar .brand .logo{width:34px!important;height:34px!important}
+  .ico{width:32px!important;height:26px!important;font-size:10px!important}
+}
+
+</style></head><body><div id="root"></div><div id="toast" class="toast"></div><div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div><script>
+function routeTab(){let p=location.pathname.replace(/^\/admin\/?/,'').replace(/\/$/,'');return ({'':'dash','dashboard':'dash'}[p]||p||'dash')}const S={token:localStorage.jmToken||'',tab:routeTab(),cmd:false,cmdIndex:0};const ICONS={dash:'📊',analytics:'📈',domains:'🌐',accounts:'👤',dns:'🔧',inbox:'📥',logs:'📋',queue:'📨',mon:'📡',diagnostics:'🔍',reputation:'🛡️',sec:'🔒',spam:'🚫',backup:'💾',system:'⚙️',ops:'🖥️'};
+const GROUPS=[['Overview',[['dash','Dashboard','📊'],['analytics','Analytics','📈']]],['Mail Operations',[['domains','Domains','🌐'],['accounts','DMS Accounts','👤'],['dns','DNS Tools','🔧'],['inbox','Inbox','📥'],['logs','Mail Logs','📋'],['queue','Queue','📨']]],['Infrastructure',[['mon','Monitoring','📡'],['diagnostics','Diagnostics','🔍'],['reputation','Reputation','🛡️'],['sec','Security','🔒'],['spam','Spam','🚫']]],['Administration',[['backup','Backup','💾'],['system','System','⚙️'],['ops','Ops Center','🖥️']]]];const T=GROUPS.flatMap(g=>g[1].map(x=>[x[0],x[1],x[2]]));
+const esc=x=>String(x??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));const dt=x=>x?new Date(x).toLocaleString():'-';const mb=x=>(x/1048576).toFixed(0)+' MB';const gb=x=>(x/1073741824).toFixed(1)+' GB';const pct=x=>Number(x||0).toFixed(1)+'%';function toast(m){let e=document.getElementById('toast');if(!e)return;e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',2200)}function openCmd(){S.cmd=true;document.body.insertAdjacentHTML('beforeend',cmdHtml());setTimeout(()=>cmdq.focus(),20)}function closeCmd(){S.cmd=false;document.querySelector('.cmd')?.remove()}function cmdHtml(){let items=T.map(x=>`<div class="cmditem" onclick="closeCmd();go('${x[0]}')"><span><b>${x[1]}</b><div class="mut">Open ${x[1]} module</div></span><span class="cmdkey">${x[2]}</span></div>`).join('');return `<div class="cmd show" onclick="if(event.target.className.includes('cmd '))closeCmd()"><div class="cmdbox"><input id="cmdq" placeholder="Search pages / actions..." oninput="filterCmd(this.value)" onkeydown="if(event.key==='Escape')closeCmd()"><div id="cmdres" class="cmdres">${items}</div><div class="mut" style="padding:0 16px 14px">Shortcut: <span class="kbd">Ctrl</span> + <span class="kbd">K</span></div></div></div>`}function filterCmd(q){q=q.toLowerCase();cmdres.innerHTML=T.filter(x=>x.join(' ').toLowerCase().includes(q)).map(x=>`<div class="cmditem" onclick="closeCmd();go('${x[0]}')"><span><b>${x[1]}</b><div class="mut">Open ${x[1]} module</div></span><span class="cmdkey">${x[2]}</span></div>`).join('')||'<div class="cmditem">No match</div>'}document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCmd()}if(e.key==='Escape')closeCmd()})
+async function api(p,o={}){let r=await fetch('/admin/api'+p,{...o,headers:{'Content-Type':'application/json',...(S.token?{Authorization:'Bearer '+S.token}:{}),...(o.headers||{})}});let t=await r.text(),j={};try{j=t?JSON.parse(t):{}}catch{j={raw:t}}if(!r.ok){if(r.status==401||r.status==403)logout(0);throw Error(j.error||r.status)}return j}
+function login(){root.innerHTML=`<div class="login"><div class="card login-card"><div class="loginbrand"><div class="logo">J</div><div><h1>JoeMail Tools</h1><p>Mail operations console</p></div></div><input id="u" value="admin"><br><br><input id="p" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"><br><br><button class="primary" style="width:100%" onclick="doLogin()">Sign In</button><p id="err" class="bad"></p></div></div>`}async function doLogin(){try{let r=await api('/login',{method:'POST',body:JSON.stringify({username:u.value,password:p.value})});localStorage.jmToken=S.token=r.token;render()}catch(e){err.textContent=e.message}}function logout(t=1){localStorage.removeItem('jmToken');S.token='';if(t)toast('logout');login()}
+let sidebarExpanded=localStorage.sidebarExpanded==='true';
+function toggleSidebar(){sidebarExpanded=!sidebarExpanded;localStorage.sidebarExpanded=sidebarExpanded;let side=document.getElementById('side');let app=document.querySelector('.app');let ov=document.getElementById('sidebarOverlay');if(side){side.classList.toggle('expanded',sidebarExpanded)}if(app){app.classList.toggle('sidebar-expanded',sidebarExpanded)}if(ov){ov.classList.toggle('active',sidebarExpanded)}}
+function shell(){let cur=T.find(x=>x[0]===S.tab)||T[0];let nav=GROUPS.map(g=>`<div class="navgroup"><div class="navlabel">${g[0]}</div>${g[1].map(x=>`<button title="${x[1]}" class="${S.tab==x[0]?'active':''}" onclick="go('${x[0]}')"><span class="ico">${x[2]}</span><span>${x[1]}</span><span class="tooltip">${x[1]}</span></button>`).join('')}</div>`).join('');let status=`<span class="status-dot"></span><span class="max-pill">Live Admin</span>`;root.innerHTML=`<div class="app${sidebarExpanded?' sidebar-expanded':''}"><aside id="side" class="sidebar${sidebarExpanded?' expanded':''}"><div class="brand"><div class="logo">JM</div><div><h1>JoeMail Admin</h1><p>Ops Console</p></div></div><div class="nav">${nav}</div><div class="sidefoot"><button onclick="openCmd()"><span class="ico">⌘K</span><span>Command</span><span class="tooltip">Command</span></button><button onclick="logout()"><span class="ico">⏻</span><span>Logout</span><span class="tooltip">Logout</span></button></div></aside><div class="mainwrap"><header class="appbar"><div style="display:flex;align-items:center;gap:8px"><button class="toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">☰</button><div class="crumb"><b>${cur[1]}</b><span>/ admin / ${S.tab}</span></div></div><div class="top-actions">${status}<button class="ghost" onclick="go('queue')">Queue</button><button class="ghost" onclick="go('ops')">Ops</button><button class="primary" onclick="render()">Refresh</button></div></header><main class="main"><div id="view"></div></main></div></div>`}
+function tabPath(tab){return '/admin/'+(tab==='dash'?'dashboard':tab)+'/'}function go(tab){S.tab=tab;history.pushState(null,'',tabPath(tab));render()}window.addEventListener('popstate',()=>{S.tab=routeTab();render()});async function render(){if(!S.token)return login();S.tab=routeTab()||S.tab||'dash';shell();try{await ({dash,domains,accounts,dns,inbox,logs,queue,mon,diagnostics,reputation,sec,spam,analytics,backup,system,ops}[S.tab]||dash)()}catch(e){view.innerHTML='<div class="card bad">'+esc(e.message)+'</div>'}}
+function pageIntro(title,desc){return `<div>${getRefreshBar()}</div><div class="card s12"><div class="head"><div><h3>${title}</h3><div class="mut">${desc}</div></div><span class="badge">Page: ${S.tab}</span></div></div>`}
+function stat(t,v,s,c=''){return `<div class="card s3"><div class="mut" style="font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.04em">${t}</div><div class="num ${c}">${v}</div><div class="mut">${s||''}</div></div>`}
+async function dash(){
+    let d=await api('/extended/dashboard');
+    let server = d.server || {};
+    let totals = d.totals || {};
+    let queueData = d.queue || {};
+    let trend = d.trend || {};
+
+    let uptime = Math.round((server.uptime || 0) / 60);
+    let cpu = +server.cpu || 0;
+    let ram = +server.ramPct || 0;
+    let disk = +server.diskPct || 0;
+
+    let sparkMail = trend.mailPerDay || [0,0,0,0,0,0,0];
+    let sparkSpam = trend.spamPerDay || [0,0,0,0,0,0,0];
+
+    view.innerHTML=`
+        <div class="refresh-bar">
+            <span>Last updated: ${new Date().toLocaleTimeString()}</span>
+            <button class="primary" onclick="render()">Refresh Now</button>
+            <div style="flex-grow:1"></div>
+            ${getRefreshBar()}
+        </div>
+
+        <div class="grid grid-4" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon"><i class="fas fa-envelope"></i></div>
+                <div class="value">${totals.emailToday || 0}</div>
+                <div class="label">Mail Today</div>
+                ${sparklineChart(sparkMail, 'blue')}
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon"><i class="fas fa-ban"></i></div>
+                <div class="value">${totals.spamBlocked || 0}</div>
+                <div class="label">Spam Blocked</div>
+                ${sparklineChart(sparkSpam, 'red')}
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon"><i class="fas fa-globe"></i></div>
+                <div class="value">${totals.domains || 0}</div>
+                <div class="label">Active Domains</div>
+                <span class="mut">${totals.activeDomains} active / ${totals.inactiveDomains} inactive</span>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon"><i class="fas fa-inbox"></i></div>
+                <div class="value">${totals.inboxes || 0}</div>
+                <div class="label">Total Inboxes</div>
+                <span class="mut">Including temporary</span>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card s12">
+                <div class="head">
+                    <div>
+                        <h3>System Resource Usage</h3>
+                        <div class="mut">Current load of critical system components.</div>
+                    </div>
+                </div>
+                <div class="grid-3" style="margin-top:20px">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(cpu.toFixed(0), 'CPU', cpu > 80 ? 'red' : cpu > 60 ? 'amber' : 'green')}
+                        <div class="label">CPU Usage</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(ram.toFixed(0), 'RAM', ram > 80 ? 'red' : ram > 60 ? 'amber' : 'green')}
+                        <div class="label">RAM Usage</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(disk.toFixed(0), 'Disk', disk > 80 ? 'red' : disk > 60 ? 'amber' : 'green')}
+                        <div class="label">Disk Usage</div>
+                    </div>
+                </div>
+                <div style="margin-top:20px">
+                    <div class="metric-card">
+                        <div class="icon-wrap"><i class="fas fa-heartbeat"></i></div>
+                        <div>
+                            <div class="val"><span class="status-indicator ${server.health === 'ok' ? 'ok' : 'bad'}">${server.health}</span></div>
+                            <div class="lbl">System Health</div>
+                        </div>
+                    </div>
+                    <div class="metric-card" style="margin-top:10px">
+                        <div class="icon-wrap"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <div class="val">${uptime} mins</div>
+                            <div class="lbl">Server Uptime</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card s12">
+                <div class="head">
+                    <div>
+                        <h3>Mail Queue Status</h3>
+                        <div class="mut">Overview of pending and deferred emails.</div>
+                    </div>
+                    <button class="primary" onclick="go('queue')">Manage Queue</button>
+                </div>
+                <div style="margin-top:20px">
+                    <div class="metric-card">
+                        <div class="icon-wrap"><i class="fas fa-hourglass-half"></i></div>
+                        <div>
+                            <div class="val"><span class="status-indicator ${queueData.status === 'ok' ? 'ok' : 'warn'}">${queueData.status}</span></div>
+                            <div class="lbl">Queue Status</div>
+                        </div>
+                    </div>
+                    <div class="metric-card" style="margin-top:10px">
+                        <div class="icon-wrap"><i class="fas fa-list-ol"></i></div>
+                        <div>
+                            <div class="val">${queueData.pending || 0}</div>
+                            <div class="lbl">Pending Emails</div>
+                        </div>
+                    </div>
+                    <div class="metric-card" style="margin-top:10px">
+                        <div class="icon-wrap"><i class="fas fa-calendar-alt"></i></div>
+                        <div>
+                            <div class="val">${totals.email7d || 0}</div>
+                            <div class="lbl">Mail Last 7 Days</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="log-viewer" style="margin-top:20px">
+                    ${esc(queueData.raw || 'Queue is empty or no raw data available.')}
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:var(--admin-gap)">
+            <div class="card s12">
+                <div class="head">
+                    <h3>Top Domains by Activity</h3>
+                    <button class="ghost" onclick="go('domains')">View All</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table-simple">
+                        <thead>
+                            <tr><th>Domain</th><th>Status</th><th>Health</th><th>Daily Mail</th></tr>
+                        </thead>
+                        <tbody>
+                            ${(d.top?.domains || []).slice(0, 5).map(dom => `
+                                <tr>
+                                    <td>@${esc(dom.domain)}</td>
+                                    <td><span class="badge ${dom.active ? 'ok' : 'bad'}">${dom.active ? 'Active' : 'Inactive'}</span></td>
+                                    <td><span class="status-indicator ${dom.health === 'ok' ? 'ok' : 'bad'}">${esc(dom.health)}</span></td>
+                                    <td>${dom.emailToday || 0}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card s12">
+                <div class="head">
+                    <h3>Top Inboxes by Volume</h3>
+                    <button class="ghost" onclick="go('inbox')">View All</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table-simple">
+                        <thead>
+                            <tr><th>Inbox</th><th>Messages</th><th>Last Activity</th></tr>
+                        </thead>
+                        <tbody>
+                            ${(d.top?.inboxes || []).slice(0, 5).map(inb => `
+                                <tr>
+                                    <td>${esc(inb.email)}</td>
+                                    <td>${inb.messageCount || 0}</td>
+                                    <td>${dt(inb.lastActivity)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+    startAutoRefresh();
+function tbl(h,rows){let table='<table><thead><tr>'+h.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map((c,i)=>'<td data-label="'+esc(h[i]||'')+'">'+((String(c).includes('<button')||String(c).includes('<span')||String(c).includes('<input')||String(c).includes('<select'))?c:esc(c))+'</td>').join('')+'</tr>').join('')+'</tbody></table>';return '<div class="table-wrap">'+table+'</div>'}
+async function domains(){
+    let d=await api('/extended/domains');
+    let domains = d.domains || [];
+    let stats = {
+        total: domains.length,
+        active: domains.filter(dom => dom.active).length,
+        inactive: domains.filter(dom => !dom.active).length,
+        healthy: domains.filter(dom => dom.health === 'ok').length,
+        warning: domains.filter(dom => dom.health === 'warn').length,
+        critical: domains.filter(dom => dom.health === 'bad').length,
+    };
+
+    view.innerHTML=`
+        <div class="refresh-bar">
+            <span>Last updated: ${new Date().toLocaleTimeString()}</span>
+            <button class="primary" onclick="render()">Refresh Now</button>
+            <div style="flex-grow:1"></div>
+            ${getRefreshBar()}
+        </div>
+
+        <div class="grid grid-4" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--primary)"><i class="fas fa-globe"></i></div>
+                <div class="value">${stats.total}</div>
+                <div class="label">Total Domains</div>
+                <span class="mut">All records</span>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--green)"><i class="fas fa-check-circle"></i></div>
+                <div class="value">${stats.active}</div>
+                <div class="label">Active Domains</div>
+                <span class="mut">Currently enabled</span>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--amber)"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="value">${stats.warning}</div>
+                <div class="label">Warning Health</div>
+                <span class="mut">Needs attention</span>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--red)"><i class="fas fa-times-circle"></i></div>
+                <div class="value">${stats.critical}</div>
+                <div class="label">Critical Health</div>
+                <span class="mut">Immediate action</span>
+            </div>
+        </div>
+
+        <div class="card s12">
+            <div class="head">
+                <h3>Domain Management</h3>
+                <span class="badge">Add/Edit/Manage Domain Records</span>
+            </div>
+            <div class="form grid-2" style="margin-top:20px; gap:15px">
+                <input class="f-span-2" id="dom" placeholder="domain.com" required>
+                <input class="f-span-2" id="target" value="admin@rzbal.biz.id" placeholder="Target email for catch-all (optional)">
+                <input class="f-span-1" id="tags" placeholder="Tags (comma separated)">
+                <input class="f-span-1" id="expiry" placeholder="Expiry (yyyy-mm-dd)">
+                <input class="f-span-2" id="notes" placeholder="Internal notes about this domain">
+                <div class="f-span-2 quickgrid">
+                    <button class="primary" onclick="addDom()">Add Domain</button>
+                    <button class="ghost" onclick="prefillSelected()">Edit Selected</button>
+                    <button class="ghost" onclick="domains()">Refresh</button>
+                </div>
+                <textarea class="f-span-2" id="bulk" rows="5" placeholder="Bulk import (one domain per line, e.g., domain.com,target@email.com,tag1,tag2,notes,2025-12-31)"></textarea>
+                <div class="f-span-2 quickgrid">
+                    <button class="primary" onclick="bulkDom()">Bulk Action</button>
+                    <button class="ghost" onclick="bulkStatus(true)">Enable Selected</button>
+                    <button class="ghost" onclick="bulkStatus(false)">Disable Selected</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card s12" style="margin-top:var(--admin-gap)">
+            <div class="head">
+                <h3>All Managed Domains</h3>
+                <span class="badge">${domains.length} Records</span>
+            </div>
+            <div class="table-responsive" style="margin-top:20px">
+                <table class="data-table-simple">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="toggleAllDomains(this.checked)"></th>
+                            <th>Domain</th>
+                            <th>Target</th>
+                            <th>Status</th>
+                            <th>Health</th>
+                            <th>Tags</th>
+                            <th>Expiry</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${domains.map(x => `
+                            <tr>
+                                <td><input type="checkbox" class="domain-pick" value="${esc(x.domain)}"></td>
+                                <td>@${esc(x.domain)}</td>
+                                <td>${esc(x.target)}</td>
+                                <td><span class="status-indicator ${x.active ? 'ok' : 'bad'}">${x.active ? 'Active' : 'Inactive'}</span></td>
+                                <td><span class="status-indicator ${x.health === 'ok' ? 'ok' : x.health === 'warn' ? 'warn' : 'bad'}">${esc(x.health)}</span></td>
+                                <td>${(x.tags || []).map(t => `<span class="badge" style="margin-right:5px">${esc(t)}</span>`).join('')}</td>
+                                <td>${esc(x.expiry || '-')}</td>
+                                <td><span title="${esc(x.notes || '')}">${esc(x.notes || '-').substring(0, 30)}${x.notes && x.notes.length > 30 ? '...' : ''}</span></td>
+                                <td>
+                                    <button class="ghost" onclick="editDomainForm('${esc(x.domain)}', '${esc((x.tags || []).join(','))}', '${esc(x.notes || '')}', '${esc(x.expiry || '')}', '${esc(x.target || '')}')">Edit</button>
+                                    <button class="ghost ${x.active ? 'danger' : 'primary'}" onclick="setDom('${esc(x.domain)}', ${!x.active})">${x.active ? 'Disable' : 'Enable'}</button>
+                                    <button class="ghost" onclick="localStorage.dn='${esc(x.domain)}';go('dns')">DNS</button>
+                                    <button class="danger" onclick="delDom('${esc(x.domain)}')">Remove</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    startAutoRefresh();
+}
+
+async function addDom(){
+    let domainVal = dom.value.trim();
+    if (!domainVal) { toast('Domain cannot be empty'); return; }
+    let targetVal = target.value.trim();
+    if (!targetVal) { toast('Target email cannot be empty'); return; }
+
+    try {
+        await api('/dms/domains',{method:'POST',body:JSON.stringify({domain:domainVal,target:targetVal})});
+        await api('/extended/domains/'+encodeURIComponent(domainVal),{method:'PATCH',body:JSON.stringify({tags:tags.value.trim().split(',').map(t=>t.trim()).filter(Boolean),notes:notes.value.trim(),expiry:expiry.value.trim(),active:true})});
+        toast('Domain added');
+        domains();
+    } catch (e) {
+        toast('Error adding domain: ' + e.message);
+    }
+}
+
+async function delDom(x){
+    if(!confirm('Are you sure you want to remove domain '+x+'?')) return;
+    try {
+        await api('/dms/domains/'+encodeURIComponent(x),{method:'DELETE'});
+        toast('Domain removed');
+        domains();
+    } catch (e) {
+        toast('Error removing domain: ' + e.message);
+    }
+}
+
+async function setDom(x,a){
+    try {
+        await api('/extended/domains/'+encodeURIComponent(x),{method:'PATCH',body:JSON.stringify({active:a})});
+        toast('Domain status updated');
+        domains();
+    } catch (e) {
+        toast('Error updating domain status: ' + e.message);
+    }
+}
+
+function editDomainForm(d, t, n, e, targetEmail){
+    dom.value=d;
+    tags.value=t;
+    notes.value=n;
+    expiry.value=e;
+    target.value=targetEmail;
+    toast('Domain data loaded for editing');
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleAllDomains(checked) {
+    document.querySelectorAll('.domain-pick').forEach(checkbox => {
+        checkbox.checked = checked;
+    });
+}
+
+function pickedDomains(){
+    return [...document.querySelectorAll('.domain-pick:checked')].map(x=>x.value);
+}
+
+function prefillSelected(){
+    const selected = pickedDomains();
+    if (selected.length === 0) {
+        toast('No domains selected');
+        return;
+    }
+    if (selected.length === 1) {
+        // Fetch full domain details for prefill
+        api('/extended/domains').then(data => {
+            const domainDetail = data.domains.find(d => d.domain === selected[0]);
+            if (domainDetail) {
+                editDomainForm(domainDetail.domain, (domainDetail.tags || []).join(','), domainDetail.notes || '', domainDetail.expiry || '', domainDetail.target || '');
+            } else {
+                toast('Could not find full details for selected domain');
+            }
+        }).catch(e => toast('Error fetching domain details: ' + e.message));
+    } else {
+        bulk.value = selected.join('\n');
+        toast('Selected domains copied to bulk textarea');
+    }
+}
+
+async function bulkDom(){
+    const bulkData = bulk.value.trim();
+    if (!bulkData) { toast('Bulk input is empty'); return; }
+
+    const lines = bulkData.split('\n').map(line => line.trim()).filter(Boolean);
+    const domainsToProcess = [];
+
+    for (const line of lines) {
+        const parts = line.split(',').map(p => p.trim());
+        if (parts.length < 1) continue;
+
+        const domainName = parts[0];
+        let domainTarget = target.value.trim(); // Default target from form
+        let domainTags = tags.value.trim().split(',').map(t=>t.trim()).filter(Boolean); // Default tags from form
+        let domainNotes = notes.value.trim(); // Default notes from form
+        let domainExpiry = expiry.value.trim(); // Default expiry from form
+
+        if (parts.length > 1) domainTarget = parts[1];
+        if (parts.length > 2) domainTags = parts[2].split(';').map(t=>t.trim()).filter(Boolean); // Allow semicolon for tags in bulk line
+        if (parts.length > 3) domainNotes = parts[3];
+        if (parts.length > 4) domainExpiry = parts[4];
+
+        domainsToProcess.push({
+            domain: domainName,
+            target: domainTarget,
+            tags: domainTags,
+            notes: domainNotes,
+            expiry: domainExpiry,
+            active: true // Always add as active for bulk import
+        });
+    }
+
+    if (domainsToProcess.length === 0) {
+        toast('No valid domains found in bulk input');
+        return;
+    }
+
+    try {
+        await api('/extended/domains/bulk',{method:'POST',body:JSON.stringify({domains: domainsToProcess})});
+        toast('Bulk operation completed for ' + domainsToProcess.length + ' domains');
+        domains();
+    } catch (e) {
+        toast('Error in bulk operation: ' + e.message);
+    }
+}
+
+async function bulkStatus(a){
+    let ds=pickedDomains();
+    if(ds.length === 0) { toast('No domains selected for bulk status update'); return; }
+    try {
+        await api('/extended/domains/bulk-status',{method:'POST',body:JSON.stringify({domains:ds,active:a})});
+        toast('Bulk status updated for ' + ds.length + ' domains');
+        domains();
+    } catch (e) {
+        toast('Error updating bulk status: ' + e.message);
+    }
+}
+
+async function accounts(){
+    let r=await api('/dms/accounts');
+    let allAccounts = r.accounts || [];
+    let stats = {
+        total: allAccounts.length,
+        active: allAccounts.filter(acc => !acc.suspended).length,
+        suspended: allAccounts.filter(acc => acc.suspended).length
+    };
+
+    view.innerHTML=`
+        <div class="refresh-bar">
+            <span>Last updated: ${new Date().toLocaleTimeString()}</span>
+            <button class="primary" onclick="render()">Refresh Now</button>
+            <div style="flex-grow:1"></div>
+            ${getRefreshBar()}
+        </div>
+
+        <div class="grid grid-3" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--primary)"><i class="fas fa-users"></i></div>
+                <div class="value">${stats.total}</div>
+                <div class="label">Total Accounts</div>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--green)"><i class="fas fa-user-check"></i></div>
+                <div class="value">${stats.active}</div>
+                <div class="label">Active Accounts</div>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--amber)"><i class="fas fa-user-lock"></i></div>
+                <div class="value">${stats.suspended}</div>
+                <div class="label">Suspended Accounts</div>
+            </div>
+        </div>
+
+        <div class="card s12">
+            <div class="head">
+                <h3>DMS Accounts</h3>
+                <span class="badge">Manage Mailbox Accounts</span>
+            </div>
+            <div class="form grid-2" style="margin-top:20px; gap:15px">
+                <input class="f-span-1" id="ae" placeholder="email@domain.com" required type="email">
+                <input class="f-span-1" id="ap" placeholder="password" required type="password">
+                <div class="f-span-2 quickgrid">
+                    <button class="primary" onclick="addAccount()">Add Account</button>
+                    <button class="ghost" onclick="accounts()">Refresh</button>
+                </div>
+                <div class="f-span-2" style="margin-top:10px">
+                    <button class="ghost" onclick="toggleAllAccounts(true)">Select All</button>
+                    <button class="ghost" onclick="toggleAllAccounts(false)">Clear Selection</button>
+                    <button class="ghost" onclick="bulkAccountAction('unsuspend')">Unsuspend Selected</button>
+                    <button class="ghost" onclick="bulkAccountAction('suspend')">Suspend Selected</button>
+                    <button class="danger" onclick="bulkAccountAction('delete')">Delete Selected</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card s12" style="margin-top:var(--admin-gap)">
+            <div class="head">
+                <h3>All Mail Accounts</h3>
+                <span class="badge">${allAccounts.length} Records</span>
+            </div>
+            <div class="table-responsive" style="margin-top:20px">
+                <table class="data-table-simple">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" onchange="toggleAllAccounts(this.checked)"></th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${allAccounts.map(a => {
+                            let email = a.email || a.user || String(a);
+                            return `
+                                <tr>
+                                    <td><input type="checkbox" class="account-pick" value="${esc(email)}"></td>
+                                    <td>${esc(email)}</td>
+                                    <td><span class="status-indicator ${a.suspended ? 'warn' : 'ok'}">${a.suspended ? 'Suspended' : 'Active'}</span></td>
+                                    <td>
+                                        <button class="ghost" onclick="localStorage.iq='${esc(email)}';go('inbox')">Inbox</button>
+                                        <button class="ghost ${a.suspended ? 'primary' : 'warn'}" onclick="updateAccountStatus('${esc(email)}', ${!a.suspended})">${a.suspended ? 'Unsuspend' : 'Suspend'}</button>
+                                        <button class="danger" onclick="delAccount('${esc(email)}')">Delete</button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    startAutoRefresh();
+}
+
+async function addAccount(){
+    let emailVal = ae.value.trim();
+    let passwordVal = ap.value.trim();
+    if (!emailVal || !passwordVal) { toast('Email and password cannot be empty'); return; }
+
+    try {
+        await api('/dms/accounts',{method:'POST',body:JSON.stringify({email:emailVal,password:passwordVal})});
+        toast('Account added');
+        ae.value = '';
+        ap.value = '';
+        accounts();
+    } catch (e) {
+        toast('Error adding account: ' + e.message);
+    }
+}
+
+async function delAccount(e){
+    if(!confirm('Are you sure you want to delete account '+e+'?')) return;
+    try {
+        await api('/dms/accounts/'+encodeURIComponent(e),{method:'DELETE'});
+        toast('Account deleted');
+        accounts();
+    } catch (e) {
+        toast('Error deleting account: ' + e.message);
+    }
+}
+
+async function updateAccountStatus(email, status){
+    try {
+        await api('/dms/accounts/'+encodeURIComponent(email),{method:'PATCH',body:JSON.stringify({suspended: !status})});
+        toast('Account status updated');
+        accounts();
+    } catch (e) {
+        toast('Error updating account status: ' + e.message);
+    }
+}
+
+function toggleAllAccounts(checked) {
+    document.querySelectorAll('.account-pick').forEach(checkbox => {
+        checkbox.checked = checked;
+    });
+}
+
+function pickedAccounts(){
+    return [...document.querySelectorAll('.account-pick:checked')].map(x=>x.value);
+}
+
+async function bulkAccountAction(action) {
+    let emails = pickedAccounts();
+    if (!emails.length) { toast('No accounts selected'); return; }
+
+    let confirmMsg = `Are you sure you want to ${action} ${emails.length} accounts?`;
+    if (action === 'delete') {
+        confirmMsg = `WARNING: Are you sure you want to DELETE ${emails.length} accounts permanently? This cannot be undone!`;
+    }
+    if (!confirm(confirmMsg)) return;
+
+    try {
+        // DMS API for accounts only supports DELETE for single, and POST for add.
+        // For suspend/unsuspend, we have to iterate or check if the API supports bulk PATCH.
+        // Assuming /extended/accounts/bulk-action for simplicity for now.
+        // If not, each account needs individual PATCH call.
+        if (action === 'suspend' || action === 'unsuspend') {
+            await Promise.all(emails.map(email =>
+                api('/dms/accounts/' + encodeURIComponent(email), {method:'PATCH', body:JSON.stringify({suspended: action === 'suspend'})})
+            ));
+        } else if (action === 'delete') {
+            await Promise.all(emails.map(email =>
+                api('/dms/accounts/' + encodeURIComponent(email), {method:'DELETE'})
+            ));
+        } else {
+            toast('Unknown bulk action: ' + action);
+            return;
+        }
+        toast(action + ' ' + emails.length + ' accounts');
+        accounts();
+    } catch (e) {
+        toast('Error performing bulk action: ' + e.message);
+    }
+}
+async function diagnostics(){
+    let d=await api('/diagnostics');
+    let checks = Object.entries(d).filter(([k])=> typeof d[k] !== 'object' && k !== 'status');
+
+    view.innerHTML=`
+        <div class="refresh-bar">
+            <span>Last updated: ${new Date().toLocaleTimeString()}</span>
+            <button class="primary" onclick="render()">Refresh Now</button>
+            <div style="flex-grow:1"></div>
+            ${getRefreshBar()}
+        </div>
+
+        <div class="grid grid-3" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--primary)"><i class="fas fa-heartbeat"></i></div>
+                <div class="value"><span class="status-indicator ${d.status === 'ok' ? 'ok' : d.status === 'warn' ? 'warn' : 'bad'}">${esc(d.status || 'unknown')}</span></div>
+                <div class="label">Overall Status</div>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--blue)"><i class="fas fa-plug"></i></div>
+                <div class="value"><span class="status-indicator ${d.api === 'ok' ? 'ok' : 'bad'}">${esc(d.api || 'unknown')}</span></div>
+                <div class="label">API Service</div>
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--green)"><i class="fas fa-server"></i></div>
+                <div class="value"><span class="status-indicator ${d.dms === 'ok' ? 'ok' : d.dms === 'warn' ? 'warn' : 'bad'}">${esc(d.dms || 'unknown')}</span></div>
+                <div class="label">Mail Server (DMS)</div>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card s12">
+                <div class="head">
+                    <h3>Health Check Details</h3>
+                    <button class="primary" onclick="diagnostics()">Run Again</button>
+                </div>
+                <div class="table-responsive" style="margin-top:20px">
+                    <table class="data-table-simple">
+                        <thead>
+                            <tr><th>Check</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            ${checks.map(([k,v]) => `
+                                <tr>
+                                    <td>${esc(k)}</td>
+                                    <td><span class="status-indicator ${v === 'ok' ? 'ok' : v === 'warn' ? 'warn' : 'bad'}">${esc(String(v))}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card s12">
+                <div class="head">
+                    <h3>Raw Diagnostics Output</h3>
+                </div>
+                <pre class="log-viewer" style="margin-top:20px">${esc(JSON.stringify(d,null,2))}</pre>
+            </div>
+        </div>
+    `;
+    startAutoRefresh();
+}
+
+async function reputation(){
+    let dom=localStorage.repDomain||localStorage.dn||'rzbal.biz.id';
+    view.innerHTML=`<div class="grid">
+        <div class="card s12"><div class="head"><div><h3>Domain/IP Reputation</h3><div class="mut">RBL blacklist lookup + mail IP discovery.</div></div><span class="badge">Spamhaus / Spamcop / Barracuda</span></div>
+        <div class="form"><input class="f8" id="repdn" value="${esc(dom)}" placeholder="domain.com"><button class="primary f2" onclick="runRep()">Check Reputation</button><button class="ghost f2" onclick="localStorage.dn=repdn.value;go('dns')">DNS Tools</button></div></div>
+        <div id="repout" class="s12"></div>
+    </div>`;
+    runRep();
+}
+async function runRep(){
+    localStorage.repDomain=repdn.value;
+    let r=await api('/extended/reputation/'+encodeURIComponent(repdn.value));
+    let checks=r.checks||[];
+    let cleanCount=checks.filter(x=>x.status==='clean').length;
+    let listedCount=checks.filter(x=>x.status==='listed').length;
+    repout.innerHTML=`<div class="grid">
+        ${stat('IP Address',r.ip||'-','mail server IP')}${stat('Clean RBLs',cleanCount,'of '+checks.length)}${stat('Listed RBLs',listedCount,listedCount?'PROBLEM':'all clear',listedCount?'bad':'ok')}
+        <div class="card s12"><div class="head"><h3>${esc(r.domain)} Reputation</h3><span class="badge">IP ${esc(r.ip||'-')}</span></div>
+        ${tbl(['RBL','Status','Value'],checks.map(x=>[`<span class="badge ${x.status==='clean'?'ok':'bad'}">${esc(x.rbl)}</span>`,`<span class="badge ${x.status==='clean'?'ok':'bad'}">${esc(x.status)}</span>`,esc(x.value)]))}
+        </div>
+    </div>`;
+}
+
+async function inbox(){
+    let q=localStorage.iq||'';
+    let r=await api('/extended/inboxes?q='+encodeURIComponent(q));
+    let stats=r.stats||{};
+    view.innerHTML=`<div class="grid">
+        ${stat('Total Inboxes',stats.total,'all')}${stat('Active',stats.active,'running',stats.active?'ok':'')}${stat('Suspended',stats.suspended,'blocked',stats.suspended?'warn':'')}${stat('Messages',stats.messages,'total messages')}
+        <div class="card s12"><div class="head"><div><h3>Inbox Management</h3><div class="mut">Search, manage, and control temporary inboxes.</div></div><input style="max-width:360px" id="iq" value="${esc(q)}" placeholder="Search inbox / IP" onkeydown="if(event.key==='Enter'){localStorage.iq=iq.value;inbox()}"></div>
+        <div class="form" style="margin-top:14px"><button class="ghost f2" onclick="pickAll(true)">Select All</button><button class="ghost f2" onclick="pickAll(false)">Clear</button><button class="ghost f2" onclick="bulkInbox('suspend')">Suspend</button><button class="ghost f2" onclick="bulkInbox('unsuspend')">Unsuspend</button><button class="ghost f2" onclick="bulkInbox('expire')">Expire</button><button class="danger f2" onclick="bulkInbox('delete')">Delete</button></div>
+        ${tbl(['Pick','Inbox','Status','Msg','IP','Activity','Action'],(r.inboxes||[]).map(x=>[`<input type="checkbox" class="ipick" value="${x.email}">`,`<span class="badge">${esc(x.email)}</span>`,x.suspended?'<span class="badge bad">suspended</span>':'<span class="badge ok">active</span>',x.messageCount,x.ip||'-',dt(x.lastActivity),`<button onclick="updInbox('${x.email}',{suspended:${!x.suspended}})">${x.suspended?'Unsuspend':'Suspend'}</button> <button onclick="updInbox('${x.email}',{forceExpire:true})">Expire</button> <button class="danger" onclick="delInbox('${x.email}')">Delete</button>`]))}
+        </div>
+    </div>`;
+}
+function pickAll(v){document.querySelectorAll('.ipick').forEach(x=>x.checked=v)}
+function pickedInbox(){return [...document.querySelectorAll('.ipick:checked')].map(x=>x.value)}
+async function bulkInbox(action){let emails=pickedInbox();if(!emails.length)return toast('no inbox selected');await api('/extended/inboxes/bulk',{method:'POST',body:JSON.stringify({action,emails})});toast(action+' '+emails.length);inbox()}
+async function updInbox(e,b){await api('/extended/inboxes/'+encodeURIComponent(e),{method:'PATCH',body:JSON.stringify(b)});inbox()}
+async function delInbox(e){await api('/users/'+encodeURIComponent(e),{method:'DELETE'});inbox()}
+
+async function logs(){
+    let type=localStorage.lt||'all';
+    let r=await api('/extended/mail-logs?type='+type+'&limit=1500');
+    window.lastLogExport=r.export||'';
+    let logs=r.logs||[];
+    let typeCounts={};
+    logs.forEach(l=>{typeCounts[l.type]=(typeCounts[l.type]||0)+1});
+    view.innerHTML=`<div class="grid">
+        ${Object.entries(typeCounts).map(([t,c])=>stat(t,c,'entries')).join('')}
+        <div class="card s12"><div class="head"><div><h3>Mail Logs</h3><div class="mut">${logs.length} entries • filtered by ${type}</div></div>
+        <div class="logtools"><select id="lt" onchange="localStorage.lt=this.value;logs()"><option>all</option><option>incoming</option><option>delivery</option><option>bounce</option><option>reject</option><option>smtp</option></select><button class="ghost" onclick="download('mail-logs.txt',window.lastLogExport||'')">Export</button></div></div>
+        <pre class="logpre">${esc(logs.map(x=>'['+x.type+'] '+x.line).join('\\n'))}</pre></div>
+    </div>`;
+    lt.value=type;
+}
+function download(n,t){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t]));a.download=n;a.click()}
+
+async function queue(){
+    let q=await api('/extended/queue');
+    let hasPending=q.pending>0;
+    view.innerHTML=`<div class="grid">
+        ${stat('Queue Status',q.status,'pending '+q.pending,hasPending?'warn':'ok')}
+        <div class="card s12"><div class="head"><div><h3>Live Mail Queue</h3><div class="mut">Postfix mail queue management.</div></div>
+        <div><button class="primary" onclick="api('/extended/queue/flush',{method:'POST'}).then(queue)">Flush Queue</button> <button class="danger" onclick="api('/extended/queue/delete-deferred',{method:'POST'}).then(queue)">Delete Deferred</button> <button class="ghost" onclick="queue()">Refresh</button></div></div>
+        <pre style="max-height:500px;overflow:auto">${esc(q.raw||'empty queue')}</pre></div>
+    </div>`;
+}
+
+async function mon(){
+    let m=await api('/extended/monitoring');
+    let cpu=+m.cpu.currentLoad||0,ram=m.memory.used/m.memory.total*100,disk=+m.disk[0]?.use||0;
+    let barH=v=>Math.max(8,Math.min(100,v))+'%';
+    let barC=v=>v>80?'bad':v>60?'warn':'ok';
+    let dockerStatus=s=>{let l=(s||'').toLowerCase();let cls=l.includes('running')?'running':l.includes('created')?'created':l.includes('exited')?'exited':'other';return`<span class="docker-status"><span class="dot ${cls}"></span>${esc(s)}</span>`};
+    view.innerHTML=`<div class="grid">
+        ${stat('CPU',pct(cpu),m.cpu.cpus?.length+' cores',barC(cpu))}${stat('RAM',pct(ram),mb(m.memory.used)+' / '+mb(m.memory.total),barC(ram))}${stat('Disk',pct(disk),gb(m.disk[0]?.used||0)+' used',barC(disk))}${stat('Uptime',Math.round(m.uptime/60)+'m','process')}${stat('Mail Queue',m.queue.status,'pending '+m.queue.pending,m.queue.pending?'warn':'ok')}${stat('Rate/min',m.ratePerMinute,'mail rate')}${stat('Connections',m.connections.length,'interfaces')}
+        <div class="card s6"><h3>System Resources</h3>
+            <div style="margin:14px 0"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span class="mut">CPU Load</span><b>${pct(cpu)}</b></div><div class="progress-bar"><div class="fill ${barC(cpu)}" style="width:${barH(cpu)}"></div></div></div>
+            <div style="margin:14px 0"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span class="mut">Memory</span><b>${pct(ram)}</b></div><div class="progress-bar"><div class="fill ${barC(ram)}" style="width:${barH(ram)}"></div></div></div>
+            <div style="margin:14px 0"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span class="mut">Disk</span><b>${pct(disk)}</b></div><div class="progress-bar"><div class="fill ${barC(disk)}" style="width:${barH(disk)}"></div></div></div>
+        </div>
+        <div class="card s6"><h3>Docker Containers</h3>${tbl(['Name','Status','Image'],(m.docker||[]).map(x=>[x.name,dockerStatus(x.status),x.image]))}</div>
+        <div class="card s6"><h3>TCP States</h3><pre>${esc(m.connectionStates||'none')}</pre></div>
+        <div class="card s6"><h3>Network</h3><pre>${esc(JSON.stringify(m.connections,null,2)||'none')}</pre></div>
+    </div>`;
+}
+
+async function dns(){let d=localStorage.dn||'rzbal.biz.id';view.innerHTML=`<div class="grid"><div class="card s12"><div class="head"><div><h3>DNS Tools</h3><div class="mut">Generate, copy, and verify MX/SPF/DKIM/DMARC records.</div></div><span class="badge">domain dns</span></div><div class="form"><input class="f8" id="dn" value="${esc(d)}" placeholder="domain.com"><button class="primary f2" onclick="genDns()">Generate</button><button class="ghost f2" onclick="checkDns()">Verify DNS</button></div></div><div id="out" class="s12"></div></div>`;genDns()}function dnsCard(x, filterType = 'ALL'){
+    if (filterType !== 'ALL' && x.type !== filterType) return '';
+    return `
+        <div class="dns-card ${x.type.toLowerCase()}">
+            <div class="dns-top">
+                <div class="dns-type">${esc(x.type)}</div>
+                <button class="ghost" onclick="navigator.clipboard.writeText('${esc(x.type)} ${esc(x.name)} ${esc(x.value)} ${esc(x.ttl)}');toast('Copied record')">Copy Record</button>
+            </div>
+            <div class="dns-fields">
+                <label>Name<input readonly value="${esc(x.name)}"></label>
+                <label>TTL<input readonly value="${esc(x.ttl)}"></label>
+                <label class="dns-value">Value<pre>${esc(x.value)}</pre></label>
+            </div>
+        </div>
+    `;
+}
+
+function toggleDNSRecordType(type) {
+    document.querySelectorAll('.dns-list .dns-card').forEach(card => {
+        if (type === 'ALL') {
+            card.style.display = 'block';
+        } else if (card.classList.contains(type.toLowerCase())) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// Analytics function
+async function analytics(){
+    let d = await api('/extended/dashboard'); // Re-use dashboard data for consistency
+    let trend = d.trend || {};
+
+    let mailSentData = trend.mailPerDay || [0,0,0,0,0,0,0];
+    let spamBlockedData = trend.spamPerDay || [0,0,0,0,0,0,0];
+    let domainHealthData = trend.domainHealth || { good: 0, warn: 0, bad: 0 };
+
+    let labels = Array.from({length: 7}, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - (6 - i));
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+
+    // Generate bar chart for mail volume
+    const mailVolumeBars = mailSentData.map((val, i) => {
+        const maxVal = Math.max(...mailSentData, 1);
+        const height = (val / maxVal) * 100;
+        return `<div class="bar" style="height:${Math.max(8, height)}%"><div class="bar-val">${val}</div><div class="bar-label">${labels[i]}</div></div>`;
+    }).join('');
+
+    // Generate bar chart for spam blocked
+    const spamBlockedBars = spamBlockedData.map((val, i) => {
+        const maxVal = Math.max(...spamBlockedData, 1);
+        const height = (val / maxVal) * 100;
+        return `<div class="bar bad" style="height:${Math.max(8, height)}%;background:linear-gradient(180deg,var(--red),#f87171)"><div class="bar-val">${val}</div><div class="bar-label">${labels[i]}</div></div>`;
+    }).join('');
+
+    view.innerHTML = `
+        <div class="refresh-bar">
+            <span>Last updated: ${new Date().toLocaleTimeString()}</span>
+            <button class="primary" onclick="render()">Refresh Now</button>
+            <div style="flex-grow:1"></div>
+            ${getRefreshBar()}
+        </div>
+
+        <div class="grid grid-3" style="margin-bottom:var(--admin-gap)">
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--blue)"><i class="fas fa-chart-line"></i></div>
+                <div class="value">${d.totals?.emailToday || 0}</div>
+                <div class="label">Mail Today</div>
+                ${sparklineChart(mailSentData, 'blue')}
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--red)"><i class="fas fa-shield-virus"></i></div>
+                <div class="value">${d.totals?.spamBlocked || 0}</div>
+                <div class="label">Spam Blocked</div>
+                ${sparklineChart(spamBlockedData, 'red')}
+            </div>
+            <div class="card card-hover mini-stat-card">
+                <div class="icon" style="color:var(--green)"><i class="fas fa-server"></i></div>
+                <div class="value">${(d.server?.health === 'ok' ? 'OK' : 'Warning')}</div>
+                <div class="label">Server Health</div>
+                <span class="status-indicator ${d.server?.health === 'ok' ? 'ok' : 'warn'}">API Status</span>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card s12">
+                <div class="head">
+                    <h3>Email Volume (Last 7 Days)</h3>
+                    <span class="badge">Total: ${d.totals?.email7d || 0}</span>
+                </div>
+                <div class="bar-chart" style="height:150px; margin-top:20px;">
+                    ${mailVolumeBars}
+                </div>
+            </div>
+            <div class="card s12">
+                <div class="head">
+                    <h3>Spam Blocked (Last 7 Days)</h3>
+                    <span class="badge bad">Total: ${d.totals?.spamBlocked || 0}</span>
+                </div>
+                <div class="bar-chart" style="height:150px; margin-top:20px;">
+                    ${spamBlockedBars}
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:var(--admin-gap)">
+            <div class="card s12">
+                <div class="head">
+                    <h3>Domain Health Distribution</h3>
+                    <span class="badge">Total: ${d.totals?.domains || 0}</span>
+                </div>
+                <div class="grid grid-3" style="margin-top:20px">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(((domainHealthData.good / d.totals.domains) * 100).toFixed(0), 'Good', 'green')}
+                        <div class="label">Good</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(((domainHealthData.warn / d.totals.domains) * 100).toFixed(0), 'Warning', 'amber')}
+                        <div class="label">Warning</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        ${radialProgress(((domainHealthData.bad / d.totals.domains) * 100).toFixed(0), 'Bad', 'red')}
+                        <div class="label">Bad</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card s12">
+                <div class="head">
+                    <h3>Top Active Inboxes</h3>
+                    <button class="ghost" onclick="go('inbox')">View All</button>
+                </div>
+                <div class="table-responsive" style="margin-top:20px">
+                    <table class="data-table-simple">
+                        <thead>
+                            <tr><th>Inbox</th><th>Messages</th><th>Last Activity</th></tr>
+                        </thead>
+                        <tbody>
+                            ${(d.top?.inboxes || []).slice(0, 5).map(inb => `
+                                <tr>
+                                    <td>${esc(inb.email)}</td>
+                                    <td>${inb.messageCount || 0}</td>
+                                    <td>${dt(inb.lastActivity)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+    startAutoRefresh();
+}
+
+// Security function
+async function sec(){
+    let x = await api('/extended/security');
+    let cfg = x.config || {};
+    let sessRows = (x.sessions||[]).map(s=>`<tr><td>${esc(s.username||'-')}</td><td>${esc(s.ip||'-')}</td><td>${s.lastActivity?dt(s.lastActivity):s.createdAt?dt(s.createdAt):'-'}</td><td><button class="danger" onclick="killSession('${esc(s.token)}')">Kill</button></td></tr>`).join('');
+    let loginRows = (x.loginHistory||[]).slice(0,50).map(l=>`<tr><td>${esc(l.username||'admin')}</td><td>${esc(l.ip||'-')}</td><td>${dt(l.timestamp)}</td><td>success</td></tr>`).join('');
+    let failedRows = (x.failedLogins||[]).slice(0,20).map(l=>`<tr><td>${esc(l.username||'-')}</td><td>${esc(l.ip||'-')}</td><td>${dt(l.timestamp)}</td><td class="badge bad">failed</td></tr>`).join('');
+    let auditRows = (x.audit||[]).slice(0,100).map(a=>`<div class="sysline"><span>${dt(a.timestamp)} — <b>${esc(a.type)}</b> ${esc(JSON.stringify(a.data||{}).substring(0,120))}</span></div>`).join('');
+    view.innerHTML=`<div class="grid">
+        <div class="card s4"><div class="head"><h3>Active Sessions</h3><span class="badge">${(x.sessions||[]).length} active</span></div>
+            <div class="tbl"><table><thead><tr><th>User</th><th>IP</th><th>Last Activity</th><th>Action</th></tr></thead><tbody>${sessRows||'<tr><td colspan="4">No active sessions</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s4"><div class="head"><h3>Login History</h3><span class="badge">${(x.loginHistory||[]).length} logins</span></div>
+            <div class="tbl"><table><thead><tr><th>User</th><th>IP</th><th>Time</th><th>Status</th></tr></thead><tbody>${loginRows||'<tr><td colspan="4">No login history</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s4"><div class="head"><h3>Failed Logins</h3><span class="badge bad">${(x.abuse?.failed)||0} attempts</span></div>
+            <div class="tbl"><table><thead><tr><th>User</th><th>IP</th><th>Time</th><th>Status</th></tr></thead><tbody>${failedRows||'<tr><td colspan="4">No failed logins</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s6"><div class="head"><h3>IP Whitelist</h3><span class="badge">${(cfg.ipWhitelist||[]).length} IPs</span></div>
+            <textarea id="ipWhitelist" rows="5" placeholder="One IP per line">${(cfg.ipWhitelist||[]).join('\\n')}</textarea>
+            <button class="primary" onclick="saveSec()" style="margin-top:10px">Save Whitelist</button>
+        </div>
+        <div class="card s6"><div class="head"><h3>IP Blacklist</h3><span class="badge bad">${(cfg.ipBlacklist||[]).length} IPs</span></div>
+            <textarea id="ipBlacklist" rows="5" placeholder="One IP per line">${(cfg.ipBlacklist||[]).join('\\n')}</textarea>
+            <button class="danger" onclick="saveSec()" style="margin-top:10px">Save Blacklist</button>
+        </div>
+        <div class="card s12"><div class="head"><h3>Admin Audit Log</h3><span class="badge">${(x.audit||[]).length} events</span></div>
+            <div class="logpre">${auditRows||'No audit events'}</div>
+        </div>
+    </div>`;
+}
+async function saveSec(){
+    let whitelist=document.getElementById('ipWhitelist').value.split('\\n').filter(Boolean);
+    let blacklist=document.getElementById('ipBlacklist').value.split('\\n').filter(Boolean);
+    let res=await api('/extended/security',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ipWhitelist:whitelist,ipBlacklist:blacklist})});
+    if(res.success){toast('Security settings saved');sec()}else{toast('Error: '+(res.message||'unknown'),'error')}
+}
+async function killSession(token){
+    if(!confirm('Kill session '+token+'?'))return;
+    await api('/extended/security/kill-session/'+encodeURIComponent(token),{method:'POST'});
+    toast('Session killed');sec();
+}
+
+
+// Spam function
+async function spam(){
+    let x = await api('/extended/spam');
+    view.innerHTML = `
+        <div class="row">
+            <div class="card mini-stat">
+                <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="val">${x.spam_blocked_today || 0}</div>
+                <div class="label">Spam Blocked Today</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card">
+                <h3>Spam Blacklist</h3>
+                <input type="text" id="blacklistEntry" placeholder="Add email or domain">
+                <button onclick="addSpamEntry('blacklist')">Add</button>
+                <div class="tbl">
+                    <table>
+                        <thead><tr><th>Entry</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${(x.blacklist || []).map(e => `
+                                <tr><td>${e}</td><td><button onclick="removeSpamEntry('blacklist', '${e}')">Remove</button></td></tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Spam Whitelist</h3>
+                <input type="text" id="whitelistEntry" placeholder="Add email or domain">
+                <button onclick="addSpamEntry('whitelist')">Add</button>
+                <div class="tbl">
+                    <table>
+                        <thead><tr><th>Entry</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${(x.whitelist || []).map(e => `
+                                <tr><td>${e}</td><td><button onclick="removeSpamEntry('whitelist', '${e}')">Remove</button></td></tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card">
+                <h3>Spam Quarantine</h3>
+                <div class="tbl">
+                    <table>
+                        <thead><tr><th>From</th><th>To</th><th>Subject</th><th>Date</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${(x.quarantine || []).map(q => `
+                                <tr><td>${q.from}</td><td>${q.to}</td><td>${q.subject}</td><td>${q.date}</td><td><button onclick="releaseQuarantine('${q.id}')">Release</button></td></tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+async function addSpamEntry(type) {
+    let entryInput = document.getElementById(`${type}Entry`);
+    let entry = entryInput.value.trim();
+    if (!entry) return;
+    let res = await api(`/extended/spam/${type}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ entry: entry })
+    });
+    if(res.status === 'success') { alert(`${type} entry added!`); entryInput.value = ''; spam(); }
+    else { alert(`Error adding ${type} entry: ` + res.message); }
+}
+async function removeSpamEntry(type, entry) {
+    if(confirm(`Are you sure you want to remove '${entry}' from ${type}?`)) {
+        let res = await api(`/extended/spam/${type}/${encodeURIComponent(entry)}`, {method: 'DELETE'});
+        if(res.status === 'success') { alert(`${type} entry removed!`); spam(); }
+        else { alert(`Error removing ${type} entry: ` + res.message); }
+    }
+}
+async function releaseQuarantine(id) {
+    if(confirm('Are you sure you want to release this email from quarantine?')) {
+        let res = await api(`/extended/spam/quarantine/${id}/release`, {method: 'POST'});
+        if(res.status === 'success') { alert('Email released!'); spam(); }
+        else { alert('Error releasing email: ' + res.message); }
+    }
+}
+
+// Backup function
+async function backup(){
+    let x = await api('/backups');
+    view.innerHTML = `
+        <div class="row">
+            <div class="card">
+                <h3>Create New Backup</h3>
+                <button onclick="createBackup()">Create Backup Now</button>
+                <div id="backupStatus"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card">
+                <h3>Available Backups</h3>
+                <div class="tbl">
+                    <table>
+                        <thead><tr><th>Filename</th><th>Size</th><th>Date</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${(x.backups || []).map(b => `
+                                <tr><td>${b.filename}</td><td>${b.size}</td><td>${b.date}</td><td><button onclick="restoreBackup('${b.filename}')">Restore</button></td></tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+async function createBackup() {
+    document.getElementById('backupStatus').innerHTML = 'Creating backup... This may take a moment.';
+    let res = await api('/backups/create', {method: 'POST'});
+    if(res.status === 'success') {
+        alert('Backup created successfully!');
+        document.getElementById('backupStatus').innerHTML = 'Backup created.';
+        backup();
+    } else {
+        alert('Error creating backup: ' + res.message);
+        document.getElementById('backupStatus').innerHTML = 'Backup failed: ' + res.message;
+    }
+}
+async function restoreBackup(filename) {
+    if(confirm(`Are you sure you want to restore from backup "${filename}"? This will overwrite current data!`)) {
+        let res = await api(`/backups/restore/${filename}`, {method: 'POST'});
+        if(res.status === 'success') { alert('Restore initiated. System may restart. Please wait a few moments before refreshing.'); }
+        else { alert('Error initiating restore: ' + res.message); }
+    }
+}
+
+// System function
+async function system(){
+    let x = await api('/extended/system');
+    let ports = (x.smtpPorts||'25,465,587').split(',').map(s=>s.trim());
+    view.innerHTML=`<div class="grid">
+        <div class="card s12"><div class="head"><h3>System Settings</h3><button class="primary" onclick="saveSys()">Save Settings</button></div>
+            <div class="form">
+                <div class="f4"><label>Maintenance Mode</label><select id="maintenanceMode"><option value="false" ${!x.maintenance?'selected':''}>Off</option><option value="true" ${x.maintenance?'selected':''}>On</option></select></div>
+                <div class="f4"><label>SMTP Port</label><input type="number" id="smtpPort" value="${ports[0]||25}"></div>
+                <div class="f4"><label>Submission Port</label><input type="number" id="submissionPort" value="${ports[1]||587}"></div>
+                <div class="f4"><label>IMAPS Port</label><input type="number" id="imapsPort" value="${ports[2]||993}"></div>
+                <div class="f4"><label>Mail Retention (Days)</label><input type="number" id="retentionDays" value="${x.retentionDays||7}"></div>
+                <div class="f4"><label>Temp Mail Expiry (Hours)</label><input type="number" id="tempMailExpiry" value="${x.tempMailExpiryHours||24}"></div>
+                <div class="f8"><label>Admin Notification Email</label><input type="email" id="adminEmail" value="${esc(x.notifications||'')}" placeholder="admin@example.com"></div>
+            </div>
+        </div>
+    </div>`;
+}
+async function saveSys(){
+    let settings={
+        maintenance:document.getElementById('maintenanceMode').value==='true',
+        smtpPorts:[document.getElementById('smtpPort').value,document.getElementById('submissionPort').value,document.getElementById('imapsPort').value].join(','),
+        retentionDays:parseInt(document.getElementById('retentionDays').value)||7,
+        tempMailExpiryHours:parseInt(document.getElementById('tempMailExpiry').value)||24,
+        notifications:document.getElementById('adminEmail').value.trim()
+    };
+    let res=await api('/extended/system',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(settings)});
+    if(res.success){toast('System settings saved');system()}else{toast('Error: '+(res.message||'unknown'),'error')}
+}
+
+// Ops function
+async function ops(){
+    let x = await api('/extended/ops');
+    let c=x.containers||{};
+    let containerRows=[['DMS',c.dms],['API',c.api],['Nginx',c.nginx]].map(([name,val])=>{
+        let parts=(val||'').split('|');
+        let state=parts[0]||'unknown', status=parts[1]||'', image=parts[2]||'';
+        let cls=state==='running'?'ok':state==='exited'?'bad':'warn';
+        return `<tr><td>${name}</td><td><span class="badge ${cls}">${state}</span></td><td>${esc(status)}</td><td>${esc(image)}</td></tr>`;
+    }).join('');
+    let portRows=(x.ports||[]).map(p=>`<tr><td>${esc(p)}</td></tr>`).join('');
+    let composeRows=(x.compose||[]).map(line=>{
+        let [name,status,ports]=line.split('|');
+        return `<tr><td>${esc(name)}</td><td>${esc(status)}</td><td>${esc(ports||'-')}</td></tr>`;
+    }).join('');
+    let backupRows=(x.backups||[]).map(b=>`<tr><td>${esc(b.file)}</td><td>${(b.size/1024).toFixed(1)} KB</td><td>${dt(b.createdAt)}</td></tr>`).join('');
+    view.innerHTML=`<div class="grid">
+        <div class="card s12"><div class="head"><h3>One-Click Operations</h3></div>
+            <div class="form">
+                <button class="primary" onclick="runOp('dms-reload')">DMS Reload</button>
+                <button class="primary" onclick="runOp('dms-restart')">DMS Restart</button>
+                <button class="primary" onclick="runOp('api-restart')">API Restart</button>
+                <button class="ghost" onclick="runOp('nginx-reload')">Nginx Reload</button>
+                <button class="ghost" onclick="runOp('queue-flush')">Flush Queue</button>
+                <button class="ghost" onclick="runOp('ops-backup')">Backup</button>
+                <button class="danger" onclick="runOp('ops-cleanup')">Cleanup</button>
+                <button class="danger" onclick="runOp('docker-prune')">Docker Prune</button>
+            </div>
+        </div>
+        <div class="card s6"><div class="head"><h3>Container Status</h3></div>
+            <div class="tbl"><table><thead><tr><th>Container</th><th>State</th><th>Status</th><th>Image</th></tr></thead><tbody>${containerRows||'<tr><td colspan="4">No containers</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s6"><div class="head"><h3>Docker Compose</h3></div>
+            <div class="tbl"><table><thead><tr><th>Service</th><th>Status</th><th>Ports</th></tr></thead><tbody>${composeRows||'<tr><td colspan="3">N/A</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s4"><div class="head"><h3>Exposed Ports</h3></div>
+            <div class="tbl"><table><thead><tr><th>Port</th></tr></thead><tbody>${portRows||'<tr><td>N/A</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s4"><div class="head"><h3>TLS Certificate</h3></div>
+            <pre class="logpre">${esc(x.cert||'N/A')}</pre>
+        </div>
+        <div class="card s4"><div class="head"><h3>Recent Backups</h3></div>
+            <div class="tbl"><table><thead><tr><th>File</th><th>Size</th><th>Date</th></tr></thead><tbody>${backupRows||'<tr><td colspan="3">No backups</td></tr>'}</tbody></table></div>
+        </div>
+        <div class="card s12"><div class="head"><h3>Action Output</h3></div>
+            <pre id="actionOutput" class="logpre">No recent action output.</pre>
+        </div>
+    </div>`;
+}
+async function runOp(operation){
+    if(!confirm('Run '+operation+'?'))return;
+    let out=document.getElementById('actionOutput');
+    if(out) out.innerText='Running '+operation+'...';
+    try{
+        let res=await api('/extended/ops/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:operation})});
+        if(out) out.innerText=res.out||'Operation completed.';
+        toast(operation+' completed');
+    }catch(e){
+        if(out) out.innerText='Error: '+e.message;
+        toast('Error: '+e.message,'error');
+    }
+}
+
+// Auto-refresh system code
+let autoRefreshInterval;
+function startAutoRefresh() {
+    stopAutoRefresh();
+    const refreshBar = document.getElementById('refreshBar');
+    if (refreshBar && refreshBar.classList.contains('active')) {
+        autoRefreshInterval = setInterval(() => {
+            const currentRoute = window.location.hash.substring(1) || 'dashboard';
+            refreshBar.style.width = '0%';
+            refreshBar.classList.remove('warn');
+            refreshBar.classList.remove('bad');
+            setTimeout(() => {
+                const interval = 10; // seconds
+                let elapsed = 0;
+                const refreshProgress = setInterval(() => {
+                    elapsed++;
+                    const percentage = (elapsed / interval) * 100;
+                    refreshBar.style.width = `${percentage}%`;
+                    if (percentage > 70) refreshBar.classList.add('warn');
+                    if (percentage > 90) refreshBar.classList.add('bad');
+                    if (elapsed >= interval) {
+                        clearInterval(refreshProgress);
+                        render(currentRoute);
+                    }
+                }, 1000);
+            }, 100); // Small delay to reset bar smoothly
+        }, 10000); // Refresh every 10 seconds
+    }
+}
+
+function stopAutoRefresh() {
+    if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+        autoRefreshInterval = null;
+    }
+    const refreshBar = document.getElementById('refreshBar');
+    if (refreshBar) {
+        refreshBar.style.width = '0%';
+        refreshBar.classList.remove('warn');
+        refreshBar.classList.remove('bad');
+    }
+}
+
+function getRefreshBar() {
+    let refreshRate = 15; // seconds
+    return `<div id="refreshBar" class="refresh-bar"><span class="mut">Auto-refresh in <span class="countdown">--</span>s</span><button onclick="toggleRefresh()">Toggle</button><div class="progress-line"></div></div>`;
+}
+
+function sparklineChart(data, colorClass = 'primary') {
+    const maxVal = Math.max(...data, 1);
+    const bars = data.map(val => {
+        const height = (val / maxVal) * 100;
+        return `<div class="bar" style="height:${height}%" title="${val}"></div>`;
+    }).join('');
+    return `<div class="sparkline-chart ${colorClass}">${bars}</div>`;
+}
+
+function radialProgress(value, label, color = 'primary') {
+    return `<div class="radial-progress" style="--p:${value};--c:var(--${color})"><div class="bg"></div><span>${value}%</span><div class="label">${label}</div></div>`;
+}
+
+function stat(t,v,s,c=''){return `<div class="card s3"><div class="mut" style="font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.04em">${t}</div><div class="num ${c}">${v}</div><div class="mut">${s||''}</div></div>`}
+    const refreshBar = document.getElementById('refreshBar');
+    if (refreshBar) {
+        if (refreshBar.classList.contains('active')) {
+            refreshBar.classList.remove('active');
+            stopAutoRefresh();
+            alert('Auto-refresh disabled.');
+        } else {
+            refreshBar.classList.add('active');
+            startAutoRefresh();
+            alert('Auto-refresh enabled.');
+        }
+    }
+}
+
+// Initial render and auto-refresh start
+render();startAutoRefresh();
+
+</script>
+</body>
+</html>

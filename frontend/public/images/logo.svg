@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60" fill="none">
+    <rect x="2" y="2" width="196" height="56" rx="8" stroke="#5b5c9a" stroke-width="3" fill="none"/>
+    <path d="M20 20 L100 40 L180 20" stroke="#5b5c9a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M20 20 L20 42 L70 35" stroke="#5b5c9a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M180 20 L180 42 L130 35" stroke="#5b5c9a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="105" y="52" text-anchor="middle" font-family="Kadwa, serif" font-size="11" font-weight="700" fill="#ffffff">JOEMAIL</text>
+</svg>
