@@ -1,10 +1,12 @@
-// JoeMail Frontend - Premiumisme.info clone
+// JoeMail Frontend - Premiumisme.info clone (v2 API + Socket.IO)
 const API_BASE = '/api';
+const WS_ENABLED = typeof io !== 'undefined';
 let currentEmail = null;
 let currentInbox = [];
 let pollInterval = null;
 let availableDomains = [];
 let selectedDomain = null;
+let socket = null;
 const EMAIL_HISTORY_KEY = 'joemail_history';
 
 // ============================================================
@@ -16,7 +18,40 @@ document.addEventListener('DOMContentLoaded', () => {
         loadExistingEmail();
     });
     bindEvents();
+    initSocketIO();
 });
+
+// ============================================================
+// SOCKET.IO (real-time email notifications)
+// ============================================================
+function initSocketIO() {
+    try {
+        socket = io({ transports: ['websocket', 'polling'], reconnection: true, reconnectionDelay: 2000 });
+        socket.on('connect', () => console.log('[WS] Connected'));
+        socket.on('disconnect', () => console.log('[WS] Disconnected'));
+        socket.on('new_email', (data) => {
+            if (currentEmail && data) {
+                fetchInbox();
+            }
+        });
+        socket.on('email_deleted', () => { if (currentEmail) fetchInbox(); });
+        socket.on('inbox_cleared', () => { if (currentEmail) fetchInbox(); });
+    } catch (e) {
+        console.log('[WS] Socket.IO not available, using polling only');
+    }
+}
+
+function wsSubscribe(email) {
+    if (socket && socket.connected) {
+        socket.emit('subscribe', email.toLowerCase().trim());
+    }
+}
+
+function wsUnsubscribe(email) {
+    if (socket && socket.connected) {
+        socket.emit('unsubscribe', email.toLowerCase().trim());
+    }
+}
 
 // ============================================================
 // COOKIE BANNER
@@ -47,9 +82,16 @@ async function api(path, opts = {}) {
     const res = await fetch(`${API_BASE}${path}`, { ...opts, headers: { ...headers, ...opts.headers } });
     if (!res.ok) {
         const err = await res.json().catch(() => ({ error: res.statusText }));
-        throw new Error(err.error || err.message || 'API error');
+        throw new Error(err.message || err.error || 'API error');
     }
     return res.json();
+}
+
+// Unwrap v2 API response: { success, data, message }
+function unwrap(res) {
+    if (res && res.success && res.data) return res.data;
+    if (res && res.data) return res.data;
+    return res;
 }
 
 function toast(msg, type = 'success') {
@@ -69,10 +111,8 @@ function toast(msg, type = 'success') {
 // ============================================================
 function animShow(el, type) {
     if (!el) return;
-    // Remove display:none first so transition can play
     el.style.display = '';
     el.classList.remove('hidden');
-    // Force reflow so browser registers the starting state
     void el.offsetHeight;
     el.classList.add('open');
 }
@@ -80,7 +120,6 @@ function animShow(el, type) {
 function animHide(el, type) {
     if (!el) return;
     el.classList.remove('open');
-    // Wait for transition to finish before hiding
     const dur = type === 'overlay' ? 300 : type === 'dropdown' ? 200 : 250;
     setTimeout(() => {
         el.classList.add('hidden');
@@ -102,8 +141,9 @@ function animToggle(el, type) {
 // ============================================================
 async function loadDomains() {
     try {
-        const data = await api('/domains');
-        availableDomains = data.domains || [];
+        const res = await api('/domain/list');
+        const data = unwrap(res);
+        availableDomains = (data.domains || []).map(d => ({ name: d.domain || d.name, active: d.active }));
         if (availableDomains.length > 0) {
             selectedDomain = availableDomains[0].name;
         }
@@ -172,6 +212,24 @@ function saveEmailToHistory(email) {
     renderEmailHistoryDropdown();
 }
 
+function removeEmailFromHistory(email) {
+    if (!email) return;
+    const history = getEmailHistory().filter(item => item !== email);
+    localStorage.setItem(EMAIL_HISTORY_KEY, JSON.stringify(history));
+    renderEmailHistoryDropdown();
+}
+
+// Auto-delete oldest emails from backend, keeping only currentEmail
+async function pruneOldEmails(currentNew) {
+    const history = getEmailHistory();
+    const oldOnes = history.filter(e => e !== currentNew);
+    if (oldOnes.length === 0) return;
+
+    // Remove oldest from dropdown history only (don't delete from backend)
+    const toRemove = oldOnes[oldOnes.length - 1];
+    removeEmailFromHistory(toRemove);
+}
+
 function renderEmailHistoryDropdown() {
     const list = document.getElementById('email-dropdown-list');
     if (!list) return;
@@ -195,12 +253,25 @@ function renderEmailHistoryDropdown() {
     });
 }
 
-function selectEmailFromHistory(email, scroll = true) {
+async function selectEmailFromHistory(email, scroll = true) {
+    // Verify email still exists on backend
+    try {
+        const check = await api('/email/check/' + encodeURIComponent(email));
+        if (!check.success || !check.data || !check.data.exists) {
+            toast('Email no longer exists, generating new one', 'error');
+            removeEmailFromHistory(email);
+            renderEmailHistoryDropdown();
+            createRandomEmail();
+            return;
+        }
+    } catch (e) {}
+    if (currentEmail) wsUnsubscribe(currentEmail);
     currentEmail = email;
     localStorage.setItem('joemail_address', email);
     document.getElementById('email-display').textContent = email;
     animHide(document.getElementById('email-dropdown-menu'), 'dropdown');
     saveEmailToHistory(email);
+    wsSubscribe(email);
     stopPolling();
     fetchInbox();
     startPolling();
@@ -212,13 +283,27 @@ function selectEmailFromHistory(email, scroll = true) {
 // ============================================================
 // EMAIL MANAGEMENT
 // ============================================================
-function loadExistingEmail() {
+async function loadExistingEmail() {
     renderEmailHistoryDropdown();
     const saved = localStorage.getItem('joemail_address');
     if (saved) {
+        // Verify email still exists on backend (may have been deleted from admin panel)
+        try {
+            const check = await api('/email/check/' + encodeURIComponent(saved));
+            if (!check.success || !check.data || !check.data.exists) {
+                // Email deleted from backend, auto-generate new
+                localStorage.removeItem('joemail_address');
+                removeEmailFromHistory(saved);
+                createRandomEmail();
+                return;
+            }
+        } catch (e) {
+            // Check failed, try to use saved email anyway
+        }
         currentEmail = saved;
         document.getElementById('email-display').textContent = saved;
         saveEmailToHistory(saved);
+        wsSubscribe(saved);
         startPolling();
     } else {
         createRandomEmail();
@@ -227,22 +312,51 @@ function loadExistingEmail() {
 
 async function createRandomEmail(prefix = null) {
     try {
-        let url = prefix ? `/generate?prefix=${encodeURIComponent(prefix)}` : '/generate';
-        if (selectedDomain) {
-            url += (url.includes('?') ? '&' : '?') + `domain=${encodeURIComponent(selectedDomain)}`;
-        }
-        const data = await api(url);
+        const body = {};
+        if (prefix) body.prefix = prefix;
+        if (selectedDomain) body.domain = selectedDomain;
 
+        const res = await api('/email/create', {
+            method: 'POST',
+            body: JSON.stringify(body)
+        });
+        const data = unwrap(res);
+
+        const oldEmail = currentEmail;
+        if (currentEmail) wsUnsubscribe(currentEmail);
         currentEmail = data.email;
         localStorage.setItem('joemail_address', data.email);
         saveEmailToHistory(data.email);
+        wsSubscribe(data.email);
 
         document.getElementById('email-display').textContent = data.email;
         showEmailView();
         startPolling();
-        // Premiumisme 1:1: no auto toast on initial email creation
-        // toast('Email created: ' + data.email);
+
+
     } catch (e) {
+        if (prefix && e.message && e.message.includes('already taken')) {
+            const domain = selectedDomain || 'rzbal.biz.id';
+            const email = prefix.includes('@') ? prefix : prefix + '@' + domain;
+            try {
+                const checkRes = await api('/email/check/' + encodeURIComponent(email));
+                const checkData = unwrap(checkRes);
+                if (checkData.exists) {
+                    if (currentEmail) wsUnsubscribe(currentEmail);
+                    currentEmail = email;
+                    localStorage.setItem('joemail_address', email);
+                    saveEmailToHistory(email);
+                    wsSubscribe(email);
+                    document.getElementById('email-display').textContent = email;
+                    showEmailView();
+                    startPolling();
+                    toast('Email loaded');
+                    return;
+                }
+            } catch (checkErr) {
+                console.error('Check email failed:', checkErr);
+            }
+        }
         console.error('Create email failed:', e);
         document.getElementById('email-display').textContent = 'Error - click New';
         toast('Failed to create email: ' + e.message, 'error');
@@ -252,47 +366,28 @@ async function createRandomEmail(prefix = null) {
 async function createCustomEmail() {
     const username = document.getElementById('new-username').value.trim();
     if (!username) return toast('Enter a username', 'error');
+    const domain = selectedDomain || 'rzbal.biz.id';
+    const email = username + '@' + domain;
+    try {
+        const checkRes = await api('/email/check/' + encodeURIComponent(email));
+        const checkData = unwrap(checkRes);
+        if (checkData.exists) {
+            if (currentEmail) wsUnsubscribe(currentEmail);
+            currentEmail = email;
+            localStorage.setItem('joemail_address', email);
+            saveEmailToHistory(email);
+            wsSubscribe(email);
+            document.getElementById('email-display').textContent = email;
+            showEmailView();
+            startPolling();
+            toast('Email loaded');
+            return;
+        }
+    } catch (e) {}
     await createRandomEmail(username);
 }
 
-async function deleteEmail() {
-    if (!currentEmail) {
-        // No current email — just generate a new one
-        await createRandomEmail();
-        return;
-    }
-    const display = document.getElementById('email-display');
-    display.style.transition = 'opacity 0.2s ease';
-    display.style.opacity = '0';
-    setTimeout(async () => {
-        // Remove current email from history
-        const history = getEmailHistory().filter(item => item !== currentEmail);
-        localStorage.setItem(EMAIL_HISTORY_KEY, JSON.stringify(history));
-
-        localStorage.removeItem('joemail_address');
-        currentEmail = null;
-        currentInbox = [];
-        stopPolling();
-
-        // Clear inbox display
-        document.getElementById('inbox-list').innerHTML = '';
-        document.getElementById('inbox-empty').classList.remove('hidden');
-        document.getElementById('email-detail').classList.add('hidden');
-
-        renderEmailHistoryDropdown();
-        display.textContent = '';
-        display.style.opacity = '1';
-
-        if (history.length > 0) {
-            // Switch to the newest remaining email
-            selectEmailFromHistory(history[0], false);
-            showEmailView();
-        } else {
-            // No emails left — auto-generate a new one
-            await createRandomEmail();
-        }
-    }, 200);
-}
+// deleteEmail moved to detail view
 
 function instantViewSwap(showEl, hideEl) {
     if (!showEl || !hideEl) return;
@@ -335,8 +430,9 @@ async function fetchInbox() {
     if (refreshIcon) refreshIcon.classList.remove('pause-spinner');
 
     try {
-        const data = await api(`/inbox/${encodeURIComponent(currentEmail)}`);
-        currentInbox = data.messages || [];
+        const res = await api(`/email/inbox/${encodeURIComponent(currentEmail)}`);
+        const data = unwrap(res);
+        currentInbox = data.emails || [];
         renderInbox();
     } catch (e) {
         console.error('Fetch inbox failed:', e);
@@ -348,7 +444,6 @@ async function fetchInbox() {
         }
     }
 
-    // Stop spinner after fetch (like premiumisme)
     setTimeout(() => {
         if (refreshIcon) refreshIcon.classList.add('pause-spinner');
     }, 500);
@@ -370,42 +465,62 @@ function renderInbox() {
 
     currentInbox.forEach((msg, idx) => {
         const item = document.createElement('div');
-        item.className = 'inbox-item inbox-fade-in';
+        item.className = 'inbox-item inbox-fade-in' + (idx === selectedIdx ? ' inbox-item-selected' : '');
         item.style.animationDelay = `${idx * 0.05}s`;
         item.innerHTML = `
-            <div class="flex justify-between items-start">
-                <div class="flex-1 min-w-0">
-                    <div class="from">${escapeHtml(msg.from || 'Unknown')}</div>
+            <div class="flex justify-between items-center">
+                <div class="flex-1 min-w-0" style="pointer-events:none">
+                    <div class="from">${escapeHtml(msg.from || msg.fromAddress || 'Unknown')}</div>
                     <div class="subject truncate">${escapeHtml(msg.subject || '(no subject)')}</div>
                 </div>
-                <div class="date ml-3 whitespace-nowrap">${formatDate(msg.date || msg.createdAt)}</div>
+                <div class="flex items-center gap-2 ml-3 whitespace-nowrap" style="pointer-events:none">
+                    <div class="date">${formatDate(msg.date || msg.createdAt)}</div>
+                </div>
             </div>
         `;
-        item.addEventListener('click', () => showMessage(msg, idx));
+        // Tap the main area to open detail
+        item.addEventListener('click', (e) => {
+            if (e.target.closest('.inbox-delete-btn')) return;
+            selectedIdx = idx;
+            currentMessage = msg;
+            showMessage(msg, idx);
+        });
         list.appendChild(item);
     });
 }
 
+let currentMessage = null;
+let selectedIdx = -1;
+
 async function showMessage(msg, idx) {
     if (msg.id) {
         try {
-            const detail = await api(`/message/${msg.id}`);
+            const res = await api(`/email/message/${msg.id}`);
+            const detail = unwrap(res);
             msg = detail;
         } catch (e) {
             console.error('Failed to fetch message detail:', e);
         }
     }
+    currentMessage = msg;
 
-    animHide(document.getElementById('inbox-section'), 'view');
-    setTimeout(() => animShow(document.getElementById('email-detail'), 'view'), 50);
+    const inboxEl = document.getElementById('inbox-section');
+    const detailEl = document.getElementById('email-detail');
 
-    document.getElementById('detail-from').textContent = msg.from || 'Unknown';
+    // Instant swap: hide inbox, show detail (no crossfade)
+    inboxEl.classList.remove('open');
+    inboxEl.classList.add('hidden');
+    detailEl.classList.remove('hidden');
+    void detailEl.offsetHeight;
+    detailEl.classList.add('open');
+
+    document.getElementById('detail-from').textContent = msg.from || msg.fromAddress || 'Unknown';
     document.getElementById('detail-subject').textContent = msg.subject || '(no subject)';
     document.getElementById('detail-date').textContent = formatDate(msg.date || msg.createdAt);
 
     const bodyEl = document.getElementById('detail-body');
-    const body = msg.html || msg.body || msg.text || msg.content || '';
-    if (msg.html || (body.includes('<') && body.includes('>') && body.includes('/'))) {
+    const body = msg.bodyHtml || msg.html || msg.bodyText || msg.body || msg.text || msg.content || '';
+    if (msg.bodyHtml || msg.html || (body.includes('<') && body.includes('>') && body.includes('/'))) {
         bodyEl.innerHTML = body;
     } else {
         bodyEl.textContent = body;
@@ -430,7 +545,7 @@ function bindTap(el, handler) {
 }
 
 function bindEvents() {
-    // Refresh (remove pause-spinner on click like premiumisme)
+    // Refresh
     bindTap(document.getElementById('btn-refresh'), () => {
         const refreshIcon = document.getElementById('refresh-icon');
         if (refreshIcon) refreshIcon.classList.remove('pause-spinner');
@@ -448,7 +563,7 @@ function bindEvents() {
     });
 
     // Delete
-    bindTap(document.getElementById('btn-delete'), deleteEmail);
+    // btn-delete moved to detail view
 
     // Create email
     bindTap(document.getElementById('btn-create-email'), createCustomEmail);
@@ -458,7 +573,7 @@ function bindEvents() {
         createRandomEmail();
     });
 
-    // Copy button - Premiumisme style: copy only when icon is clicked, not when email text is clicked
+    // Copy button
     bindTap(document.getElementById('btn-copy'), () => {
         if (!currentEmail) return;
         const input = document.createElement('input');
@@ -492,11 +607,69 @@ function bindEvents() {
 
     // Back to inbox
     document.getElementById('btn-back-inbox').addEventListener('click', () => {
-        animHide(document.getElementById('email-detail'), 'view');
-        setTimeout(() => animShow(document.getElementById('inbox-section'), 'view'), 50);
+        const inboxEl = document.getElementById('inbox-section');
+        const detailEl = document.getElementById('email-detail');
+        detailEl.classList.remove('open');
+        detailEl.classList.add('hidden');
+        inboxEl.classList.remove('hidden');
+        void inboxEl.offsetHeight;
+        inboxEl.classList.add('open');
     });
 
-    // Email text/dropdown click opens history only. Copy stays only on copy icon.
+    // Delete email address + auto-generate new (like premiumisme.info)
+    document.getElementById('btn-delete')?.addEventListener('click', async () => {
+        if (!currentEmail) {
+            toast('No email address active', 'error');
+            return;
+        }
+        try {
+            // Delete the address entirely
+            await api('/email/address/' + encodeURIComponent(currentEmail), { method: 'DELETE' });
+
+            // Cleanup old email state
+            const deletedEmail = currentEmail;
+            if (currentEmail) wsUnsubscribe(currentEmail);
+            currentEmail = null;
+            currentMessage = null;
+            selectedIdx = -1;
+            currentInbox = [];
+            renderInbox();
+            localStorage.removeItem('joemail_address');
+            removeEmailFromHistory(deletedEmail);
+
+            toast('Email deleted');
+
+            // Auto-generate new random email
+            await createRandomEmail();
+
+            // Prune oldest email from history (1 per 1, oldest first)
+            pruneOldEmails(currentEmail);
+        } catch (e) {
+            toast('Failed to delete: ' + e.message, 'error');
+        }
+    });
+
+    // Delete email from detail view
+    document.getElementById('btn-delete-detail')?.addEventListener('click', async () => {
+        if (!currentMessage) return;
+        try {
+            await api('/email/message/' + currentMessage.id, { method: 'DELETE' });
+            toast('Email deleted');
+            currentMessage = null;
+            selectedIdx = -1;
+            // Go back to inbox
+            const inboxEl = document.getElementById('inbox-section');
+            const detailEl = document.getElementById('email-detail');
+            detailEl.classList.remove('open');
+            inboxEl.classList.remove('hidden');
+            void inboxEl.offsetHeight;
+            inboxEl.classList.add('open');
+            setTimeout(() => { detailEl.classList.add('hidden'); }, 300);
+            fetchInbox();
+        } catch (e) {
+            toast('Failed to delete: ' + e.message, 'error');
+        }
+    });
 
     // Enter key in username field
     document.getElementById('new-username').addEventListener('keypress', (e) => {
@@ -511,7 +684,6 @@ function bindEvents() {
             renderEmailHistoryDropdown();
             animToggle(emailDropdownMenu, 'dropdown');
         });
-        // Close on outside click
         document.addEventListener('click', (e) => {
             if (!emailDropdownBtn.contains(e.target) && !emailDropdownMenu.contains(e.target)) {
                 animHide(emailDropdownMenu, 'dropdown');
@@ -526,7 +698,6 @@ function bindEvents() {
         bindTap(domainDropdownBtn, () => {
             animToggle(domainDropdownMenu, 'dropdown');
         });
-        // Close on outside click
         document.addEventListener('click', (e) => {
             if (!domainDropdownBtn.contains(e.target) && !domainDropdownMenu.contains(e.target)) {
                 animHide(domainDropdownMenu, 'dropdown');
@@ -552,25 +723,20 @@ function formatDate(dateStr) {
         const diffMs = now - d;
         const diffMins = Math.floor(diffMs / 60000);
         const diffHrs = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMins < 1) return 'Just now';
-        if (diffMins < 60) return `${diffMins}m ago`;
-        if (diffHrs < 24) return `${diffHrs}h ago`;
-        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const time = d.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', hour12: false });
+
+        if (diffMins < 1) return 'Baru saja';
+        if (diffMins < 60) return `${diffMins}m lalu  ${time}`;
+        if (diffHrs < 24) return `${diffHrs}j lalu  ${time}`;
+        if (diffDays < 7) {
+            const hari = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+            return `${hari[d.getDay()]}  ${time}`;
+        }
+        const bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'];
+        return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}  ${time}`;
     } catch {
         return dateStr;
     }
 }
-
-// Auto-polling like premiumisme (every 15 seconds)
-let autoPollCounter = parseInt('15');
-setInterval(() => {
-    if (autoPollCounter === 0 && !document.hidden && currentEmail) {
-        fetchInbox();
-        autoPollCounter = parseInt('15');
-    }
-    autoPollCounter--;
-    if (document.hidden) {
-        autoPollCounter = 1;
-    }
-}, 1000);

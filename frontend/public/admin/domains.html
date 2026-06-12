@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JoeMail Admin - Domains</title>
+    <link rel="icon" href="/images/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/admin/admin.css">
+    
+</head>
+<body>
+    <div class="app-layout">
+        <div id="sidebar-container"></div>
+        <main class="main-wrap" id="main-content">
+            <div id="header-container"></div>
+            <div class="content" id="content">
+                <div class="empty-state"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- ADD DOMAIN MODAL -->
+    <div id="modal-add-domain" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-globe"></i> Add Domain</h2>
+            <div class="form-group">
+                <label>Domain Name</label>
+                <input type="text" id="new-domain" class="form-input" placeholder="example.com">
+            </div>
+            <div id="dns-instructions" style="display:none;">
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Add these 6 DNS records in Cloudflare (or your DNS provider), then click Verify:</p>
+                <div id="dns-records-list"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-ghost" onclick="closeModal('modal-add-domain'); resetAddDomainModal();">Cancel</button>
+                <button class="btn-primary" id="btn-add-domain" onclick="addDomain()">Add Domain</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOMAIN DETAIL MODAL -->
+    <div id="modal-domain-detail" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-globe"></i> <span id="detail-domain-name"></span></h2>
+            <div id="domain-detail-content"></div>
+            <div class="modal-actions">
+                <button class="btn-ghost" onclick="closeModal('modal-domain-detail')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="/admin/admin.js"></script>
+    <script src="/admin/template.js"></script>
+    <script src="/admin/domains.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (requireAuth()) {
+                document.getElementById('sidebar-container').innerHTML = renderSidebar();
+                document.getElementById('header-container').innerHTML = renderHeader('Domains');
+                // The domains.js script will be dynamically loaded and initDomains called by admin.js
+            }
+        });
+        
+        function initDomains() {
+            loadDomains();
+        }
+    </script>
+</body>
+</html>

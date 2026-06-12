@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JoeMail Admin - Dashboard</title>
+    <link rel="icon" href="/images/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/admin/admin.css?v=4">
+    
+</head>
+<body>
+    <div class="app-layout">
+        <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon">J</div>
+                <div>
+                    <h1>JoeMail</h1>
+                    <p>Admin Console</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <div class="nav-label">Main</div>
+                    <a class="nav-item active" data-page="dashboard" href="/admin/dashboard">
+                        <i class="fas fa-chart-pie"></i><span>Dashboard</span>
+                    </a>
+                    <a class="nav-item" data-page="emails" href="/admin/emails">
+                        <i class="fas fa-envelope"></i><span>Emails</span>
+                    </a>
+                    <a class="nav-item" data-page="addresses" href="/admin/addresses">
+                        <i class="fas fa-at"></i><span>Addresses</span>
+                    </a>
+                    <a class="nav-item" data-page="domains" href="/admin/domains">
+                        <i class="fas fa-globe"></i><span>Domains</span>
+                    </a>
+                </div>
+
+            </nav>
+            <div class="sidebar-footer">
+                <button class="nav-item" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+            </div>
+        </aside>
+
+        <main class="main-wrap">
+            <header class="app-header">
+                <div class="header-left">
+                    <button class="mobile-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                    <span class="header-title">Dashboard</span>
+                </div>
+                <div class="header-right">
+                    <div class="header-badge"><span class="dot"></span><span>Online</span></div>
+                    <button class="btn-ghost" onclick="window.open('/', '_blank')"><i class="fas fa-external-link-alt"></i> <span>Frontend</span></button>
+                </div>
+            </header>
+            <div class="content" id="content">
+                <div class="empty-state"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+        </main>
+    </div>
+    
+    <div id="toast" class="toast"></div>
+    <script src="/admin/admin.js"></script>
+    <script src="/admin/dashboard.js?v=4"></script>
+</body>
+</html>

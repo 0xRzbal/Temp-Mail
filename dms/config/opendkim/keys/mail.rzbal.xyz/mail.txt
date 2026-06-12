@@ -1,0 +1,3 @@
+mail._domainkey	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
+	  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtvJ5xIk0u44WkQImtERtStnrHaoLTflLflXt6fTEk5xRrHcng7LH5CZxqOvaS3WG87vtJfKIdFrN42li8yTJmGSR0zSkIKH66xMkoItJUOOmS2WaOCllDheCqn7ZMUo345cQrvLAk+KUYaA4pRDYGlPn/PdYiLfRbxB6uA3RJ6rKz+oXwHnOoxwt/S+Z/6GWga/joVCWB5C9B3"
+	  "52Kzalmnl1n48kfT3k0PHApNErRZIdnVTZPcH++mTdRP6NT9259eSV462XDe3gWecbB1fqQ5iuga0dCkRkW8BVpd5FferWBReWBvZJ3SsMkf3yAyWhwD3ELJuIs+G2rZKudxXR0QIDAQAB" )  ; ----- DKIM key mail for mail.rzbal.xyz

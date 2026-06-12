@@ -1,0 +1,42 @@
+{
+  "name": "joemail-backend",
+  "version": "2.0.0",
+  "description": "Enterprise Temporary Email Service Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "init-db": "node src/utils/initDb.js",
+    "cleanup": "node src/utils/cleanup.js",
+    "seed": "node src/utils/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "dotenv": "^16.3.1",
+    "better-sqlite3": "^9.4.3",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "express-rate-limit": "^7.1.5",
+    "nodemailer": "^6.9.8",
+    "mailparser": "^3.6.5",
+    "smtp-server": "^3.13.2",
+    "socket.io": "^4.7.4",
+    "uuid": "^9.0.1",
+    "crypto-js": "^4.2.0",
+    "node-cron": "^3.0.3",
+    "multer": "^1.4.5-lts.1",
+    "sanitize-html": "^2.11.0",
+    "validator": "^13.11.0",
+    "axios": "^1.6.2",
+    "express-validator": "^7.0.1",
+    "compression": "^1.7.4",
+    "hpp": "^0.2.3",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": { "nodemon": "^3.0.2" },
+  "engines": { "node": ">=18.0.0" }
+}

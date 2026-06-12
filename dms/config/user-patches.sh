@@ -2,25 +2,25 @@
 # JoeMail custom Postfix configuration
 # Runs on container startup
 
-# Remove any existing joemail-webhook entries
-sed -i '/joemail-webhook/d' /etc/postfix/master.cf
+# Disable postscreen enforcement for faster delivery
+postconf -e "postscreen_greet_action = ignore"
+postconf -e "postscreen_bare_newline_action = ignore"
 
-# Add webhook transport with original_recipient
-echo "joemail-webhook unix - n n - - pipe" >> /etc/postfix/master.cf
-echo "  flags=Rq user=nobody argv=/tmp/docker-mailserver/webhook-deliver.sh \${original_recipient}" >> /etc/postfix/master.cf
+# Disable content filter (amavis) — relay directly to API
+postconf -e "content_filter ="
+postconf -e "local_recipient_maps ="
+postconf -e "virtual_mailbox_maps ="
 
-# Configure transport maps
+# Configure transport maps — relay ALL domains to API SMTP server
 postconf -e "transport_maps = hash:/etc/postfix/transport"
-echo "rzbal.biz.id    joemail-webhook:" > /etc/postfix/transport
+
+cat > /etc/postfix/transport << 'EOF'
+mail.rzbal.biz.id    smtp:joemail-api:2525
+rzbal.xyz            smtp:joemail-api:2525
+EOF
 postmap /etc/postfix/transport
 
 # Disable virtual alias rewriting so original recipient is preserved
 postconf -e "virtual_alias_maps ="
 
-# Make webhook script executable
-chmod +x /tmp/docker-mailserver/webhook-deliver.sh
-
-# Install jq if missing (needed by webhook script)
-which jq >/dev/null 2>&1 || (apt-get update -qq && apt-get install -y -qq jq >/dev/null 2>&1)
-
-echo "JoeMail patches applied"
+echo "JoeMail patches applied — direct relay to API SMTP on port 2525"

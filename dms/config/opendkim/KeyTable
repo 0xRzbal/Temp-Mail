@@ -1,0 +1,2 @@
+mail._domainkey.rzbal.xyz rzbal.xyz:mail:/etc/opendkim/keys/rzbal.xyz/mail.private
+mail._domainkey.mail.rzbal.xyz mail.rzbal.xyz:mail:/etc/opendkim/keys/mail.rzbal.xyz/mail.private

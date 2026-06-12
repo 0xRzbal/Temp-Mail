@@ -1,0 +1,33 @@
+# Environment files
+.env
+.env.local
+.env.production
+*.env
+!*.env.example
+
+# Logs
+*.log
+*.log.*.gz
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite-journal
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Docker volumes / runtime data
+dms/mail-data/
+dms/mail-logs/
+dms/mail-state/
+dms/config/dms.env
+
+# Backups
+backups/
+
+# OS
+.DS_Store
+Thumbs.db

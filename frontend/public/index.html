@@ -6,15 +6,14 @@
     <title>JoeMail</title>
     <link rel="icon" href="/images/logo.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.bunny.net" />
-    <link href="https://fonts.bunny.net/css2?family=Kadwa:wght@400;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.bunny.net/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
     <link rel="stylesheet" href="/build/assets/app-BSyY0X6t.css" />
     <link rel="stylesheet" href="/build/assets/common-CM5FHs_M.css" />
-    <link rel="stylesheet" href="/css/app.css?v=20260529-contrast" />
+    <link rel="stylesheet" href="/css/app.css?v=20260611-deletefix" />
 </head>
-<body class="bg-gray-900 text-gray-200" style="background: linear-gradient(#1a1a1a, #1f1f1f 52%, #242424);">
-    <div class="groot-theme flex flex-col min-h-screen" style="background-image: linear-gradient(rgba(245,245,245,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(245,245,245,0.035) 1px, transparent 1px); background-size: 54px 54px;">
+<body class="bg-gray-900 text-gray-200" style="background: linear-gradient(180deg, #1a1a1a, #1f1f1f 52%, #242424);">
+    <div class="groot-theme flex flex-col min-h-screen" style="background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px); background-size: 54px 54px;">
         <!-- ============================================================ -->
         <!-- HEADER -->
         <!-- ============================================================ -->
@@ -22,7 +21,7 @@
             <!-- Top row: darkmode | logo | nav+hamburger -->
             <div class="logo flex justify-center p-5 lg:p-10 lg:justify-start">
                 <a href="/" class="no-underline">
-                    <span style="font-family: 'Kadwa', serif; font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: 0.05em;">JoeMail</span>
+                    <span style="font-family: 'Inter', sans-serif; font-size: 1.35rem; font-weight: 700; color: #fff; letter-spacing: -0.02em;">JoeMail</span>
                 </a>
             </div>
 
@@ -59,7 +58,7 @@
                                     </div>
                                 </div>
                                 <!-- Copy button -->
-                                <div id="btn-copy" class="btn-press btn_copy flex items-center bg-indigo-600 rounded-md text-white text-center py-4 px-5 hover:bg-opacity-75 cursor-pointer" style="background-color: #ff6b4a">
+                                <div id="btn-copy" class="btn-press btn_copy flex items-center bg-indigo-600 rounded-md text-white text-center py-4 px-5 hover:bg-opacity-75 cursor-pointer">
                                     <i class="far fa-copy"></i>
                                 </div>
 
@@ -72,14 +71,15 @@
                                 <i id="refresh-icon" class="fas fa-sync-alt fa-spin pause-spinner"></i>
                                 <div class="text-sm ml-3">Refresh</div>
                             </div>
-                            <div id="btn-new" class="btn-press flex justify-center items-center bg-white bg-opacity-10 hover:bg-opacity-25 text-white rounded-md text-center cursor-pointer py-3 px-4">
-                                <i class="far fa-plus-square"></i>
-                                <div class="text-sm ml-3">New</div>
-                            </div>
                             <div id="btn-delete" class="btn-press flex justify-center items-center bg-white bg-opacity-10 hover:bg-opacity-25 text-white rounded-md text-center cursor-pointer py-3 px-4">
                                 <i class="far fa-trash-alt"></i>
                                 <div class="text-sm ml-3">Delete</div>
                             </div>
+                            <div id="btn-new" class="btn-press flex justify-center items-center bg-white bg-opacity-10 hover:bg-opacity-25 text-white rounded-md text-center cursor-pointer py-3 px-4">
+                                <i class="far fa-plus-square"></i>
+                                <div class="text-sm ml-3">New</div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -112,7 +112,7 @@
                                         </div>
                                     </div>
                                     <!-- Create button -->
-                                    <button id="btn-create-email" class="flex items-center bg-indigo-600 rounded-md text-white text-center py-4 px-5 hover:bg-opacity-75 cursor-pointer" style="background-color: #ff6b4a">
+                                    <button id="btn-create-email" class="flex items-center bg-indigo-600 rounded-md text-white text-center py-4 px-5 hover:bg-opacity-75 cursor-pointer">
                                         <i class="fas fa-chevron-right"></i>
                                     </button>
                                 </div>
@@ -121,7 +121,7 @@
                                     <div class="border border-dashed border-white h-6"></div>
                                 </div>
                                 <!-- Random button -->
-                                <div id="btn-random" class="flex items-center bg-indigo-600 rounded-md text-white text-center py-4 px-5 hover:bg-opacity-75 cursor-pointer" style="background-color: #ff6b4a">
+                                <div id="btn-random" class="flex items-center bg-indigo-600 rounded-md text-white text-center py-4 px-5 hover:bg-opacity-75 cursor-pointer">
                                     <i class="fas fa-random"></i>
                                 </div>
                             </div>
@@ -162,24 +162,50 @@
                     <div id="inbox-list" class="hidden space-y-3"></div>
                 </div>
 
-                <!-- Email detail (hidden by default) -->
-                <div id="email-detail" class="hidden view-anim">
-                    <div class="bg-gray-800 text-sm rounded-lg p-6">
-                        <button id="btn-back-inbox" class="text-sm text-gray-500 hover:text-gray-700 text-gray-400 hover:text-gray-200 mb-4">
-                            <i class="fas fa-arrow-left mr-2"></i>Back to Inbox
-                        </button>
-                        <div class="space-y-3 mb-4">
-                            <div><strong class="text-gray-400">From:</strong> <span id="detail-from" class="text-gray-200"></span></div>
-                            <div><strong class="text-gray-400">Subject:</strong> <span id="detail-subject" class="text-gray-200"></span></div>
-                            <div><strong class="text-gray-400">Date:</strong> <span id="detail-date" class="text-gray-200"></span></div>
-                        </div>
-                        <hr class="border-gray-700 mb-4" />
-                        <div id="detail-body" class="prose prose-invert max-w-none"></div>
-                    </div>
-                </div>
+                <!-- Email detail (hidden by default) — moved outside inbox-section to avoid parent hiding it -->
             </div>
 
             <!-- Right ad -->
+            <div class="flex justify-center items-center max-w-full"></div>
+        </div>
+
+        <!-- Email detail (sibling of inbox-section, not nested) -->
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-6 gap-5 bg-gray-900 py-5 lg:py-10 hidden view-anim" id="email-detail">
+            <div class="flex justify-center items-center max-w-full"></div>
+            <div class="col-span-4 mx-5 lg:mx-0">
+                <div class="bg-gray-800 text-sm rounded-lg p-6">
+                    <!-- Back button + Delete -->
+                    <div class="flex items-center justify-between mb-5">
+                        <button id="btn-back-inbox" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-arrow-left"></i>Back to Inbox
+                        </button>
+                        <button id="btn-delete-detail" class="flex items-center gap-2 text-red-400 hover:text-red-300 transition-colors px-3 py-1.5 rounded-md hover:bg-red-400/10">
+                            <i class="far fa-trash-alt"></i>Delete
+                        </button>
+                    </div>
+
+                    <!-- Email meta info -->
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-3">
+                            <span class="email-meta-label min-w-[60px]">From</span>
+                            <span id="detail-from" class="email-meta-value"></span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="email-meta-label min-w-[60px]">Subject</span>
+                            <span id="detail-subject" class="email-meta-value font-semibold"></span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="email-meta-label min-w-[60px]">Date</span>
+                            <span id="detail-date" class="email-meta-value"></span>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-700" />
+
+                    <!-- Email body -->
+                    <div id="detail-body" class="prose prose-invert max-w-none"></div>
+                </div>
+            </div>
             <div class="flex justify-center items-center max-w-full"></div>
         </div>
 
@@ -187,17 +213,8 @@
         <!-- FOOTER -->
         <!-- ============================================================ -->
         <footer class="bg-gray-950 px-6 py-4 text-white text-sm">
-            <div class="flex items-center justify-center lg:hidden mb-5">
-                <a href="https://t.me/rzbal" target="_blank" class="ml-2 text-lg text-gray-200 hover:text-gray-300"><i class="fab fa-telegram-plane"></i></a>
-                <a href="https://rzbal.biz.id/" target="_blank" class="ml-2 text-lg text-gray-200 hover:text-gray-300"><i class="fas fa-globe"></i></a>
-            </div>
-            <div class="flex flex-col lg:flex-row gap-5 justify-between items-center">
-                <div class="flex space-x-3"></div>
-                <div class="opacity-75 text-gray-300">Copyright &copy; 2026 JoeMail. All rights reserved.</div>
-                <div class="hidden lg:block">
-                    <a href="https://t.me/rzbal" target="_blank" class="ml-2 text-lg text-gray-200 hover:text-gray-300"><i class="fab fa-telegram-plane"></i></a>
-                    <a href="https://rzbal.biz.id/" target="_blank" class="ml-2 text-lg text-gray-200 hover:text-gray-300"><i class="fas fa-globe"></i></a>
-                </div>
+            <div class="flex justify-center items-center">
+                <div class="opacity-75 text-gray-300 text-center">Copyright &copy; 2026 JoeMail. All rights reserved.</div>
             </div>
         </footer>
     </div>
@@ -205,6 +222,6 @@
     <!-- Toast -->
     <div id="toast" class="fixed bottom-5 right-5 bg-green-600 text-white px-4 py-3 rounded-md shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50"></div>
 
-    <script src="/js/app.js?v=20260528-delete"></script>
+    <script src="/js/app.js?v=20260611-deletefix"></script>
 </body>
 </html>

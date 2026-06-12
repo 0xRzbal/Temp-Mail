@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JoeMail Admin - Domains</title>
+    <link rel="icon" href="/images/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css2?family=Kadwa:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon">J</div>
+                <div>
+                    <h1>JoeMail</h1>
+                    <p>Admin Console</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <div class="nav-label">Main</div>
+                    <a class="nav-item" data-page="dashboard" href="/admin/dashboard.html">
+                        <i class="fas fa-chart-pie"></i><span>Dashboard</span>
+                    </a>
+                    <a class="nav-item" data-page="emails" href="/admin/emails.html">
+                        <i class="fas fa-envelope"></i><span>Emails</span>
+                    </a>
+                    <a class="nav-item active" data-page="domains" href="/admin/domains.html">
+                        <i class="fas fa-globe"></i><span>Domains</span>
+                    </a>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-label">System</div>
+                    <a class="nav-item" data-page="webhooks" href="/admin/webhooks.html">
+                        <i class="fas fa-link"></i><span>Webhooks</span>
+                    </a>
+                    <a class="nav-item" data-page="stats" href="/admin/stats.html">
+                        <i class="fas fa-chart-bar"></i><span>Statistics</span>
+                    </a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="nav-item" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+            </div>
+        </aside>
+
+        <main class="main-wrap">
+            <header class="app-header">
+                <div class="header-left">
+                    <button class="mobile-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                    <span class="header-title">Domains</span>
+                </div>
+                <div class="header-right">
+                    <div class="header-badge"><span class="dot"></span><span>Online</span></div>
+                    <button class="btn-ghost" onclick="window.open('/', '_blank')"><i class="fas fa-external-link-alt"></i> Frontend</button>
+                </div>
+            </header>
+            <div class="content" id="content">
+                <div class="empty-state"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ADD DOMAIN MODAL -->
+    <div id="modal-add-domain" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-globe"></i> Add Domain</h2>
+            <div class="form-group">
+                <label>Domain Name</label>
+                <input type="text" id="new-domain" class="form-input" placeholder="example.com">
+            </div>
+            <div id="dns-instructions" style="display:none;">
+                <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Add these DNS records to your domain (Cloudflare or other DNS provider):</p>
+                <div id="dns-records-list"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-ghost" onclick="closeModal('modal-add-domain'); resetAddDomainModal();">Cancel</button>
+                <button class="btn-primary" id="btn-add-domain" onclick="addDomain()">Add Domain</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOMAIN DETAIL MODAL -->
+    <div id="modal-domain-detail" class="modal-overlay">
+        <div class="modal">
+            <h2><i class="fas fa-globe"></i> <span id="detail-domain-name"></span></h2>
+            <div id="domain-detail-content"></div>
+            <div class="modal-actions">
+                <button class="btn-ghost" onclick="closeModal('modal-domain-detail')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="admin.js"></script>
+    <script>
+        if (!requireAuth()) location.href = '/admin/';
+
+        function dnsRecordsHTML(domain, vr) {
+            return `
+                <div class="dns-box">
+                    <button class="copy-btn" onclick="copyDNS(this)" data-value="Type: TXT\\nName: ${domain}\\nValue: ${vr}"><i class="fas fa-copy"></i> Copy</button>
+                    <div><span class="dns-record-type">Type:</span> TXT</div>
+                    <div><span class="dns-record-name">Name:</span> ${domain}</div>
+                    <div><span class="dns-record-value">Value:</span> ${vr}</div>
+                </div>
+                <div class="dns-box" style="margin-top:8px;">
+                    <button class="copy-btn" onclick="copyDNS(this)" data-value="Type: MX\\nName: @\\nValue: mail.${domain}\\nPriority: 10"><i class="fas fa-copy"></i> Copy</button>
+                    <div><span class="dns-record-type">Type:</span> MX</div>
+                    <div><span class="dns-record-name">Name:</span> @</div>
+                    <div><span class="dns-record-value">Value:</span> mail.${domain} &nbsp; <span style="color:var(--text-muted)">Priority: 10</span></div>
+                </div>
+                <div class="dns-box" style="margin-top:8px;">
+                    <button class="copy-btn" onclick="copyDNS(this)" data-value="Type: A\\nName: mail.${domain}\\nValue: ${serverIP}"><i class="fas fa-copy"></i> Copy</button>
+                    <div><span class="dns-record-type">Type:</span> A</div>
+                    <div><span class="dns-record-name">Name:</span> mail.${domain}</div>
+                    <div><span class="dns-record-value">Value:</span> ${serverIP}</div>
+                </div>
+                <div class="dns-box" style="margin-top:8px;">
+                    <button class="copy-btn" onclick="copyDNS(this)" data-value="Type: TXT\\nName: @\\nValue: v=spf1 mx a ~all"><i class="fas fa-copy"></i> Copy</button>
+                    <div><span class="dns-record-type">Type:</span> TXT (SPF)</div>
+                    <div><span class="dns-record-name">Name:</span> @</div>
+                    <div><span class="dns-record-value">Value:</span> v=spf1 mx a ~all</div>
+                </div>
+                <p style="font-size:11px; color:var(--text-muted); margin-top:10px;">
+                    <i class="fas fa-info-circle"></i> Add all records in Cloudflare, then click Verify on the domain.
+                </p>`;
+        }
+
+        async function loadDomains() {
+            try {
+                const data = await api('/domains');
+                if (!data.success) throw new Error(data.message);
+                const d = data.data;
+                document.getElementById('content').innerHTML = `
+                    <h2 class="page-title">Domains</h2>
+                    <p class="page-subtitle">Manage custom domains for email addresses</p>
+                    <div style="margin-bottom: 16px;">
+                        <button class="btn-primary" onclick="openModal('modal-add-domain')"><i class="fas fa-plus"></i> Add Domain</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Registered Domains</h3>
+                            <span class="badge">${(d.domains || []).length} domains</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead><tr><th>Domain</th><th>Status</th><th>Verified</th><th>Created</th><th>Actions</th></tr></thead>
+                                <tbody>
+                                    ${(d.domains || []).map(dm => `<tr>
+                                        <td style="font-weight:600;">${dm.domain}</td>
+                                        <td><span class="status ${dm.isActive ? 'ok' : 'error'}">${dm.isActive ? 'Active' : 'Inactive'}</span></td>
+                                        <td><span class="status ${dm.isVerified ? 'ok' : 'warning'}">${dm.isVerified ? 'Verified' : 'Pending'}</span></td>
+                                        <td>${formatDate(dm.createdAt)}</td>
+                                        <td>
+                                            <button class="btn-ghost btn-sm" onclick="viewDomainDetail('${dm.domain}')" title="View DNS"><i class="fas fa-eye"></i></button>
+                                            <button class="btn-danger btn-sm" onclick="deleteDomain('${dm.domain}')" title="Delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>`).join('') || '<tr><td colspan="5" class="empty-state">No domains</td></tr>'}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`;
+            } catch (e) {
+                document.getElementById('content').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>${e.message}</p></div>`;
+            }
+        }
+
+        async function addDomain() {
+            const domain = document.getElementById('new-domain').value.trim();
+            if (!domain) { toast('Enter a domain name', 'error'); return; }
+
+            try {
+                const data = await fetch('/api/domain/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ domain })
+                }).then(r => r.json());
+
+                if (!data.success) throw new Error(data.message);
+
+                const vr = data.data.verificationRecord;
+                document.getElementById('dns-records-list').innerHTML = dnsRecordsHTML(domain, vr);
+                document.getElementById('dns-instructions').style.display = 'block';
+                document.getElementById('btn-add-domain').textContent = 'Close';
+                document.getElementById('btn-add-domain').onclick = () => { closeModal('modal-add-domain'); resetAddDomainModal(); loadDomains(); };
+                toast('Domain registered! Add DNS records in Cloudflare.');
+            } catch (e) { toast(e.message, 'error'); }
+        }
+
+        function resetAddDomainModal() {
+            document.getElementById('new-domain').value = '';
+            document.getElementById('dns-instructions').style.display = 'none';
+            document.getElementById('btn-add-domain').textContent = 'Add Domain';
+            document.getElementById('btn-add-domain').onclick = addDomain;
+        }
+
+        async function viewDomainDetail(domain) {
+            try {
+                const data = await fetch(`/api/domain/verify/${domain}`, {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(r => r.json());
+
+                document.getElementById('detail-domain-name').textContent = domain;
+                const vr = data.data.verificationRecord || 'Already verified';
+                const isVerified = data.data.verified;
+
+                document.getElementById('domain-detail-content').innerHTML = `
+                    <div style="margin-bottom:16px;">
+                        <span class="status ${isVerified ? 'ok' : 'warning'}">${isVerified ? 'Verified' : 'Pending Verification'}</span>
+                    </div>
+                    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Required DNS records for Cloudflare:</p>
+                    ${dnsRecordsHTML(domain, vr)}
+                    ${!isVerified ? `<div style="margin-top:14px;">
+                        <button class="btn-primary" onclick="verifyDomain('${domain}')"><i class="fas fa-check"></i> Verify Now</button>
+                    </div>` : ''}`;
+
+                openModal('modal-domain-detail');
+            } catch (e) { toast(e.message, 'error'); }
+        }
+
+        async function verifyDomain(domain) {
+            try {
+                const data = await fetch(`/api/domain/verify/${domain}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(r => r.json());
+                if (data.success) {
+                    toast('Domain verified!');
+                    closeModal('modal-domain-detail');
+                    loadDomains();
+                } else {
+                    toast(data.message || 'Verification failed', 'error');
+                }
+            } catch (e) { toast(e.message, 'error'); }
+        }
+
+        async function deleteDomain(domain) {
+            if (!confirm('Delete domain ' + domain + '?')) return;
+            try {
+                const data = await fetch(`/api/domain/${domain}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(r => r.json());
+                if (data.success) { toast('Domain deleted'); loadDomains(); }
+                else { toast(data.message || 'Failed', 'error'); }
+            } catch (e) { toast(e.message, 'error'); }
+        }
+
+        loadDomains();
+    </script>
+</body>
+</html>
