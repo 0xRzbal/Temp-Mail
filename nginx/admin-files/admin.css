@@ -191,7 +191,7 @@ body {
 .btn-sm { padding: 5px 10px; font-size: 11px; }
 
 /* CONTENT */
-.content { padding: 16px 20px; flex: 1; overflow-y: auto; overflow-x: hidden; }
+.content { padding: 12px 20px; flex: 1; overflow-y: auto; overflow-x: hidden; }
 .page-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
 .page-subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 8px; }
 
@@ -510,19 +510,19 @@ body.sidebar-open { overflow: hidden; }
 /* Dashboard Modern Design */
 .dashboard-welcome {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 24px; margin-bottom: 12px;
+    padding: 16px 20px; margin-bottom: 10px;
     background: linear-gradient(135deg, rgba(255,107,74,0.1) 0%, rgba(255,107,74,0.05) 100%);
     border: 1px solid rgba(255,107,74,0.2); border-radius: var(--radius);
 }
-.welcome-greeting { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
-.welcome-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+.welcome-greeting { font-size: 22px; font-weight: 800; margin-bottom: 2px; }
+.welcome-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
 .welcome-time { font-size: 12px; color: var(--text-secondary); }
 .welcome-status { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--success); }
 .status-pulse { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
 
-.stats-grid-modern { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.stats-grid-modern { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 10px; }
 .stat-card-modern {
-    display: flex; align-items: center; gap: 14px; padding: 16px;
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px;
     background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
     transition: all 0.2s;
 }
@@ -553,16 +553,16 @@ body.sidebar-open { overflow: hidden; }
 
 .section-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 .section-title i { color: var(--accent); }
-.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .section-link { font-size: 12px; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 4px; }
 .section-link:hover { text-decoration: underline; }
 
-.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
+.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 10px; }
 .dashboard-section {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 16px;
 }
-.activity-list { max-height: 300px; overflow-y: auto; }
+.activity-list { max-height: 220px; overflow-y: auto; }
 .activity-item {
     display: flex; align-items: center; gap: 12px; padding: 10px 0;
     border-bottom: 1px solid var(--border);
@@ -579,10 +579,10 @@ body.sidebar-open { overflow: hidden; }
 .activity-meta { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .activity-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
 
-.system-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.system-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
 .system-card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 14px; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+    padding: 12px; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
 }
 .system-card:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 .system-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px; }
