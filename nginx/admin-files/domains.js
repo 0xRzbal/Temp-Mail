@@ -20,12 +20,12 @@ async function fetchDKIM(domain) {
 async function dnsRecordsHTML(domain, vr) {
     const dkim = await fetchDKIM(domain);
     const records = [
-        { num: 1, label: 'Domain Verification', type: 'TXT', name: domain, value: vr, copyValue: 'Type: TXT\nName: ' + domain + '\nValue: ' + vr },
-        { num: 2, label: 'Mail Exchange', type: 'MX', name: '@', value: 'mail.' + domain + ' (Priority: 10)', copyValue: 'Type: MX\nName: @\nValue: mail.' + domain + '\nPriority: 10' },
-        { num: 3, label: 'Mail Server IP', type: 'A', name: 'mail.' + domain, value: serverIP, copyValue: 'Type: A\nName: mail.' + domain + '\nValue: ' + serverIP },
-        { num: 4, label: 'SPF Record', type: 'TXT', name: domain, value: 'v=spf1 mx a ip4:' + serverIP + ' ~all', copyValue: 'Type: TXT\nName: ' + domain + '\nValue: v=spf1 mx a ip4:' + serverIP + ' ~all' },
-        { num: 5, label: 'DKIM', type: 'TXT', name: 'mail._domainkey.' + domain, value: dkim, copyValue: 'Type: TXT\nName: mail._domainkey.' + domain + '\nValue: ' + dkim },
-        { num: 6, label: 'DMARC', type: 'TXT', name: '_dmarc.' + domain, value: 'v=DMARC1; p=quarantine; rua=mailto:dmarc@' + domain, copyValue: 'Type: TXT\nName: _dmarc.' + domain + '\nValue: v=DMARC1; p=quarantine; rua=mailto:dmarc@' + domain }
+        { num: 1, label: 'Domain Verification', type: 'TXT', name: domain, value: vr },
+        { num: 2, label: 'Mail Exchange', type: 'MX', name: '@', value: 'mail.' + domain + ' (Priority: 10)' },
+        { num: 3, label: 'Mail Server IP', type: 'A', name: 'mail.' + domain, value: serverIP },
+        { num: 4, label: 'SPF Record', type: 'TXT', name: domain, value: 'v=spf1 mx a ip4:' + serverIP + ' ~all' },
+        { num: 5, label: 'DKIM', type: 'TXT', name: 'mail._domainkey.' + domain, value: dkim },
+        { num: 6, label: 'DMARC', type: 'TXT', name: '_dmarc.' + domain, value: 'v=DMARC1; p=quarantine; rua=mailto:dmarc@' + domain }
     ];
 
     return records.map(r => {
@@ -35,7 +35,7 @@ async function dnsRecordsHTML(domain, vr) {
         <div class="dns-record-card" style="padding:10px 12px;margin-bottom:6px;">
             <div class="dns-header" style="margin-bottom:6px;">
                 <span class="dns-num">${r.num}. ${r.label}</span>
-                <button class="copy-btn" onclick="copyDNS(this)" data-value="${r.copyValue.replace(/"/g, '&quot;')}"><i class="fas fa-copy"></i> Copy</button>
+                <button class="copy-btn" onclick="copyDNS(this)" data-value="${r.value.replace(/"/g, '&quot;')}"><i class="fas fa-copy"></i> Copy</button>
             </div>
             <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Type: <span class="dns-record-type">${r.type}</span> &middot; Name: <span class="dns-record-name">${r.name}</span></div>
             <div class="dns-row" style="margin-bottom:0;"><span class="label">Value:</span> <span class="dns-record-value" style="word-break:break-all;font-size:11px;">${displayValue}</span></div>
