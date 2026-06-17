@@ -194,7 +194,7 @@ router.get('/domains', adminAuthMiddleware, (req, res) => {
   try {
     const db = getDatabase();
     const domains = db.prepare('SELECT * FROM custom_domains ORDER BY created_at DESC').all();
-    res.json({ success: true, data: { domains: domains.map(d => ({ id: d.id, domain: d.domain, isVerified: !!d.is_verified, isActive: !!d.is_active, createdAt: d.created_at, verifiedAt: d.verified_at, emailCount: db.prepare('SELECT COUNT(*) as c FROM emails WHERE email_address LIKE ?').get('%@' + d.domain).c })) } });
+    res.json({ success: true, data: { domains: domains.map(d => ({ id: d.id, domain: d.domain, isVerified: !!d.is_verified, isActive: !!d.is_active, createdAt: d.created_at, verifiedAt: d.verified_at, verificationToken: d.verification_record || null, emailCount: db.prepare('SELECT COUNT(*) as c FROM emails WHERE email_address LIKE ?').get('%@' + d.domain).c })) } });
   } catch (error) { logger.error('[ADMIN] Domains error:', error); res.status(500).json({ success: false, message: 'Failed to fetch domains' }); }
 });
 
