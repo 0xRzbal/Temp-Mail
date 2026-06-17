@@ -226,9 +226,12 @@ async function pruneOldEmails(currentNew) {
     const oldOnes = history.filter(e => e !== currentNew);
     if (oldOnes.length === 0) return;
 
-    // Remove oldest from dropdown history only (don't delete from backend)
+    // Remove oldest from dropdown history AND delete from backend
     const toRemove = oldOnes[oldOnes.length - 1];
     removeEmailFromHistory(toRemove);
+    try {
+        await api('/email/address/' + encodeURIComponent(toRemove), { method: 'DELETE' });
+    } catch (e) { /* silent */ }
 }
 
 function renderEmailHistoryDropdown() {

@@ -1,4 +1,4 @@
-// JoeMail Admin - SMTP Relay v6
+// JoeMail Admin - SMTP Relay v7
 if (typeof requireAuth === 'function' && !requireAuth()) location.href = '/admin/';
 
 var RELAY_PRESETS = {
@@ -12,7 +12,33 @@ var RELAY_PRESETS = {
 
 var presetsVisible = false;
 
+function getSavedPresets() {
+    try { return JSON.parse(localStorage.getItem('joemail_relay_presets') || '{}'); } catch(e) { return {}; }
+}
+
+function saveCustomPreset(name) {
+    var host = document.getElementById('relay-host').value;
+    var port = document.getElementById('relay-port').value;
+    var username = document.getElementById('relay-username').value;
+    var password = document.getElementById('relay-password').value;
+    if (!host || !username || !password) { toast('Fill host, username, password first', 'error'); return; }
+    var presets = getSavedPresets();
+    presets[name] = { host: host, port: port, username: username, password: password, name: name };
+    localStorage.setItem('joemail_relay_presets', JSON.stringify(presets));
+    renderRelay();
+    toast('Preset "' + name + '" saved');
+}
+
+function deleteCustomPreset(name) {
+    var presets = getSavedPresets();
+    delete presets[name];
+    localStorage.setItem('joemail_relay_presets', JSON.stringify(presets));
+    renderRelay();
+    toast('Preset deleted');
+}
+
 function renderRelay() {
+    // Built-in presets
     var presetBtns = '';
     Object.keys(RELAY_PRESETS).forEach(function(key) {
         var p = RELAY_PRESETS[key];
@@ -20,6 +46,22 @@ function renderRelay() {
             '<strong>' + p.name + '</strong><br>' +
             '<span style="color:var(--text-muted);font-size:11px;">' + p.host + ':' + p.port + '</span></button>';
     });
+
+    // Saved custom presets
+    var saved = getSavedPresets();
+    var savedKeys = Object.keys(saved);
+    if (savedKeys.length > 0) {
+        presetBtns += '<div style="grid-column:1/-1;font-size:11px;color:var(--text-muted);margin-top:8px;border-top:1px solid var(--border);padding-top:8px;">Saved Presets</div>';
+        savedKeys.forEach(function(name) {
+            var p = saved[name];
+            presetBtns += '<div style="display:flex;align-items:center;gap:4px;">' +
+                '<button class="btn-ghost" style="text-align:left;padding:10px 12px;flex:1;" onclick="applySavedPreset(\'' + name.replace(/'/g, "\\'") + '\')">' +
+                '<strong>' + name + '</strong><br>' +
+                '<span style="color:var(--text-muted);font-size:11px;">' + p.host + ':' + p.port + '</span></button>' +
+                '<button class="btn-danger btn-sm" onclick="if(confirm(\'Delete preset?\'))deleteCustomPreset(\'' + name.replace(/'/g, "\\'") + '\')" title="Delete" style="padding:6px 8px;"><i class="fas fa-trash"></i></button>' +
+                '</div>';
+        });
+    }
 
     document.getElementById('content').innerHTML =
         '<div class="page-header-row">' +
@@ -44,7 +86,10 @@ function renderRelay() {
         '<div class="card">' +
             '<div class="card-header">' +
                 '<h3><i class="fas fa-cog"></i> Relay Configuration</h3>' +
-                '<button class="btn-ghost btn-sm" onclick="togglePresets()"><i class="fas fa-magic"></i> Presets</button>' +
+                '<div style="display:flex;gap:6px;">' +
+                    '<button class="btn-ghost btn-sm" onclick="togglePresets()"><i class="fas fa-magic"></i> Presets</button>' +
+                    '<button class="btn-primary btn-sm" onclick="promptSavePreset()"><i class="fas fa-save"></i> Save as Preset</button>' +
+                '</div>' +
             '</div>' +
             '<div class="card-body">' +
                 '<div id="presets-panel" style="display:none;margin-bottom:16px;">' +
@@ -126,7 +171,25 @@ function applyPreset(key) {
     document.getElementById('relay-port').value = p.port;
     document.getElementById('presets-panel').style.display = 'none';
     presetsVisible = false;
-    toast(p.name + ' preset applied');
+    toast(p.name + ' preset applied — fill username & password');
+}
+
+function applySavedPreset(name) {
+    var presets = getSavedPresets();
+    var p = presets[name];
+    if (!p) return;
+    document.getElementById('relay-host').value = p.host || '';
+    document.getElementById('relay-port').value = p.port || '2525';
+    document.getElementById('relay-username').value = p.username || '';
+    document.getElementById('relay-password').value = p.password || '';
+    document.getElementById('presets-panel').style.display = 'none';
+    presetsVisible = false;
+    toast('Preset "' + name + '" loaded');
+}
+
+function promptSavePreset() {
+    var name = prompt('Preset name:');
+    if (name && name.trim()) saveCustomPreset(name.trim());
 }
 
 async function loadRelay() {

@@ -139,6 +139,11 @@ async function loadEmails(isRefresh) {
         }
         lastEmailCount = total;
         if (!isRefresh) selectedEmails.clear();
+        // On refresh, remove IDs that no longer exist in the new list
+        if (isRefresh) {
+            var currentIds = new Set(emails.map(function(e) { return e.id; }));
+            selectedEmails.forEach(function(id) { if (!currentIds.has(id)) selectedEmails.delete(id); });
+        }
 
         var emailRows = emails.map(function(e) {
             return '<tr>' +
@@ -187,6 +192,14 @@ async function loadEmails(isRefresh) {
                     '<tbody>' + emailRows + '</tbody>' +
                 '</table></div>' +
             '</div>';
+        // Sync checkbox visual state with selectedEmails on refresh
+        if (isRefresh && selectedEmails.size > 0) {
+            document.querySelectorAll('.bulk-check').forEach(function(cb) {
+                var id = parseInt(cb.dataset.id);
+                if (selectedEmails.has(id)) cb.checked = true;
+            });
+            updateBulkBar();
+        }
     } catch (e) {
         if (!isRefresh) {
             document.getElementById('content').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>' + e.message + '</p></div>';
