@@ -600,6 +600,10 @@ body.sidebar-open { overflow: hidden; }
     .actions-grid { grid-template-columns: repeat(4, 1fr); }
     .action-btn { padding: 12px 8px; }
     .action-btn span { font-size: 10px; }
+    .dashboard-section { overflow: hidden; }
+    .activity-content { overflow-x: auto; }
+    .activity-title { white-space: normal; min-width: 0; word-break: break-word; }
+    .activity-meta { white-space: normal; min-width: 0; word-break: break-word; }
 }
 @media (max-width: 480px) {
     .stats-grid-modern { grid-template-columns: 1fr; }

@@ -21,54 +21,57 @@ async function openCompose() {
     document.getElementById('compose-to').value = '';
     document.getElementById('compose-subject').value = '';
     document.getElementById('compose-body').value = '';
+    document.getElementById('compose-from').value = '';
     openModal('modal-compose');
-    document.getElementById('compose-to').focus();
-    // Load addresses for From dropdown
+    document.getElementById('compose-from').focus();
+    // Load addresses for From datalist suggestions
     try {
         var data = await api('/users');
-        var sel = document.getElementById('compose-from');
-        sel.innerHTML = '';
+        var datalist = document.getElementById('from-suggestions');
+        datalist.innerHTML = '';
         if (data.success && data.data && data.data.users) {
             data.data.users.forEach(function(u) {
                 var opt = document.createElement('option');
                 opt.value = u.email;
-                opt.textContent = u.email;
-                sel.appendChild(opt);
+                datalist.appendChild(opt);
             });
         }
-        if (sel.options.length === 0) {
-            sel.innerHTML = '<option value="">No addresses found</option>';
-        }
-    } catch (e) {
-        document.getElementById('compose-from').innerHTML = '<option value="">Failed to load</option>';
-    }
+    } catch (e) { /* ignore */ }
 }
 
 async function sendCompose() {
-    var from = document.getElementById('compose-from').value;
-    var to = document.getElementById('compose-to').value.trim();
+    var from = document.getElementById('compose-from').value.trim();
+    var toRaw = document.getElementById('compose-to').value.trim();
     var subject = document.getElementById('compose-subject').value.trim();
     var body = document.getElementById('compose-body').value.trim();
-    if (!from) { toast('Select a From address', 'error'); return; }
-    if (!to) { toast('Recipient required', 'error'); return; }
+    if (!from) { toast('From address required', 'error'); return; }
+    if (!toRaw) { toast('Recipient required', 'error'); return; }
     if (!body) { toast('Message body required', 'error'); return; }
+
+    // Parse multiple recipients (comma-separated)
+    var recipients = toRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+    if (recipients.length === 0) { toast('No valid recipients', 'error'); return; }
 
     var btn = document.getElementById('btn-send-compose');
     btn.disabled = true;
     btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;margin:0 auto;"></div>';
 
+    var successCount = 0;
+    var failCount = 0;
+
     try {
-        var data = await api('/compose', {
-            method: 'POST',
-            body: JSON.stringify({ from: from, to: to, subject: subject, body: body })
-        });
-        if (data.success) {
-            toast('Email sent to ' + to);
-            closeModal('modal-compose');
-            if (currentTab === 'sent') loadSent();
-        } else {
-            toast(data.message || 'Failed to send', 'error');
+        for (var i = 0; i < recipients.length; i++) {
+            var data = await api('/compose', {
+                method: 'POST',
+                body: JSON.stringify({ from: from, to: recipients[i], subject: subject, body: body })
+            });
+            if (data.success) successCount++;
+            else failCount++;
         }
+        if (successCount > 0) toast('Sent to ' + successCount + ' recipient(s)' + (failCount > 0 ? ', ' + failCount + ' failed' : ''));
+        if (failCount > 0 && successCount === 0) toast('Failed to send to all recipients', 'error');
+        closeModal('modal-compose');
+        if (currentTab === 'sent') loadSent();
     } catch (e) {
         toast(e.message, 'error');
     }
