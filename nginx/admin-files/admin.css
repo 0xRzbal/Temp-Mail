@@ -191,7 +191,7 @@ body {
 .btn-sm { padding: 5px 10px; font-size: 11px; }
 
 /* CONTENT */
-.content { padding: 20px; flex: 1; overflow-y: auto; }
+.content { padding: 20px; flex: 1; overflow-y: auto; overflow-x: hidden; }
 .page-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
 .page-subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
 
@@ -425,7 +425,7 @@ body.sidebar-open { overflow: hidden; }
     .btn-ghost span { display: none; }
     
     /* Content fits mobile viewport */
-    .content { padding: 12px 10px; overflow: visible; }
+    .content { padding: 12px 10px; overflow-y: auto; overflow-x: hidden; }
     .page-title { font-size: 15px; }
     .page-subtitle { font-size: 11px; margin-bottom: 10px; }
     .card-header h3 { font-size: 12px; }
@@ -477,7 +477,7 @@ body.sidebar-open { overflow: hidden; }
     .sidebar.open { transform: translateX(0); }
     .app-layout { display: block; height: auto; min-height: 100vh; overflow: visible; }
     .main-wrap { margin-left: 0; height: auto; min-height: 100vh; overflow: visible; }
-    .content { padding: 10px 8px; overflow: visible; }
+    .content { padding: 10px 8px; overflow-y: auto; overflow-x: hidden; }
     .page-title { font-size: 16px; }
     .sidebar-brand h1 { font-size: 13px; }
     .sidebar-brand p { font-size: 9px; }

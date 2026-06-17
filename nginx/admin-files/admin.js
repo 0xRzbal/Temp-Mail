@@ -255,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', e => {
             e.preventDefault();
             navigateTo(btn.dataset.page);
+            closeSidebar();
         });
     });
 
