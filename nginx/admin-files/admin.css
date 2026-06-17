@@ -562,7 +562,7 @@ body.sidebar-open { overflow: hidden; }
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 12px;
 }
-.activity-list { max-height: 180px; overflow-y: auto; }
+.activity-list { max-height: 240px; overflow-y: auto; }
 .activity-item {
     display: flex; align-items: center; gap: 10px; padding: 7px 0;
     border-bottom: 1px solid var(--border);
