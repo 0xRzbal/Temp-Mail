@@ -118,13 +118,19 @@ const pageScripts = {
     'dashboard': '/admin/dashboard.js',
     'emails': '/admin/emails.js',
     'addresses': '/admin/addresses.js',
-    'domains': '/admin/domains.js'
+    'domains': '/admin/domains.js',
+    'relay': '/admin/relay.js',
+    'stats': '/admin/stats.js',
+    'settings': '/admin/settings.js'
 };
 const pageTitles = {
     'dashboard': 'Dashboard',
     'emails': 'Emails',
     'addresses': 'Addresses',
-    'domains': 'Domains'
+    'domains': 'Domains',
+    'relay': 'SMTP Relay',
+    'stats': 'Statistics',
+    'settings': 'Settings'
 };
 let currentPage = '';
 let spaCache = {}; // cache fetched pages

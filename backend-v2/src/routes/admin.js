@@ -431,6 +431,26 @@ router.get('/domains/:domain/health', adminAuthMiddleware, async (req, res) => {
   } catch (error) { logger.error('[ADMIN] DNS health error:', error); res.status(500).json({ success: false, message: 'DNS health check failed' }); }
 });
 
+
+// Change admin password
+router.post('/change-password', adminAuthMiddleware, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) return res.status(400).json({ success: false, message: 'Current and new password required' });
+    if (newPassword.length < 6) return res.status(400).json({ success: false, message: 'New password must be at least 6 characters' });
+    const db = getDatabase();
+    const bcrypt = require('bcryptjs');
+    const admin = db.prepare('SELECT * FROM admin_users WHERE username = ? AND is_active = 1').get(req.username);
+    if (!admin) return res.status(404).json({ success: false, message: 'Admin user not found' });
+    const isValid = await bcrypt.compare(currentPassword, admin.password_hash);
+    if (!isValid) return res.status(401).json({ success: false, message: 'Current password is incorrect' });
+    const newHash = await bcrypt.hash(newPassword, 12);
+    db.prepare('UPDATE admin_users SET password_hash = ? WHERE id = ?').run(newHash, admin.id);
+    logger.info('[ADMIN] Password changed for:', req.username);
+    res.json({ success: true, message: 'Password changed successfully' });
+  } catch (error) { logger.error('[ADMIN] Change password error:', error); res.status(500).json({ success: false, message: 'Failed to change password' }); }
+});
+
 module.exports = router;
 
 // Sync DMS domains on module load (startup)

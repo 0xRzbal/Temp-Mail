@@ -618,3 +618,148 @@ html { scroll-behavior: smooth; }
 .empty-state { text-align: center; padding: 36px 16px; color: var(--text-muted); }
 .empty-state i { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
 .empty-state p { font-size: 13px; }
+/* MISSING CLASSES - Added for card/stat grid support */
+.card-body { padding: 16px; }
+.card-body.no-padding { padding: 0; }
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.stat-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* DNS record cards */
+.dns-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.dns-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: var(--bg-button);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* Welcome text */
+.welcome-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+/* Page utility */
+.page {
+    min-height: 100%;
+}
+
+/* Stat card modern variant */
+.stat-card-modern {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
+}
+.stat-card-modern:hover { border-color: rgba(255,107,74,0.3); }
+
+/* Progress bar */
+.progress-bar {
+    height: 4px;
+    background: var(--bg-button);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+.progress-bar .fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Badge variants */
+.badge-green { background: rgba(74,222,128,0.15); color: var(--success); }
+.badge-red { background: rgba(248,113,113,0.15); color: var(--danger); }
+.badge-yellow { background: rgba(251,191,36,0.15); color: var(--warning); }
+
+/* Activity list */
+.activity-list { display: flex; flex-direction: column; gap: 8px; }
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xs);
+    transition: border-color 0.2s ease;
+}
+.activity-item:hover { border-color: var(--border-hover); }
+.activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--bg-button);
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+.activity-content { flex: 1; min-width: 0; }
+.activity-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.activity-meta { font-size: 11px; color: var(--text-muted); }
+.activity-time { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
+
+/* Bulk actions bar */
+.bulk-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xs);
+    margin-bottom: 12px;
+}
+.bulk-count { font-size: 13px; font-weight: 500; }
+
+/* Copy button */
+.copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xs);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 11px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+.copy-btn:hover { background: var(--bg-button); color: var(--text); }
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .stat-grid { grid-template-columns: 1fr; }
+    .stat-grid-3 { grid-template-columns: 1fr; }
+}
