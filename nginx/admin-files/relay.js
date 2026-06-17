@@ -81,7 +81,7 @@ const RELAY_PRESETS = {
                     <option value="25">Last 25</option><option value="50" selected>Last 50</option><option value="100">Last 100</option>
                 </select>
             </div>
-            <div class="card-body"><pre id="relay-logs" style="background:var(--bg-secondary);padding:12px;border-radius:8px;font-size:12px;max-height:300px;overflow:auto;font-family:monospace;">Loading...</pre></div>
+            <div class="card-body"><pre id="relay-logs" style="background:var(--bg-secondary);padding:12px;border-radius:8px;font-size:12px;max-height:200px;overflow:auto;word-break:break-all;font-family:monospace;">Loading...</pre></div>
         </div>`;
 
     await loadRelay();

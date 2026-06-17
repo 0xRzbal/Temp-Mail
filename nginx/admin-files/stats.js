@@ -23,8 +23,8 @@ if (typeof requireAuth === 'function' && !requireAuth()) location.href = '/admin
         </div>
         <div class="card">
             <div class="card-header"><h3><i class="fas fa-chart-bar"></i> Daily Breakdown</h3></div>
-            <div class="card-body" style="padding:0;">
-                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <div class="card-body" style="padding:0;overflow-x:auto;">
+                <div class="table-wrap"><table style="width:100%;border-collapse:collapse;font-size:13px;">
                     <thead><tr>
                         <th style="text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border);">DATE</th>
                         <th style="text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border);">EMAILS</th>
@@ -35,7 +35,7 @@ if (typeof requireAuth === 'function' && !requireAuth()) location.href = '/admin
                         <th style="text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border);">DOMAINS</th>
                     </tr></thead>
                     <tbody id="stats-list"><tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-secondary);">Loading...</td></tr></tbody>
-                </table>
+                </table></div>
             </div>
         </div>`;
 

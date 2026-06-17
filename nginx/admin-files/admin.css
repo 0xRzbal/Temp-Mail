@@ -763,3 +763,131 @@ html { scroll-behavior: smooth; }
     .stat-grid { grid-template-columns: 1fr; }
     .stat-grid-3 { grid-template-columns: 1fr; }
 }
+
+/* ===== COMPREHENSIVE MOBILE OVERFLOW FIXES ===== */
+
+/* Prevent ALL cards from overflowing */
+.card, .stat-card, .stat-card-modern, .stat-grid, .stat-grid-3, .stats-grid-modern, .dashboard-grid {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* All tables horizontal scroll */
+.table-wrap, .card-body:has(table) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Pre/code blocks overflow */
+pre, code, .code-block, .log-block {
+    max-width: 100%;
+    overflow-x: auto;
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+
+/* Form inputs don't overflow */
+input, textarea, select {
+    max-width: 100%;
+    min-width: 0;
+}
+
+/* Grid cards stack properly */
+.stat-grid, .stat-grid-3, .stats-grid-modern, .dashboard-grid {
+    min-width: 0;
+}
+
+/* Card body overflow protection */
+.card-body {
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+/* Preset grid mobile */
+.preset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+/* Form group mobile */
+.form-group {
+    min-width: 0;
+}
+
+/* Activity list mobile */
+.activity-item {
+    min-width: 0;
+}
+
+/* Bulk bar mobile */
+.bulk-bar {
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+/* Modal content overflow */
+.modal-content {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Settings form mobile */
+.form-group label {
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* DNS record cards mobile */
+.dns-record-card {
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* Log block mobile */
+.log-block, #relay-logs {
+    max-width: 100%;
+    overflow-x: auto;
+    font-size: 11px;
+}
+
+/* Stats page table mobile */
+.stats-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Header buttons don't overflow */
+.header-right {
+    flex-shrink: 0;
+}
+
+/* Page title truncation */
+.page-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+/* Address list mobile */
+.address-list, .email-list {
+    min-width: 0;
+}
+
+/* Toast notifications mobile */
+.toast {
+    max-width: calc(100vw - 40px);
+    word-break: break-word;
+}
+
+/* Empty state mobile */
+.empty-state {
+    padding: 20px 10px;
+}
+
+/* Copy button mobile */
+.copy-btn {
+    flex-shrink: 0;
+}
