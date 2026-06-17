@@ -371,11 +371,12 @@ router.get('/dkim/:domain', adminAuthMiddleware, (req, res) => {
       return res.json({ success: false, message: 'DKIM key not found for ' + domain });
     }
     const raw = fs.readFileSync(keyPath, 'utf8');
-    // Extract the p= value from BIND TXT record format
-    const match = raw.match(/"p=([^"]+)"/g);
-    if (!match) return res.json({ success: false, message: 'Invalid DKIM key format' });
-    const pValue = match.map(m => m.replace(/"/g, '').replace('p=', '')).join('');
-    const dkim = 'v=DKIM1; h=sha256; k=rsa; p=' + pValue;
+    const quotedParts = raw.match(/"([^"]+)"/g);
+    if (!quotedParts) return res.json({ success: false, message: 'Invalid DKIM key format' });
+    const allQuoted = quotedParts.map(m => m.replace(/"/g, '').trim()).join('');
+    const pMatch = allQuoted.match(/p=([A-Za-z0-9+/=]+)/);
+    if (!pMatch) return res.json({ success: false, message: 'No p= value found in DKIM key' });
+    const dkim = 'v=DKIM1; h=sha256; k=rsa; p=' + pMatch[1];
     res.json({ success: true, data: { domain, dkim } });
   } catch (error) {
     logger.error('[ADMIN] DKIM fetch error:', error);

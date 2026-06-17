@@ -86,6 +86,7 @@ function toggleEmailCheck(id, checked) {
 }
 
 function toggleAllEmails(checked) {
+    if (!checked) selectedEmails.clear();
     document.querySelectorAll('.bulk-check').forEach(function(cb) {
         cb.checked = checked;
         var id = parseInt(cb.dataset.id);
@@ -202,6 +203,7 @@ function toggleSentCheck(id, checked) {
 }
 
 function toggleAllSent(checked) {
+    if (!checked) selectedSent.clear();
     document.querySelectorAll('.sent-check').forEach(function(cb) {
         cb.checked = checked;
         var id = parseInt(cb.dataset.id);

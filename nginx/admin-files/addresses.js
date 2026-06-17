@@ -10,6 +10,7 @@ function toggleAddrCheck(email, checked) {
 }
 
 function toggleAllAddr(checked) {
+    if (!checked) selectedAddresses.clear();
     document.querySelectorAll('.bulk-check').forEach(cb => {
         cb.checked = checked;
         const email = cb.dataset.email;

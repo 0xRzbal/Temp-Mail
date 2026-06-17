@@ -393,15 +393,15 @@ async function createCustomEmail() {
 
 function instantViewSwap(showEl, hideEl) {
     if (!showEl || !hideEl) return;
-    // Smooth crossfade: fade out hideEl, then fade in showEl
     hideEl.classList.remove('open');
-    hideEl.style.pointerEvents = 'none';
+    hideEl.style.pointerEvents = '';
     setTimeout(() => {
         hideEl.classList.add('hidden');
         hideEl.style.display = '';
         showEl.classList.remove('hidden');
         showEl.style.display = '';
-        void showEl.offsetHeight; // force reflow
+        showEl.style.pointerEvents = '';
+        void showEl.offsetHeight;
         showEl.classList.add('open');
     }, 200);
 }
