@@ -17,18 +17,39 @@ function switchTab(tab) {
 }
 
 // ===== COMPOSE =====
-function openCompose() {
+async function openCompose() {
     document.getElementById('compose-to').value = '';
     document.getElementById('compose-subject').value = '';
     document.getElementById('compose-body').value = '';
     openModal('modal-compose');
     document.getElementById('compose-to').focus();
+    // Load addresses for From dropdown
+    try {
+        var data = await api('/users');
+        var sel = document.getElementById('compose-from');
+        sel.innerHTML = '';
+        if (data.success && data.data && data.data.users) {
+            data.data.users.forEach(function(u) {
+                var opt = document.createElement('option');
+                opt.value = u.email;
+                opt.textContent = u.email;
+                sel.appendChild(opt);
+            });
+        }
+        if (sel.options.length === 0) {
+            sel.innerHTML = '<option value="">No addresses found</option>';
+        }
+    } catch (e) {
+        document.getElementById('compose-from').innerHTML = '<option value="">Failed to load</option>';
+    }
 }
 
 async function sendCompose() {
+    var from = document.getElementById('compose-from').value;
     var to = document.getElementById('compose-to').value.trim();
     var subject = document.getElementById('compose-subject').value.trim();
     var body = document.getElementById('compose-body').value.trim();
+    if (!from) { toast('Select a From address', 'error'); return; }
     if (!to) { toast('Recipient required', 'error'); return; }
     if (!body) { toast('Message body required', 'error'); return; }
 
@@ -39,7 +60,7 @@ async function sendCompose() {
     try {
         var data = await api('/compose', {
             method: 'POST',
-            body: JSON.stringify({ to: to, subject: subject, body: body })
+            body: JSON.stringify({ from: from, to: to, subject: subject, body: body })
         });
         if (data.success) {
             toast('Email sent to ' + to);
