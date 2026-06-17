@@ -58,7 +58,7 @@ function renderRelay() {
                     '</div>' +
                     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
                         '<div class="form-group"><label>Username</label><input type="text" id="relay-username" class="form-input" placeholder="SMTP username"></div>' +
-                        '<div class="form-group"><label>Password</label><input type="password" id="relay-password" class="form-input" placeholder="SMTP password"></div>' +
+                        '<div class="form-group"><label>Password</label><div style="position:relative;"><input type="password" id="relay-password" class="form-input" placeholder="SMTP password" style="padding-right:36px;"><button type="button" onclick="togglePassword()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;padding:4px;"><i class="fas fa-eye" id="toggle-pw-icon"></i></button></div></div>' +
                     '</div>' +
                     '<div class="form-group" style="margin-bottom:16px;">' +
                         '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;">' +
@@ -106,6 +106,18 @@ function togglePresets() {
     var panel = document.getElementById('presets-panel');
     presetsVisible = !presetsVisible;
     panel.style.display = presetsVisible ? '' : 'none';
+}
+
+function togglePassword() {
+    var input = document.getElementById('relay-password');
+    var icon = document.getElementById('toggle-pw-icon');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+    } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+    }
 }
 
 function applyPreset(key) {

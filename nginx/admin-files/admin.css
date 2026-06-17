@@ -761,6 +761,10 @@ input, textarea, select {
     max-width: 100%;
     min-width: 0;
 }
+select option {
+    background: var(--bg-input);
+    color: var(--text);
+}
 
 /* Grid cards stack properly */
 .stat-grid, .stat-grid-3, .stats-grid-modern, .dashboard-grid {

@@ -11,7 +11,7 @@ if (typeof requireAuth === 'function' && !requireAuth()) location.href = '/admin
                 <h2 style="font-size:18px;font-weight:600;margin:0;">Statistics</h2>
                 <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0;">Email and system usage statistics</p>
             </div>
-            <select id="stat-days" onchange="loadStats()" style="padding:6px 10px;font-size:13px;border:1px solid var(--border);border-radius:6px;background:var(--bg);">
+            <select id="stat-days" onchange="loadStats()" class="form-input" style="width:auto;padding:6px 10px;font-size:13px;">
                 <option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option>
             </select>
         </div>
