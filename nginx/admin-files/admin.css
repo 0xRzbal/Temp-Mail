@@ -384,7 +384,7 @@ tr:hover td { background: rgba(255,107,74,0.03); transition: background 0.2s eas
 /* RESPONSIVE */
 
 /* Sidebar scroll lock */
-body.sidebar-open { /* sidebar always visible */ }
+body.sidebar-open { overflow: hidden; }
 
 /* Checkbox */
 .bulk-check { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }

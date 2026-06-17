@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JoeMail Admin - SMTP Relay</title>
+    <link rel="icon" href="/images/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <div class="app-layout">
+        <div id="sidebar-container"></div>
+        <main class="main-wrap" id="main-content">
+            <div id="header-container"></div>
+            <div class="content" id="content">
+                <div class="empty-state"><div class="spinner" style="margin:0 auto;"></div></div>
+            </div>
+        </main>
+    </div>
+    <div id="toast" class="toast"></div>
+    <script src="/admin/admin.js"></script>
+    <script src="/admin/template.js"></script>
+    <script src="/admin/relay.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (requireAuth()) {
+                document.getElementById('sidebar-container').innerHTML = renderSidebar();
+                document.getElementById('header-container').innerHTML = renderHeader('SMTP Relay');
+                initRelay();
+            }
+        });
+    </script>
+</body>
+</html>

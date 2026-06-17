@@ -1,2 +1,8 @@
 myhostname = smtp.rzbal.biz.id
 mynetworks = 127.0.0.0/8 172.16.0.0/12 192.168.0.0/16 10.0.0.0/8
+
+# Deliverability fixes
+myhostname = mail.rzbal.biz.id
+smtp_tls_security_level = may
+smtp_tls_loglevel = 1
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt

@@ -60,6 +60,13 @@ services:
       - ./dms/config/dms.env
     ports:
       - "25:25"
+
+
+
+
+
+
+
     volumes:
       - ./dms/mail-data:/var/mail
       - ./dms/mail-state:/var/mail-state

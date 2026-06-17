@@ -1,6 +1,4 @@
 rzbal.biz.id         smtp:joemail-api:2525
 mail.rzbal.biz.id    smtp:joemail-api:2525
-rzbal.app         smtp:joemail-api:2525
-mail.rzbal.app    smtp:joemail-api:2525
 buksuo.dev         smtp:joemail-api:2525
 mail.buksuo.dev    smtp:joemail-api:2525

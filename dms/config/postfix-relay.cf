@@ -1,0 +1,4 @@
+# Mailgun SMTP Relay Configuration
+# Activate by setting RELAY_HOST in dms.env
+
+[smtp.mailgun.org]:587    postmaster@mg.rzbal.biz.id:MAILGUN_API_KEY
