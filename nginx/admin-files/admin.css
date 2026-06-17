@@ -663,18 +663,6 @@ html { scroll-behavior: smooth; }
     min-height: 100%;
 }
 
-/* Stat card modern variant */
-.stat-card-modern {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease;
-}
-.stat-card-modern:hover { border-color: rgba(255,107,74,0.3); }
 
 /* Progress bar */
 .progress-bar {
@@ -696,19 +684,6 @@ html { scroll-behavior: smooth; }
 .badge-red { background: rgba(248,113,113,0.15); color: var(--danger); }
 .badge-yellow { background: rgba(251,191,36,0.15); color: var(--warning); }
 
-/* Activity list */
-.activity-list { display: flex; flex-direction: column; gap: 8px; }
-.activity-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 12px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xs);
-    transition: border-color 0.2s ease;
-}
-.activity-item:hover { border-color: var(--border-hover); }
 .activity-icon {
     width: 32px;
     height: 32px;
@@ -766,11 +741,6 @@ html { scroll-behavior: smooth; }
 
 /* ===== COMPREHENSIVE MOBILE OVERFLOW FIXES ===== */
 
-/* Prevent ALL cards from overflowing */
-.card, .stat-card, .stat-card-modern, .stat-grid, .stat-grid-3, .stats-grid-modern, .dashboard-grid {
-    max-width: 100%;
-    overflow: hidden;
-}
 
 /* All tables horizontal scroll */
 .table-wrap, .card-body:has(table) {
