@@ -191,22 +191,81 @@ async function loadEmails(isRefresh) {
 }
 
 // ===== SENT EMAILS =====
+var selectedSent = new Set();
+
+function toggleSentCheck(id, checked) {
+    if (checked) selectedSent.add(id); else selectedSent.delete(id);
+    updateSentBulkBar();
+}
+
+function toggleAllSent(checked) {
+    document.querySelectorAll('.sent-check').forEach(function(cb) {
+        cb.checked = checked;
+        var id = parseInt(cb.dataset.id);
+        if (checked) selectedSent.add(id); else selectedSent.delete(id);
+    });
+    updateSentBulkBar();
+}
+
+function updateSentBulkBar() {
+    var bar = document.getElementById('sent-bulk-bar');
+    if (!bar) return;
+    var count = selectedSent.size;
+    if (count > 0) {
+        bar.classList.add('show');
+        bar.querySelector('.bulk-count').textContent = count + ' selected';
+    } else {
+        bar.classList.remove('show');
+    }
+}
+
+async function deleteSentEmail(id) {
+    if (!confirm('Delete this sent email?')) return;
+    try {
+        var data = await api('/sent/' + id, { method: 'DELETE' });
+        if (data.success) { toast('Sent email deleted'); selectedSent.delete(id); loadSent(); }
+        else { toast(data.message || 'Failed', 'error'); }
+    } catch (e) { toast(e.message, 'error'); }
+}
+
+async function bulkDeleteSent() {
+    var count = selectedSent.size;
+    if (count === 0) return;
+    if (!confirm('Delete ' + count + ' sent emails?')) return;
+    try {
+        var data = await api('/sent/bulk-delete', {
+            method: 'POST',
+            body: JSON.stringify({ ids: Array.from(selectedSent) })
+        });
+        if (data.success) {
+            toast(count + ' sent emails deleted');
+            selectedSent.clear();
+            loadSent();
+        } else {
+            toast(data.message || 'Failed', 'error');
+        }
+    } catch (e) { toast(e.message, 'error'); }
+}
+
 async function loadSent() {
     try {
         var data = await api('/sent');
         if (!data.success) throw new Error(data.message);
         var emails = data.data.emails || [];
+        selectedSent.clear();
 
         var rows = emails.map(function(e) {
             var statusClass = e.status === 'sent' ? 'ok' : 'error';
             return '<tr>' +
+                '<td><input type="checkbox" class="sent-check" data-id="' + e.id + '" onchange="toggleSentCheck(' + e.id + ', this.checked)"></td>' +
                 '<td>' + (e.to || '-') + '</td>' +
                 '<td>' + (e.from || '-') + '</td>' +
                 '<td>' + (e.subject || '-') + '</td>' +
                 '<td>' + formatDate(e.date) + '</td>' +
                 '<td><span class="status ' + statusClass + '">' + (e.status || '-') + '</span></td>' +
+                '<td><button class="btn-danger btn-sm" onclick="deleteSentEmail(' + e.id + ')" title="Delete"><i class="fas fa-trash"></i></button></td>' +
             '</tr>';
-        }).join('') || '<tr><td colspan="5" class="empty-state">No sent emails</td></tr>';
+        }).join('') || '<tr><td colspan="7" class="empty-state">No sent emails</td></tr>';
 
         document.getElementById('content').innerHTML =
             '<div class="page-header-row">' +
@@ -222,10 +281,18 @@ async function loadSent() {
                 '<button class="tab-btn" data-tab="received" onclick="switchTab(\'received\')"><i class="fas fa-inbox"></i> Received</button>' +
                 '<button class="tab-btn active" data-tab="sent" onclick="switchTab(\'sent\')"><i class="fas fa-paper-plane"></i> Sent (' + emails.length + ')</button>' +
             '</div>' +
+            '<div id="sent-bulk-bar" class="bulk-bar">' +
+                '<input type="checkbox" checked disabled class="bulk-check">' +
+                '<span class="bulk-count">0 selected</span>' +
+                '<div class="bulk-actions">' +
+                    '<button class="btn-danger btn-sm" onclick="bulkDeleteSent()"><i class="fas fa-trash"></i> Delete Selected</button>' +
+                    '<button class="btn-ghost btn-sm" onclick="selectedSent.clear();toggleAllSent(false);updateSentBulkBar();">Clear</button>' +
+                '</div>' +
+            '</div>' +
             '<div class="card">' +
                 '<div class="card-header"><h3>Sent Emails</h3><span class="badge">' + emails.length + ' sent</span></div>' +
                 '<div class="table-wrap"><table>' +
-                    '<thead><tr><th>To</th><th>From</th><th>Subject</th><th>Date</th><th>Status</th></tr></thead>' +
+                    '<thead><tr><th><input type="checkbox" class="bulk-check-header" onchange="toggleAllSent(this.checked)"></th><th>To</th><th>From</th><th>Subject</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>' +
                     '<tbody>' + rows + '</tbody>' +
                 '</table></div>' +
             '</div>';
