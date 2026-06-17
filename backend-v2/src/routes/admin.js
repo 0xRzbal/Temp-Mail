@@ -219,7 +219,7 @@ router.get('/stats', adminAuthMiddleware, (req, res) => {
 // Admin reply to email
 router.post('/reply', adminAuthMiddleware, async (req, res) => {
   try {
-    const { emailId, body, subject } = req.body;
+    const { emailId, body, subject, from } = req.body;
     if (!emailId || !body) return res.status(400).json({ success: false, message: 'emailId and body required' });
     const nodemailer = require('nodemailer');
     const db = getDatabase();
@@ -240,7 +240,7 @@ router.post('/reply', adminAuthMiddleware, async (req, res) => {
 
     const replySubject = subject || `Re: ${email.subject || '(No Subject)'}`;
     const mailOptions = {
-      from: `"${process.env.REPLY_FROM_NAME || 'JoeMail'}" <${process.env.REPLY_SMTP_USER}>`,
+      from: from ? `<${from}>` : `"${process.env.REPLY_FROM_NAME || 'JoeMail'}" <${process.env.REPLY_SMTP_USER}>`,
       to: email.from_address,
       subject: replySubject,
       text: body,
@@ -251,7 +251,7 @@ router.post('/reply', adminAuthMiddleware, async (req, res) => {
 
     const info = await transporter.sendMail(mailOptions);
     const now = new Date().toISOString();
-    db.prepare(`INSERT INTO replies (email_id, from_address, to_address, subject, body, sent_at, status) VALUES (?, ?, ?, ?, ?, ?, ?)`).run(emailId, email.email_address, email.from_address, replySubject, body, now, 'sent');
+    db.prepare(`INSERT INTO replies (email_id, from_address, to_address, subject, body, sent_at, status) VALUES (?, ?, ?, ?, ?, ?, ?)`).run(emailId, from || email.email_address, email.from_address, replySubject, body, now, 'sent');
     db.prepare('UPDATE emails SET is_replied = 1 WHERE id = ?').run(emailId);
 
     const today = getTodayDate();
@@ -433,6 +433,68 @@ router.get('/domains/:domain/health', adminAuthMiddleware, async (req, res) => {
 
 
 // Change admin password
+
+
+// DELETE SENT EMAIL
+router.delete('/sent/:id', adminAuthMiddleware, (req, res) => {
+  try {
+    const db = getDatabase();
+    const result = db.prepare('DELETE FROM replies WHERE id = ?').run(req.params.id);
+    if (result.changes === 0) return res.status(404).json({ success: false, message: 'Sent email not found' });
+    logger.info('[SENT] Deleted sent email ' + req.params.id);
+    res.json({ success: true });
+  } catch (error) { logger.error('[SENT] Delete error:', error); res.status(500).json({ success: false, message: 'Failed to delete' }); }
+});
+
+// BULK DELETE SENT EMAILS
+router.post('/sent/bulk-delete', adminAuthMiddleware, (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !ids.length) return res.status(400).json({ success: false, message: 'No IDs provided' });
+    const db = getDatabase();
+    const placeholders = ids.map(() => '?').join(',');
+    const result = db.prepare('DELETE FROM replies WHERE id IN (' + placeholders + ')').run(...ids);
+    logger.info('[SENT] Bulk deleted ' + result.changes + ' sent emails');
+    res.json({ success: true, deleted: result.changes });
+  } catch (error) { logger.error('[SENT] Bulk delete error:', error); res.status(500).json({ success: false, message: 'Failed to bulk delete' }); }
+});
+
+// COMPOSE - Send new email
+router.post('/compose', adminAuthMiddleware, async (req, res) => {
+  try {
+    const { to, subject, body, from: customFrom } = req.body;
+    if (!to || !body) return res.status(400).json({ success: false, message: 'Recipient and body required' });
+    const nodemailer = require('nodemailer');
+    const smtpConfig = {
+      host: process.env.REPLY_SMTP_HOST || 'mail.smtp2go.com',
+      port: parseInt(process.env.REPLY_SMTP_PORT) || 2525,
+      secure: false,
+      tls: { rejectUnauthorized: false }
+    };
+    if (process.env.REPLY_SMTP_USER) {
+      smtpConfig.auth = { user: process.env.REPLY_SMTP_USER, pass: process.env.REPLY_SMTP_PASS };
+    }
+    const transporter = nodemailer.createTransport(smtpConfig);
+    const fromAddr = customFrom || process.env.REPLY_FROM_ADDRESS || process.env.REPLY_SMTP_USER || 'admin@rzbal.biz.id';
+    const from = fromAddr;
+    const info = await transporter.sendMail({ from, to, subject: subject || '(No Subject)', text: body, html: body.replace(/\n/g, '<br>') });
+    const db = getDatabase();
+    const now = new Date().toISOString();
+    db.prepare("INSERT INTO replies (email_id, from_address, to_address, subject, body, sent_at, status) VALUES (0, ?, ?, ?, ?, ?, 'sent')").run(fromAddr, to, subject || '(No Subject)', body, now);
+    logger.info(`[COMPOSE] Sent email to ${to}`);
+    res.json({ success: true, data: { messageId: info.messageId, sentAt: now } });
+  } catch (error) { logger.error('[COMPOSE] Send error:', error); res.status(500).json({ success: false, message: 'Failed to send: ' + error.message }); }
+});
+
+// SENT EMAILS - List all sent emails (from replies table where email_id=0 or all)
+router.get('/sent', adminAuthMiddleware, (req, res) => {
+  try {
+    const db = getDatabase();
+    const sent = db.prepare('SELECT * FROM replies ORDER BY sent_at DESC LIMIT 100').all();
+    res.json({ success: true, data: { emails: sent.map(r => ({ id: r.id, to: r.to_address, from: r.from_address, subject: r.subject, body: r.body, date: r.sent_at, status: r.status })) } });
+  } catch (error) { logger.error('[SENT] Error:', error); res.status(500).json({ success: false, message: 'Failed to load sent emails' }); }
+});
+
 router.post('/change-password', adminAuthMiddleware, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;

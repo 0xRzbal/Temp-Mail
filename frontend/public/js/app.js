@@ -168,11 +168,12 @@ function renderDomainDropdown() {
 
     availableDomains.forEach(domain => {
         const a = document.createElement('a');
-        a.className = 'dropdown-item';
+        a.className = 'dropdown-item' + (domain.name === selectedDomain ? ' active' : '');
         a.textContent = domain.name;
         a.addEventListener('click', () => {
             selectedDomain = domain.name;
             display.value = domain.name;
+            renderDomainDropdown();
             closeDomainDropdown();
         });
         list.appendChild(a);
@@ -238,7 +239,8 @@ function renderEmailHistoryDropdown() {
 
     if (history.length === 0) {
         const empty = document.createElement('div');
-        empty.className = 'px-4 py-2 text-sm leading-5 text-gray-500 dark:text-gray-300';
+        empty.className = 'dropdown-item';
+        empty.style.opacity = '0.5';
         empty.textContent = 'No previous emails';
         list.appendChild(empty);
         return;
@@ -246,7 +248,7 @@ function renderEmailHistoryDropdown() {
 
     history.forEach(email => {
         const a = document.createElement('a');
-        a.className = 'block px-4 py-2 text-sm leading-5 text-gray-700 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 transition duration-150 ease-in-out';
+        a.className = 'dropdown-item' + (email === currentEmail ? ' active' : '');
         a.textContent = email;
         a.addEventListener('click', () => selectEmailFromHistory(email));
         list.appendChild(a);
@@ -391,12 +393,17 @@ async function createCustomEmail() {
 
 function instantViewSwap(showEl, hideEl) {
     if (!showEl || !hideEl) return;
+    // Smooth crossfade: fade out hideEl, then fade in showEl
     hideEl.classList.remove('open');
-    hideEl.classList.add('hidden');
-    hideEl.style.display = '';
-    showEl.classList.remove('hidden');
-    showEl.style.display = '';
-    showEl.classList.add('open');
+    hideEl.style.pointerEvents = 'none';
+    setTimeout(() => {
+        hideEl.classList.add('hidden');
+        hideEl.style.display = '';
+        showEl.classList.remove('hidden');
+        showEl.style.display = '';
+        void showEl.offsetHeight; // force reflow
+        showEl.classList.add('open');
+    }, 200);
 }
 
 function showEmailView() {

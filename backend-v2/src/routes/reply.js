@@ -20,14 +20,14 @@ const transporter = nodemailer.createTransport(smtpConfig);
 router.post('/send', validateReply, async (req, res) => {
   try {
     if (process.env.REPLY_ENABLED !== 'true') return res.status(403).json({ success: false, message: 'Reply feature is disabled' });
-    const { emailId, body, subject } = req.body;
+    const { emailId, body, subject, from } = req.body;
     const db = getDatabase();
     const email = db.prepare('SELECT * FROM emails WHERE id = ?').get(emailId);
     if (!email) return res.status(404).json({ success: false, message: 'Original email not found' });
 
     const replySubject = subject || `Re: ${email.subject || '(No Subject)'}`;
     const mailOptions = {
-      from: `"${process.env.REPLY_FROM_NAME || 'JoeMail'}" <${process.env.REPLY_FROM_ADDRESS || process.env.REPLY_SMTP_USER || email.to_address}>`,
+      from: from ? `<${from}>` : `"${process.env.REPLY_FROM_NAME || 'JoeMail'}" <${process.env.REPLY_FROM_ADDRESS || process.env.REPLY_SMTP_USER || email.to_address}>`,
       to: email.from_address,
       subject: replySubject,
       text: body,
@@ -38,7 +38,7 @@ router.post('/send', validateReply, async (req, res) => {
 
     const info = await transporter.sendMail(mailOptions);
     const now = new Date().toISOString();
-    db.prepare(`INSERT INTO replies (email_id, from_address, to_address, subject, body, sent_at, status) VALUES (?, ?, ?, ?, ?, ?, ?)`).run(emailId, email.to_address, email.from_address, replySubject, body, now, 'sent');
+    db.prepare(`INSERT INTO replies (email_id, from_address, to_address, subject, body, sent_at, status) VALUES (?, ?, ?, ?, ?, ?, ?)`).run(emailId, from || email.to_address, email.from_address, replySubject, body, now, 'sent');
     db.prepare('UPDATE emails SET is_replied = 1 WHERE id = ?').run(emailId);
 
     const today = getTodayDate();

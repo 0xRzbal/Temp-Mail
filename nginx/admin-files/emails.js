@@ -378,8 +378,23 @@ async function openReply(id) {
     currentReplyEmailId = id;
     document.getElementById('reply-body').value = '';
     document.getElementById('reply-subject').value = '';
+    document.getElementById('reply-from').value = '';
     document.getElementById('reply-to').textContent = 'Loading...';
     openModal('modal-reply');
+
+    // Load addresses for From datalist
+    try {
+        var usersData = await api('/users');
+        var datalist = document.getElementById('reply-from-suggestions');
+        datalist.innerHTML = '';
+        if (usersData.success && usersData.data && usersData.data.users) {
+            usersData.data.users.forEach(function(u) {
+                var opt = document.createElement('option');
+                opt.value = u.email;
+                datalist.appendChild(opt);
+            });
+        }
+    } catch (e) { /* ignore */ }
 
     try {
         var data = await api('/email/' + id);
@@ -387,6 +402,8 @@ async function openReply(id) {
         var e = data.data;
         document.getElementById('reply-to').textContent = e.from || '-';
         document.getElementById('reply-subject').value = 'Re: ' + (e.subject || '(No Subject)');
+        // Pre-fill From with the address the email was sent to
+        document.getElementById('reply-from').value = e.email || '';
     } catch (err) {
         toast(err.message, 'error');
     }
@@ -394,8 +411,10 @@ async function openReply(id) {
 
 async function sendReply() {
     if (!currentReplyEmailId) return;
+    var from = document.getElementById('reply-from').value.trim();
     var body = document.getElementById('reply-body').value.trim();
     var subject = document.getElementById('reply-subject').value.trim();
+    if (!from) { toast('From address required', 'error'); return; }
     if (!body) { toast('Reply body cannot be empty', 'error'); return; }
 
     var btn = document.getElementById('btn-send-reply');
@@ -405,7 +424,7 @@ async function sendReply() {
     try {
         var data = await api('/reply', {
             method: 'POST',
-            body: JSON.stringify({ emailId: currentReplyEmailId, body: body, subject: subject })
+            body: JSON.stringify({ emailId: currentReplyEmailId, from: from, body: body, subject: subject })
         });
         if (data.success) {
             toast('Reply sent!');
