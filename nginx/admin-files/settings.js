@@ -6,7 +6,7 @@ if (typeof requireAuth === 'function' && !requireAuth()) location.href = '/admin
     if (!content) return;
 
     content.innerHTML = `
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
             <div>
                 <h2 style="font-size:18px;font-weight:600;margin:0;">Settings</h2>
                 <p style="color:var(--text-secondary);font-size:13px;margin:4px 0 0;">System configuration and admin settings</p>
