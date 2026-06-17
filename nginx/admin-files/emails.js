@@ -1,30 +1,79 @@
-// JoeMail Admin - Emails v4 with Auto-Refresh
+// JoeMail Admin - Emails v6 with Compose + Sent/Received tabs
 if (typeof requireAuth === 'function' && !requireAuth()) location.href = '/admin/';
 
 var currentReplyEmailId = null;
 var selectedEmails = new Set();
 var lastEmailCount = 0;
 var refreshInterval = null;
-var newEmailCount = 0;
+var currentTab = 'received';
 
+// ===== TAB SWITCHING =====
+function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('.tab-btn[data-tab="' + tab + '"]').classList.add('active');
+    if (tab === 'received') loadEmails(false);
+    else loadSent();
+}
+
+// ===== COMPOSE =====
+function openCompose() {
+    document.getElementById('compose-to').value = '';
+    document.getElementById('compose-subject').value = '';
+    document.getElementById('compose-body').value = '';
+    openModal('modal-compose');
+    document.getElementById('compose-to').focus();
+}
+
+async function sendCompose() {
+    var to = document.getElementById('compose-to').value.trim();
+    var subject = document.getElementById('compose-subject').value.trim();
+    var body = document.getElementById('compose-body').value.trim();
+    if (!to) { toast('Recipient required', 'error'); return; }
+    if (!body) { toast('Message body required', 'error'); return; }
+
+    var btn = document.getElementById('btn-send-compose');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;margin:0 auto;"></div>';
+
+    try {
+        var data = await api('/compose', {
+            method: 'POST',
+            body: JSON.stringify({ to: to, subject: subject, body: body })
+        });
+        if (data.success) {
+            toast('Email sent to ' + to);
+            closeModal('modal-compose');
+            if (currentTab === 'sent') loadSent();
+        } else {
+            toast(data.message || 'Failed to send', 'error');
+        }
+    } catch (e) {
+        toast(e.message, 'error');
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
+}
+
+// ===== RECEIVED EMAILS =====
 function toggleEmailCheck(id, checked) {
     if (checked) selectedEmails.add(id); else selectedEmails.delete(id);
     updateBulkBar();
 }
 
 function toggleAllEmails(checked) {
-    document.querySelectorAll('.bulk-check').forEach(cb => {
+    document.querySelectorAll('.bulk-check').forEach(function(cb) {
         cb.checked = checked;
-        const id = parseInt(cb.dataset.id);
+        var id = parseInt(cb.dataset.id);
         if (checked) selectedEmails.add(id); else selectedEmails.delete(id);
     });
     updateBulkBar();
 }
 
 function updateBulkBar() {
-    const bar = document.getElementById('bulk-bar');
+    var bar = document.getElementById('bulk-bar');
     if (!bar) return;
-    const count = selectedEmails.size;
+    var count = selectedEmails.size;
     if (count > 0) {
         bar.classList.add('show');
         bar.querySelector('.bulk-count').textContent = count + ' selected';
@@ -34,11 +83,11 @@ function updateBulkBar() {
 }
 
 async function bulkDeleteEmails() {
-    const count = selectedEmails.size;
+    var count = selectedEmails.size;
     if (count === 0) return;
     if (!confirm('Delete ' + count + ' emails?')) return;
     try {
-        const data = await api('/emails/bulk-delete', {
+        var data = await api('/emails/bulk-delete', {
             method: 'POST',
             body: JSON.stringify({ ids: Array.from(selectedEmails) })
         });
@@ -54,76 +103,65 @@ async function bulkDeleteEmails() {
 
 async function loadEmails(isRefresh) {
     try {
-        const data = await api('/emails');
+        var data = await api('/emails');
         if (!data.success) throw new Error(data.message);
-        const d = data.data;
-        const total = d.pagination.total;
-        const emails = d.emails || [];
+        var d = data.data;
+        var total = d.pagination.total;
+        var emails = d.emails || [];
 
-        // Detect new emails on refresh
         if (isRefresh && lastEmailCount > 0 && total > lastEmailCount) {
-            newEmailCount = total - lastEmailCount;
-            toast(newEmailCount + ' new email' + (newEmailCount > 1 ? 's' : '') + '!', 'success');
+            toast((total - lastEmailCount) + ' new email(s)!');
         }
         lastEmailCount = total;
         if (!isRefresh) selectedEmails.clear();
 
-        const emailRows = emails.map(e => `
-            <tr class="${isRefresh && newEmailCount > 0 ? 'row-new' : ''}">
-                <td data-label=""><input type="checkbox" class="bulk-check" data-id="${e.id}" onchange="toggleEmailCheck(${e.id}, this.checked)"></td>
-                <td data-label="Email"><span class="status ok">${e.email}</span></td>
-                <td data-label="From">${e.from || '-'}</td>
-                <td data-label="Subject">${e.subject || '-'}</td>
-                <td data-label="Size">${e.size}</td>
-                <td data-label="Date">${formatDate(e.date)}</td>
-                <td data-label="Actions">
-                    <button class="btn-ghost btn-sm" onclick="viewEmail(${e.id})" title="View"><i class="fas fa-eye"></i></button>
-                    <button class="btn-ghost btn-sm" onclick="openReply(${e.id})" title="Reply"><i class="fas fa-reply"></i></button>
-                    <button class="btn-danger btn-sm" onclick="deleteEmail(${e.id})" title="Delete"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `).join('') || '<tr><td colspan="7" class="empty-state">No emails</td></tr>';
+        var emailRows = emails.map(function(e) {
+            return '<tr>' +
+                '<td><input type="checkbox" class="bulk-check" data-id="' + e.id + '" onchange="toggleEmailCheck(' + e.id + ', this.checked)"></td>' +
+                '<td><span class="status ok">' + e.email + '</span></td>' +
+                '<td>' + (e.from || '-') + '</td>' +
+                '<td>' + (e.subject || '-') + '</td>' +
+                '<td>' + (e.size || '-') + '</td>' +
+                '<td>' + formatDate(e.date) + '</td>' +
+                '<td>' +
+                    '<button class="btn-ghost btn-sm" onclick="viewEmail(' + e.id + ')" title="View"><i class="fas fa-eye"></i></button> ' +
+                    '<button class="btn-ghost btn-sm" onclick="openReply(' + e.id + ')" title="Reply"><i class="fas fa-reply"></i></button> ' +
+                    '<button class="btn-danger btn-sm" onclick="deleteEmail(' + e.id + ')" title="Delete"><i class="fas fa-trash"></i></button>' +
+                '</td></tr>';
+        }).join('') || '<tr><td colspan="7" class="empty-state">No received emails</td></tr>';
 
-        const newBadge = newEmailCount > 0 ? `<span class="badge-new">${newEmailCount} new</span>` : '';
-
-        document.getElementById('content').innerHTML = `
-            <div class="page-header-row">
-                <div>
-                    <h2 class="page-title" style="margin-bottom:0;">Emails</h2>
-                    <p class="page-subtitle" style="margin-bottom:0;">Manage all received emails</p>
-                </div>
-                <div class="stats-bar" style="margin-bottom:0; padding:8px 14px;">
-                    <div class="stats-bar-item">
-                        <span class="stats-bar-icon"><i class="fas fa-envelope"></i></span>
-                        <span class="stats-bar-value">${total}</span>
-                        <span class="stats-bar-label">Total</span>
-                    </div>
-                    ${newBadge}
-                    <button class="btn-ghost btn-sm" onclick="toggleAutoRefresh()" id="btn-refresh-toggle" title="Auto-refresh">
-                        <i class="fas fa-sync-alt ${refreshInterval ? 'spin' : ''}"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="bulk-bar" class="bulk-bar">
-                <input type="checkbox" checked disabled class="bulk-check">
-                <span class="bulk-count">0 selected</span>
-                <div class="bulk-actions">
-                    <button class="btn-danger btn-sm" onclick="bulkDeleteEmails()"><i class="fas fa-trash"></i> Delete Selected</button>
-                    <button class="btn-ghost btn-sm" onclick="selectedEmails.clear();toggleAllEmails(false);updateBulkBar();">Clear</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h3>All Emails</h3>
-                    <span class="badge">${total} total</span>
-                </div>
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th><input type="checkbox" class="bulk-check-header" onchange="toggleAllEmails(this.checked)"></th><th>Email</th><th>From</th><th>Subject</th><th>Size</th><th>Date</th><th>Actions</th></tr></thead>
-                        <tbody>${emailRows}</tbody>
-                    </table>
-                </div>
-            </div>`;
+        document.getElementById('content').innerHTML =
+            '<div class="page-header-row">' +
+                '<div>' +
+                    '<h2 class="page-title" style="margin-bottom:0;">Emails</h2>' +
+                    '<p class="page-subtitle" style="margin-bottom:0;">Manage all emails</p>' +
+                '</div>' +
+                '<div style="display:flex;gap:8px;align-items:center;">' +
+                    '<button class="btn-primary" onclick="openCompose()"><i class="fas fa-pen"></i> Compose</button>' +
+                    '<button class="btn-ghost btn-sm" onclick="toggleAutoRefresh()" id="btn-refresh-toggle" title="Auto-refresh">' +
+                        '<i class="fas fa-sync-alt' + (refreshInterval ? ' spin' : '') + '"></i>' +
+                    '</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="tabs-row">' +
+                '<button class="tab-btn active" data-tab="received" onclick="switchTab(\'received\')"><i class="fas fa-inbox"></i> Received (' + total + ')</button>' +
+                '<button class="tab-btn" data-tab="sent" onclick="switchTab(\'sent\')"><i class="fas fa-paper-plane"></i> Sent</button>' +
+            '</div>' +
+            '<div id="bulk-bar" class="bulk-bar">' +
+                '<input type="checkbox" checked disabled class="bulk-check">' +
+                '<span class="bulk-count">0 selected</span>' +
+                '<div class="bulk-actions">' +
+                    '<button class="btn-danger btn-sm" onclick="bulkDeleteEmails()"><i class="fas fa-trash"></i> Delete Selected</button>' +
+                    '<button class="btn-ghost btn-sm" onclick="selectedEmails.clear();toggleAllEmails(false);updateBulkBar();">Clear</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="card">' +
+                '<div class="card-header"><h3>Received Emails</h3><span class="badge">' + total + ' total</span></div>' +
+                '<div class="table-wrap"><table>' +
+                    '<thead><tr><th><input type="checkbox" class="bulk-check-header" onchange="toggleAllEmails(this.checked)"></th><th>Email</th><th>From</th><th>Subject</th><th>Size</th><th>Date</th><th>Actions</th></tr></thead>' +
+                    '<tbody>' + emailRows + '</tbody>' +
+                '</table></div>' +
+            '</div>';
     } catch (e) {
         if (!isRefresh) {
             document.getElementById('content').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>' + e.message + '</p></div>';
@@ -131,74 +169,120 @@ async function loadEmails(isRefresh) {
     }
 }
 
+// ===== SENT EMAILS =====
+async function loadSent() {
+    try {
+        var data = await api('/sent');
+        if (!data.success) throw new Error(data.message);
+        var emails = data.data.emails || [];
+
+        var rows = emails.map(function(e) {
+            var statusClass = e.status === 'sent' ? 'ok' : 'error';
+            return '<tr>' +
+                '<td>' + (e.to || '-') + '</td>' +
+                '<td>' + (e.from || '-') + '</td>' +
+                '<td>' + (e.subject || '-') + '</td>' +
+                '<td>' + formatDate(e.date) + '</td>' +
+                '<td><span class="status ' + statusClass + '">' + (e.status || '-') + '</span></td>' +
+            '</tr>';
+        }).join('') || '<tr><td colspan="5" class="empty-state">No sent emails</td></tr>';
+
+        document.getElementById('content').innerHTML =
+            '<div class="page-header-row">' +
+                '<div>' +
+                    '<h2 class="page-title" style="margin-bottom:0;">Emails</h2>' +
+                    '<p class="page-subtitle" style="margin-bottom:0;">Manage all emails</p>' +
+                '</div>' +
+                '<div style="display:flex;gap:8px;align-items:center;">' +
+                    '<button class="btn-primary" onclick="openCompose()"><i class="fas fa-pen"></i> Compose</button>' +
+                '</div>' +
+            '</div>' +
+            '<div class="tabs-row">' +
+                '<button class="tab-btn" data-tab="received" onclick="switchTab(\'received\')"><i class="fas fa-inbox"></i> Received</button>' +
+                '<button class="tab-btn active" data-tab="sent" onclick="switchTab(\'sent\')"><i class="fas fa-paper-plane"></i> Sent (' + emails.length + ')</button>' +
+            '</div>' +
+            '<div class="card">' +
+                '<div class="card-header"><h3>Sent Emails</h3><span class="badge">' + emails.length + ' sent</span></div>' +
+                '<div class="table-wrap"><table>' +
+                    '<thead><tr><th>To</th><th>From</th><th>Subject</th><th>Date</th><th>Status</th></tr></thead>' +
+                    '<tbody>' + rows + '</tbody>' +
+                '</table></div>' +
+            '</div>';
+    } catch (e) {
+        document.getElementById('content').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>' + e.message + '</p></div>';
+    }
+}
+
+// ===== AUTO REFRESH =====
 function toggleAutoRefresh() {
     if (refreshInterval) {
         clearInterval(refreshInterval);
         refreshInterval = null;
-        newEmailCount = 0;
         toast('Auto-refresh disabled');
     } else {
-        refreshInterval = setInterval(() => loadEmails(true), 15000);
+        refreshInterval = setInterval(function() { if (currentTab === 'received') loadEmails(true); }, 15000);
         toast('Auto-refresh enabled (15s)');
     }
-    // Update button icon
-    const btn = document.getElementById('btn-refresh-toggle');
+    var btn = document.getElementById('btn-refresh-toggle');
     if (btn) {
-        const icon = btn.querySelector('i');
+        var icon = btn.querySelector('i');
         if (refreshInterval) icon.classList.add('spin');
         else icon.classList.remove('spin');
     }
 }
 
+// ===== VIEW EMAIL =====
 async function viewEmail(id) {
     document.getElementById('email-view-body').innerHTML = '<div class="empty-state"><div class="spinner" style="margin:0 auto;"></div></div>';
     document.getElementById('email-view-subject').textContent = 'Loading...';
+    document.getElementById('email-view-meta').innerHTML = '';
     openModal('modal-view-email');
 
     try {
-        const data = await api('/email/' + id);
+        var data = await api('/email/' + id);
         if (!data.success) throw new Error(data.message);
-        const e = data.data;
+        var e = data.data;
 
         document.getElementById('email-view-subject').textContent = e.subject || '(No Subject)';
-        document.getElementById('email-view-from').textContent = e.from || '-';
-        document.getElementById('email-view-to').textContent = e.email || '-';
-        document.getElementById('email-view-date').textContent = formatDate(e.date);
+        document.getElementById('email-view-meta').innerHTML =
+            '<div style="font-size:12px;color:var(--text-muted);"><strong>From:</strong> ' + (e.from || '-') + '</div>' +
+            '<div style="font-size:12px;color:var(--text-muted);"><strong>To:</strong> ' + (e.email || '-') + '</div>' +
+            '<div style="font-size:12px;color:var(--text-muted);"><strong>Date:</strong> ' + formatDate(e.date) + '</div>';
 
-        const bodyContent = e.html || e.body || '(empty)';
-        const attachmentsHtml = (e.attachments && e.attachments.length > 0) ?
-            '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);"><strong style="font-size:12px;color:var(--text-muted);">ATTACHMENTS</strong><div style="margin-top:6px;">' +
-            e.attachments.map(a => `<span class="status ok" style="margin-right:6px;">${a.filename || 'file'}</span>`).join('') +
-            '</div></div>' : '';
+        var bodyContent = e.html || e.body || '(empty)';
+        var attachmentsHtml = '';
+        if (e.attachments && e.attachments.length > 0) {
+            attachmentsHtml = '<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">' +
+                '<strong style="font-size:12px;color:var(--text-muted);">ATTACHMENTS</strong><div style="margin-top:6px;">' +
+                e.attachments.map(function(a) { return '<span class="status ok" style="margin-right:6px;">' + (a.filename || 'file') + '</span>'; }).join('') +
+                '</div></div>';
+        }
 
-        const repliesHtml = (e.replies && e.replies.length > 0) ?
-            '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);"><strong style="font-size:12px;color:var(--text-muted);">REPLIES (' + e.replies.length + ')</strong>' +
-            e.replies.map(r => `
-                <div style="margin-top:8px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xs);">
-                    <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">To: ${r.to} | ${formatDate(r.sentAt)} | <span class="status ${r.status === 'sent' ? 'ok' : 'error'}">${r.status}</span></div>
-                    <div style="font-size:13px;white-space:pre-wrap;">${r.body}</div>
-                </div>
-            `).join('') + '</div>' : '';
+        var repliesHtml = '';
+        if (e.replies && e.replies.length > 0) {
+            repliesHtml = '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">' +
+                '<strong style="font-size:12px;color:var(--text-muted);">REPLIES (' + e.replies.length + ')</strong>' +
+                e.replies.map(function(r) {
+                    return '<div style="margin-top:8px;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xs);">' +
+                        '<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">To: ' + r.to + ' | ' + formatDate(r.sentAt) + ' | <span class="status ' + (r.status === 'sent' ? 'ok' : 'error') + '">' + r.status + '</span></div>' +
+                        '<div style="font-size:13px;white-space:pre-wrap;">' + r.body + '</div></div>';
+                }).join('') + '</div>';
+        }
 
-        document.getElementById('email-view-body').innerHTML = `
-            <div style="margin-bottom:12px;">
-                <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;"><strong>From:</strong> ${e.from || '-'}</div>
-                <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;"><strong>To:</strong> ${e.email || '-'}</div>
-                <div style="font-size:12px;color:var(--text-muted);"><strong>Date:</strong> ${formatDate(e.date)}</div>
-            </div>
-            ${attachmentsHtml}
-            <div style="padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xs);margin-top:12px;font-size:13px;line-height:1.7;white-space:pre-wrap;max-height:400px;overflow-y:auto;">${bodyContent}</div>
-            ${repliesHtml}
-            <div style="margin-top:16px;display:flex;gap:8px;">
-                <button class="btn-primary" onclick="closeModal('modal-view-email');openReply(${e.id});"><i class="fas fa-reply"></i> Reply</button>
-                <button class="btn-danger" onclick="closeModal('modal-view-email');deleteEmail(${e.id});"><i class="fas fa-trash"></i> Delete</button>
-            </div>
-        `;
+        document.getElementById('email-view-body').innerHTML =
+            attachmentsHtml +
+            '<div style="padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xs);margin-top:12px;font-size:13px;line-height:1.7;white-space:pre-wrap;max-height:400px;overflow-y:auto;">' + bodyContent + '</div>' +
+            repliesHtml +
+            '<div style="margin-top:16px;display:flex;gap:8px;">' +
+                '<button class="btn-primary" onclick="closeModal(\'modal-view-email\');openReply(' + e.id + ');"><i class="fas fa-reply"></i> Reply</button>' +
+                '<button class="btn-danger" onclick="closeModal(\'modal-view-email\');deleteEmail(' + e.id + ');"><i class="fas fa-trash"></i> Delete</button>' +
+            '</div>';
     } catch (e) {
         document.getElementById('email-view-body').innerHTML = '<div class="empty-state"><p>' + e.message + '</p></div>';
     }
 }
 
+// ===== REPLY =====
 async function openReply(id) {
     currentReplyEmailId = id;
     document.getElementById('reply-body').value = '';
@@ -207,9 +291,9 @@ async function openReply(id) {
     openModal('modal-reply');
 
     try {
-        const data = await api('/email/' + id);
+        var data = await api('/email/' + id);
         if (!data.success) throw new Error(data.message);
-        const e = data.data;
+        var e = data.data;
         document.getElementById('reply-to').textContent = e.from || '-';
         document.getElementById('reply-subject').value = 'Re: ' + (e.subject || '(No Subject)');
     } catch (err) {
@@ -219,18 +303,18 @@ async function openReply(id) {
 
 async function sendReply() {
     if (!currentReplyEmailId) return;
-    const body = document.getElementById('reply-body').value.trim();
-    const subject = document.getElementById('reply-subject').value.trim();
+    var body = document.getElementById('reply-body').value.trim();
+    var subject = document.getElementById('reply-subject').value.trim();
     if (!body) { toast('Reply body cannot be empty', 'error'); return; }
 
-    const btn = document.getElementById('btn-send-reply');
+    var btn = document.getElementById('btn-send-reply');
     btn.disabled = true;
     btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;margin:0 auto;"></div>';
 
     try {
-        const data = await api('/reply', {
+        var data = await api('/reply', {
             method: 'POST',
-            body: JSON.stringify({ emailId: currentReplyEmailId, body, subject })
+            body: JSON.stringify({ emailId: currentReplyEmailId, body: body, subject: subject })
         });
         if (data.success) {
             toast('Reply sent!');
@@ -246,13 +330,15 @@ async function sendReply() {
     btn.textContent = 'Send Reply';
 }
 
+// ===== DELETE =====
 async function deleteEmail(id) {
     if (!confirm('Delete this email?')) return;
     try {
-        const data = await api('/email/' + id, { method: 'DELETE' });
+        var data = await api('/email/' + id, { method: 'DELETE' });
         if (data.success) { toast('Email deleted'); selectedEmails.delete(id); loadEmails(); }
         else { toast(data.message || 'Failed', 'error'); }
     } catch (e) { toast(e.message, 'error'); }
 }
 
+// ===== INIT =====
 loadEmails(false);

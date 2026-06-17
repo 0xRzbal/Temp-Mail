@@ -121,7 +121,6 @@ const pageScripts = {
     'domains': '/admin/domains.js',
     'relay': '/admin/relay.js',
     'stats': '/admin/stats.js',
-    'settings': '/admin/settings.js'
 };
 const pageTitles = {
     'dashboard': 'Dashboard',
@@ -130,7 +129,6 @@ const pageTitles = {
     'domains': 'Domains',
     'relay': 'SMTP Relay',
     'stats': 'Statistics',
-    'settings': 'Settings'
 };
 let currentPage = '';
 let spaCache = {}; // cache fetched pages
