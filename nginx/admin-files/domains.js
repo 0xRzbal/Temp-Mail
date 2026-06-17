@@ -28,16 +28,19 @@ async function dnsRecordsHTML(domain, vr) {
         { num: 6, label: 'DMARC', type: 'TXT', name: '_dmarc.' + domain, value: 'v=DMARC1; p=quarantine; rua=mailto:dmarc@' + domain, copyValue: 'Type: TXT\nName: _dmarc.' + domain + '\nValue: v=DMARC1; p=quarantine; rua=mailto:dmarc@' + domain }
     ];
 
-    return records.map(r => `
+    return records.map(r => {
+        var displayValue = r.value;
+        if (r.value.length > 100) displayValue = r.value.substring(0, 60) + '...' + r.value.substring(r.value.length - 30);
+        return `
         <div class="dns-record-card" style="padding:10px 12px;margin-bottom:6px;">
             <div class="dns-header" style="margin-bottom:6px;">
                 <span class="dns-num">${r.num}. ${r.label}</span>
                 <button class="copy-btn" onclick="copyDNS(this)" data-value="${r.copyValue.replace(/"/g, '&quot;')}"><i class="fas fa-copy"></i> Copy</button>
             </div>
             <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Type: <span class="dns-record-type">${r.type}</span> &middot; Name: <span class="dns-record-name">${r.name}</span></div>
-            <div class="dns-row" style="margin-bottom:0;"><span class="label">Value:</span> <span class="dns-record-value" style="word-break:break-all;max-height:60px;overflow-y:auto;display:block;font-size:11px;">${r.value}</span></div>
-        </div>
-    `).join('');
+            <div class="dns-row" style="margin-bottom:0;"><span class="label">Value:</span> <span class="dns-record-value" style="word-break:break-all;font-size:11px;">${displayValue}</span></div>
+        </div>`;
+    }).join('');
 }
 
 
