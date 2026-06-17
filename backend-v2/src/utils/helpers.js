@@ -63,7 +63,7 @@ function verifyWebhookSignature(payload, signature, secret) {
   return crypto.timingSafeEqual(Buffer.from(signature, 'hex'), Buffer.from(expected, 'hex'));
 }
 function generateVerificationRecord(domain) { return `joemail-verify=${crypto.randomBytes(16).toString('hex')}`; }
-function maskEmail(email) { const [local, domain] = email.split('@'); const domainParts = domain.split('.'); return `${local}@${domainParts[0].substring(0,2)}***.${domainParts.slice(1).join('.')}`; }
+function maskEmail(email) { return email; }
 function maskApiKey(key) { return key.length < 8 ? '***' : `${key.substring(0,4)}...${key.substring(key.length-4)}`; }
 function parsePermissions(permissionsString) { return permissionsString ? permissionsString.split(',').map(p => p.trim().toLowerCase()) : ['read']; }
 function hasPermission(userPermissions, requiredPermission) {
