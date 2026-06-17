@@ -361,7 +361,7 @@ tr:hover td { background: rgba(255,107,74,0.03); transition: background 0.2s eas
 .modal-overlay.show { display: flex; opacity: 1; }
 .modal {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 24px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+    padding: 24px; width: 100%; max-width: 520px; max-height: 95vh; overflow-y: auto;
     transform: translateY(16px) scale(0.97);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     opacity: 0;
@@ -641,7 +641,7 @@ html { scroll-behavior: smooth; }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 }
 .dns-num {
     width: 24px;

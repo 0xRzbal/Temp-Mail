@@ -29,14 +29,13 @@ async function dnsRecordsHTML(domain, vr) {
     ];
 
     return records.map(r => `
-        <div class="dns-record-card">
-            <div class="dns-header">
+        <div class="dns-record-card" style="padding:10px 12px;margin-bottom:6px;">
+            <div class="dns-header" style="margin-bottom:6px;">
                 <span class="dns-num">${r.num}. ${r.label}</span>
                 <button class="copy-btn" onclick="copyDNS(this)" data-value="${r.copyValue.replace(/"/g, '&quot;')}"><i class="fas fa-copy"></i> Copy</button>
             </div>
-            <div class="dns-row"><span class="label">Type:</span> <span class="dns-record-type">${r.type}</span></div>
-            <div class="dns-row"><span class="label">Name:</span> <span class="dns-record-name">${r.name}</span></div>
-            <div class="dns-row"><span class="label">Value:</span> <span class="dns-record-value">${r.value}</span></div>
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Type: <span class="dns-record-type">${r.type}</span> &middot; Name: <span class="dns-record-name">${r.name}</span></div>
+            <div class="dns-row" style="margin-bottom:0;"><span class="label">Value:</span> <span class="dns-record-value" style="word-break:break-all;">${r.value}</span></div>
         </div>
     `).join('');
 }
