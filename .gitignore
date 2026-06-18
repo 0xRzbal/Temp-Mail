@@ -31,3 +31,22 @@ backups/
 # OS
 .DS_Store
 Thumbs.db
+
+# Secrets (never commit)
+*.pem
+*.key
+*.private
+dms/config/relay.conf
+dms/config/relay.env
+dms/config/relay-status.json
+
+# Backups
+*.bak
+*.bak.*
+
+# Legacy / dead files
+api-index.js
+Dockerfile.api
+activate-mailgun.sh
+setup-relay.sh
+docker-compose.yml.new
