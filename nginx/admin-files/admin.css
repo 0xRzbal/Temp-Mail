@@ -707,19 +707,6 @@ html { scroll-behavior: smooth; }
 .activity-meta { font-size: 11px; color: var(--text-muted); }
 .activity-time { font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
 
-/* Bulk actions bar */
-.bulk-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xs);
-    margin-bottom: 12px;
-}
-.bulk-count { font-size: 13px; font-weight: 500; }
-
 /* Copy button */
 .copy-btn {
     display: inline-flex;
